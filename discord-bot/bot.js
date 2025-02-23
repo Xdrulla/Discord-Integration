@@ -24,13 +24,11 @@ client.on('messageCreate', async (message) => {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
 				usuario: message.author.username,
-				mensagem: message.content,
-				horario: new Date().toISOString()
+				mensagem: message.content
 			});
-
 		} catch (error) {
-			console.error("Erro ao registrar ponto:", error);
-			await message.reply("❌ Erro ao registrar ponto.");
+			console.error("❌ Erro ao registrar ponto:", error);
+			await message.reply("❌ Ocorreu um erro ao registrar seu ponto.");
 		}
 	}
 });
@@ -52,7 +50,7 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			});
 			console.log(`⏸️ Pausa iniciada para ${usuario}`);
 		} catch (error) {
-			console.error("Erro ao registrar pausa:", error);
+			console.error("❌ Erro ao registrar pausa:", error);
 		}
 	}
 
@@ -64,7 +62,7 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			});
 			console.log(`▶️ Pausa finalizada para ${usuario}`);
 		} catch (error) {
-			console.error("Erro ao registrar fim da pausa:", error);
+			console.error("❌ Erro ao registrar fim da pausa:", error);
 		}
 	}
 });
