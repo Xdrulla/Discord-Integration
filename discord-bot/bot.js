@@ -28,7 +28,6 @@ client.on('messageCreate', async (message) => {
 				horario: new Date().toISOString()
 			});
 
-			await message.reply("✅ Registro de ponto salvo!");
 		} catch (error) {
 			console.error("Erro ao registrar ponto:", error);
 			await message.reply("❌ Erro ao registrar ponto.");
