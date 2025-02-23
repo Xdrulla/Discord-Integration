@@ -12,6 +12,7 @@ yarn-error.log*
 # Env files (credenciais sensíveis)
 .env
 firebase-key.json
+.railway/
 
 # Diretórios do Editor/IDE
 .vscode/
