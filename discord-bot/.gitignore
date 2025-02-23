@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env files (credenciais sensíveis)
+.env
+
+# Diretórios do Editor/IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Build / Cache
+dist/
+build/
+.cache/

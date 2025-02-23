@@ -1,0 +1,9 @@
+.stats-container {
+  margin-top: 20px;
+}
+
+.export-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
