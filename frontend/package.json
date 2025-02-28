@@ -13,13 +13,15 @@
     "antd": "^5.24.1",
     "axios": "^1.7.9",
     "file-saver": "^2.0.5",
-    "firebase": "^11.3.1",
+    "firebase": "^11.4.0",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "moment": "^2.30.1",
     "papaparse": "^5.5.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-firebase-hooks": "^5.1.1",
+    "react-router-dom": "^6.30.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
