@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Layout, Typography, Tabs } from "antd";
+import { Layout, Typography, Tabs, Button } from "antd";
 import { collection, getDocs } from "firebase/firestore";
+import { useAuth } from "../context/useAuth";
 import { db } from "../firebaseConfig";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
@@ -10,6 +11,7 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const Dashboard = () => {
+  const { logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -94,7 +96,10 @@ const Dashboard = () => {
   return (
     <Layout className="dashboard-container">
       <Header className="dashboard-header">
-        <Title level={2}>Registros de Ponto</Title>
+        <div className="header-content">
+          <Title level={2}>Registros de Ponto</Title>
+          <Button onClick={logout} type="primary">Sair</Button>
+        </div>
       </Header>
       <Content>
         <Tabs defaultActiveKey="1">

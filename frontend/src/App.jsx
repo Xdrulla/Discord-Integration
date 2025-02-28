@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
-import { AuthProvider } from "./context/AuthContext";
-import Login from "./components/Auth/Login";
+import { AuthProvider } from "./context/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
+import ManageUsers from "./components/Admin/ManageUsers";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          </Routes>
+          <Route path="/admin/manage-users" element={<PrivateRoute roleRequired="admin"><ManageUsers /></PrivateRoute>} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
