@@ -1,0 +1,86 @@
+$goepik-dark:#595959;
+$goepik-medium:#767676;
+$goepik-light:#808080;
+$goepik-border-light: #D0D0D0;
+$goepik-primary-dark: #339481;
+$goepik-primary: #43CDB2;
+$goepik-primary-hover: #4CE5C8;
+$goepik-primary-light: #92ffeb;
+$goepik-primary-lighter: #b5fcef;
+$goepik-secondary: #E1FFF9;
+$goepik-overdue-background: #FFDEDE;
+$goepik-pendent-background: #FFF5DA;
+$goepik-in-progress-background: #BEEFFF;
+$goepik-done-background: #DBFFDD;
+$goepik-external-background: #dbdfff;
+
+$goepik-menu-color: #9B9B9B;
+
+$goepik-btn-primary-color: #FFFFFF;
+$goepik-error-primary: #ef5c5c;
+$goepik-error-primary-hover:#ff6c6c;
+
+$goepik-bg-color: #F8F8F8;
+$goepik-modal-bf-color: #F7F7F7;
+
+$goepik-overdue-color: #EF5C5C;
+$goepik-done-color: #6BE770;
+$goepik-pendent-color: #FFCC4A;
+$goepik-in-progress-color: #49CCF6;
+$goepik-disabled-color: #595959;
+
+
+$colors: ("goepik-dark": $goepik-dark);
+$colors: ("goepik-medium": $goepik-medium);
+$colors: ("goepik-light": $goepik-light);
+$colors: ("goepik-primary": $goepik-primary);
+$colors: ("goepik-primary-hover": $goepik-primary-hover);
+$colors: ("goepik-secondary": $goepik-secondary);
+
+$primary: $goepik-primary;
+$secondary: $goepik-secondary;
+
+// Buttons 
+$btn-border-radius: 5px;
+$btn-primary-color: $goepik-primary;
+$btn-primary-hover-color: #4CE5C8;
+$btn-dark-medium: $goepik-border-light;
+
+$btn-secondary-color: #FFF;
+$btn-secondary-hover-color: #E1FFF9;
+$link-hover-decoration: none ;
+
+// Table
+$table-border-color: $goepik-border-light;
+
+//Tabs
+$nav-tabs-border-color: #EEEEEE;
+$nav-tabs-border-width: 2px;
+$nav-tabs-link-color: #BFBFBF;
+$nav-tabs-link-hover-border-color: $nav-tabs-link-color;
+
+$nav-tabs-link-active-color: $goepik-primary;
+$nav-tabs-link-active-border-color: $goepik-primary;
+
+//
+$credentials-width: 700px;
+$the-navbar-height: 65px;
+$sidebar-menu-width-open: 210px;
+$sidebar-menu-width-minified: 60px;
+
+// Execution
+$execution-description: #BFBFBF;
+
+$goepik-menu-color-active: $goepik-primary;
+$goepik-menu-color-hover: $goepik-medium;
+
+// Route
+
+$goepik-route-node: #E3C5EA;
+$goepik-route-bg: #EBDEF0;
+$goepik-route-border: #DBCFE1;
+
+// ChatBot
+
+$goepik-chatbot-primary: #00B2BF;
+

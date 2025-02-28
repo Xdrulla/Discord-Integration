@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Layout, Typography, Tabs } from "antd";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebaseConfig";
-import FilterBar from "./components/FilterBar";
-import RecordsTable from "./components/RecordsTable";
-import DashboardStats from "./components/DashboardStats";
-import "./Dashboard.css";
+import { db } from "../firebaseConfig";
+import FilterBar from "./FilterBar";
+import RecordsTable from "./RecordsTable";
+import DashboardStats from "./DashboardStats";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -43,11 +42,11 @@ const Dashboard = () => {
 
   const calcularTotalPausas = useCallback((pausas) => {
     if (!pausas || pausas.length === 0) return "0h 0m";
-  
+
     let totalMinutos = 0;
     pausas.forEach((p) => {
       if (!p.duracao) return;
-  
+
       const partes = p.duracao.match(/(\d+)h(\d+(\.\d+)?)m/);
       if (partes) {
         const horas = parseInt(partes[1]) || 0;
@@ -55,7 +54,7 @@ const Dashboard = () => {
         totalMinutos += horas * 60 + minutos;
       }
     });
-  
+
     return formatarTempo(totalMinutos);
   }, []);
 

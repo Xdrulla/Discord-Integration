@@ -1,0 +1,29 @@
+.filter-container {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.filter-container input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid $goepik-border-light;
+}
+
+@media (max-width: 768px) {
+  .filter-container {
+      flex-direction: column;
+  }
+
+  .filter-container input {
+      width: 100%;
+  }
+}

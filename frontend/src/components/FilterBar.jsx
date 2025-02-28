@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { Input, Button } from "antd";
-import './FilterBar.css'
 
 const FilterBar = ({ searchUser, setSearchUser, handleFilter }) => {
   return (

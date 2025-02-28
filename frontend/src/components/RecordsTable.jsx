@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
-import "./RecordsTable.css";
 
 const RecordsTable = ({ loading, filteredData }) => {
   const [visibleColumns, setVisibleColumns] = useState([
