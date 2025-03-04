@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import AuthContext from "./AuthContext"
 
@@ -12,18 +12,27 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const userRef = doc(db, "users", currentUser.uid);
-        const userSnap = await getDoc(userRef);
+      if (currentUser) {                
+        try {
+          const usersRef = collection(db, "users");
+          const q = query(usersRef, where("email", "==", currentUser.email));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const userData = querySnapshot.docs[0].data();
+            setRole(userData.role || "leitor");
+          } else {
+            console.warn("Usuário não encontrado no Firestore, definindo como leitor.");
+            setRole("leitor");
+          }
 
-        if (userSnap.exists()) {
-          setRole(userSnap.data().role);
-        } else {
+          setUser(currentUser);
+        } catch (error) {
+          console.error("Erro ao buscar role no Firestore:", error);
           setRole("leitor");
         }
-
-        setUser(currentUser);
       } else {
+        console.warn("Nenhum usuário autenticado.");
         setUser(null);
         setRole(null);
       }

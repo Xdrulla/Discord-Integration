@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { db } from "../../firebaseConfig"; 
+import { db } from "../../firebaseConfig";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { Table, Select, message } from "antd";
 

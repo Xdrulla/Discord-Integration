@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Layout, Typography, Tabs, Button } from "antd";
+import { Layout, Typography, Tabs } from "antd";
 import { collection, getDocs } from "firebase/firestore";
-import { useAuth } from "../context/useAuth";
 import { db } from "../firebaseConfig";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
@@ -11,11 +10,28 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const Dashboard = () => {
-  const { logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchUser, setSearchUser] = useState("");
+
+  function ajustarFusoHorario(horario) {
+    if (!horario || horario === "-") return "-";
+
+    try {
+      const dataUtc = new Date(`1970-01-01T${horario}:00Z`);
+      const dataLocal = new Intl.DateTimeFormat("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: "America/Sao_Paulo",
+      }).format(dataUtc);
+      return dataLocal;
+    } catch (error) {
+      console.error("Erro ao converter fuso horário:", error);
+      return horario;
+    }
+  }
 
   function formatarTempo(minutos) {
     if (!minutos || isNaN(minutos)) return "0h 0m";
@@ -69,8 +85,8 @@ const Dashboard = () => {
           id: doc.id,
           usuario: data.usuario,
           data: data.data,
-          entrada: data.entrada || "-",
-          saida: data.saida || "-",
+          entrada: ajustarFusoHorario(data.entrada) || "-",
+          saida: ajustarFusoHorario(data.saida) || "-",
           total_horas: formatarTempo(extrairMinutosDeString(data.total_horas)),
           total_pausas: calcularTotalPausas(data.pausas || []),
         };
@@ -98,7 +114,6 @@ const Dashboard = () => {
       <Header className="dashboard-header">
         <div className="header-content">
           <Title level={2}>Registros de Ponto</Title>
-          <Button onClick={logout} type="primary">Sair</Button>
         </div>
       </Header>
       <Content>
