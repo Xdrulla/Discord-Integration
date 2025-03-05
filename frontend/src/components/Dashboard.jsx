@@ -5,11 +5,15 @@ import { db } from "../firebaseConfig";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
+import { useAuth } from "../context/useAuth";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const Dashboard = () => {
+  const { user, role } = useAuth()
+  const userName = user.email.split("@")[0]
+
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -79,7 +83,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       const querySnapshot = await getDocs(collection(db, "registros"));
-      const registros = querySnapshot.docs.map((doc) => {
+      let registros = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           id: doc.id,
@@ -92,12 +96,17 @@ const Dashboard = () => {
         };
       });
 
+      if (role === "leitor") {
+        registros = registros.filter((record) => record.usuario.includes(userName));
+      }
+
       setData(registros);
       setFilteredData(registros);
       setLoading(false);
     };
     fetchData();
-  }, [calcularTotalPausas]);
+  }, [calcularTotalPausas, role, userName]);
+  
 
   const handleFilter = () => {
     let filtered = [...data];
@@ -119,7 +128,9 @@ const Dashboard = () => {
       <Content>
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Registros de Ponto" key="1">
-            <FilterBar searchUser={searchUser} setSearchUser={setSearchUser} handleFilter={handleFilter} />
+            {role === "admin" && (
+              <FilterBar searchUser={searchUser} setSearchUser={setSearchUser} handleFilter={handleFilter} />
+            )}
             <RecordsTable loading={loading} filteredData={filteredData} />
           </Tabs.TabPane>
 
