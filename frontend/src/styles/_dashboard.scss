@@ -1,5 +1,5 @@
 @use "variables" as *;
-/* === Layout Principal === */
+
 .dashboard-container {
   min-height: 100vh;
   padding: 20px;
@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .dashboard-header {
@@ -16,7 +17,7 @@
   border-radius: 10px;
   margin-bottom: 20px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   color: $goepik-btn-primary-color;
   font-weight: 600;
 }
@@ -26,7 +27,6 @@
   font-weight: 600;
 }
 
-/* === Barra de Filtros === */
 .filter-container {
   background: #fff;
   padding: 15px;
@@ -37,10 +37,9 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
-/* Estilo dos Inputs */
 .filter-container input {
   flex: 1;
   padding: 8px;
@@ -48,23 +47,33 @@
   border: 1px solid #ccc;
 }
 
-/* === Tabela === */
 .table-container {
   background: #fff;
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
+  overflow-x: auto;
 }
 
-/* Responsividade */
+.table-container .ant-table {
+  width: 100%;
+  min-width: 1100px;
+}
+
+@media (max-width: 1024px) {
+  .table-container {
+    max-width: 95%;
+  }
+}
+
 @media (max-width: 768px) {
   .filter-container {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .filter-container input {
-      width: 100%;
+    width: 100%;
   }
 }

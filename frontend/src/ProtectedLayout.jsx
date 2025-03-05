@@ -1,11 +1,19 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import SidebarMenu from "./components/SidebarMenu";
+import UserProfile from "./pages/UserProfile"
 
 const ProtectedLayout = () => {
   return (
-    <div>
-      <Navbar />
-      <Outlet />
+    <div className="protected-layout">
+      <SidebarMenu />
+
+      <div className="content-container">
+        <div className="user-profile-container">
+          <UserProfile />
+        </div>
+
+        <Outlet />
+      </div>
     </div>
   );
 };

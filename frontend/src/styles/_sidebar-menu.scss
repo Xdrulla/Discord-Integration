@@ -1,0 +1,187 @@
+@use "variables" as *;
+
+#sidebar-menu {
+  display: block;
+  background: #FFFFFF;
+  width: $sidebar-menu-width-open;
+  height: 100vh;
+  position: fixed;
+  border-right: 2px solid #EEEEEE;
+  overflow-y: initial;
+  z-index: 1;
+  transition: 0.1s;
+
+  &.collapse {
+    display: none;
+
+    &.opened {
+      display: block;
+    }
+  }
+
+  [class*="toggle-menu-"] {
+    background-color: #fff;
+    border-radius: 50%;
+    border: 2px solid #EEEEEE;
+    color: #EEEEEE !important;
+    padding: 4px;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    line-height: 1.4;
+    position: absolute;
+    top: 105px;
+    right: -18px;
+    z-index: 50;
+
+    &:focus {
+      box-shadow: none;
+      color: $goepik-menu-color-active !important;
+      border-color: $goepik-menu-color-active;
+      background-color: $btn-secondary-hover-color;
+    }
+
+    &:hover {
+      border-color: $goepik-menu-color-hover;
+      color: $goepik-menu-color-hover !important;
+    }
+  }
+
+  .list-group {
+    position: absolute;
+    top: 180px;
+  }
+
+  .list-group-item {
+    border: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background: none;
+    font-size: 12px;
+    padding: 10px 20px;
+    color: $goepik-menu-color;
+
+    &:hover {
+      color: $goepik-menu-color-hover;
+    }
+
+    &.active {
+      background: none;
+      color: $goepik-menu-color-active;
+      margin: 0;
+    }
+
+    .dropdown,
+    .dropleft {
+      .dropdown-toggle::before {
+        content: none;
+      }
+
+      .btn-link {
+        padding: 0;
+        width: 100%;
+        text-align: left;
+      }
+    }
+
+    span[class*="icon-"] {
+      display: inline-block;
+      font-size: 20px;
+    }
+
+    span.label {
+      display: inline-block;
+      margin-left: 20px;
+      text-transform: uppercase;
+      line-height: 2.1;
+    }
+
+    &.back-menu-epik {
+      font-weight: bold;
+
+      span.label {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 170px;
+
+    .logo-menu {
+      display: block;
+      margin: 0 auto;
+      transition: 0.5s;
+      max-width: 170px;
+    }
+  }
+
+  .powered {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .powered-container {
+    text-align: center;
+  }
+
+  .logo-footer {
+    text-align: center;
+    background-image: url('../images/goepik-logo-gray.png');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    position: absolute;
+    height: 48px;
+    bottom: 34px;
+    left: 0;
+    right: 0;
+
+    p {
+      font-size: 9px;
+      color: #C7C7C7;
+      text-transform: uppercase;
+    }
+  }
+
+  &.minified {
+    width: $sidebar-menu-width-minified;
+    padding-top: 180px;
+
+    .logo-menu {
+      display: none;
+    }
+
+    .list-group-item {
+      span.label {
+        display: none;
+      }
+    }
+
+    .logo-footer {
+      p {
+        display: none;
+      }
+
+      background-image: url('../images/g-logo-gray.png');
+    }
+  }
+
+  .db-icon {
+    background: url('../images/icons/database.svg') no-repeat 10px;
+    background-position: left top;
+    height: 20px;
+    width: 20px;
+
+    &.no-data-icon {
+      height: 100px;
+      width: 100px;
+    }
+  }
+}

@@ -9,7 +9,7 @@ const FilterBar = ({ searchUser, setSearchUser, handleFilter }) => {
         value={searchUser}
         onChange={(e) => setSearchUser(e.target.value)}
       />
-      <Button type="primary" onClick={handleFilter}>Filtrar</Button>
+      <Button className="button-primary" type="primary" onClick={handleFilter}>Filtrar</Button>
     </div>
   );
 };

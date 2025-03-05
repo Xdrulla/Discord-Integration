@@ -1,0 +1,17 @@
+.protected-layout {
+  display: flex;
+
+  .content-container {
+    flex: 1;
+    position: relative;
+    padding: 20px;
+    margin-left: 250px;
+    padding-top: 60px;
+  }
+
+  .user-profile-container {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+  }
+}

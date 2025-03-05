@@ -4,3 +4,14 @@
 @use "dashboard-stats";
 @use "filter-bar";
 @use "records-table";
+@use "sidebar-menu";
+@use "profile-user";
+@use "protected-layout";
+@use "button";
+
+body {
+  background-color: #f8f9fa;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 12px 12px;
+  background-position: 0 0;
+}

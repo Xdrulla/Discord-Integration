@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from 'react';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import { Dropdown, Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
@@ -13,6 +13,8 @@ const UserProfile = () => {
   const handleMenuClick = ({ key }) => {
     if (key === "user_profile") {
       navigate("/profile");
+    } else if (key === "manage_users") {
+      navigate("admin/manage-users");
     } else if (key === "logout") {
       logout();
     }
@@ -21,6 +23,7 @@ const UserProfile = () => {
 
   const menuItems = [
     { key: "user_profile", label: "Perfil do Usuário", icon: <UserOutlined /> },
+    { key: "manage_users", label: "Gerenciar Usuários", icon: <SettingOutlined /> },
     { key: "logout", label: "Sair" }
   ];
 
@@ -31,8 +34,8 @@ const UserProfile = () => {
       open={open}
       onOpenChange={setOpen}
     >
-      <UserOutlined style={{ fontSize: "20px", cursor: "pointer" }} />
-    </Dropdown>
+      <UserOutlined className="user-profile-dropdown" />
+      </Dropdown>
   );
 };
 
