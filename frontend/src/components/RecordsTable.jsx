@@ -46,20 +46,21 @@ const RecordsTable = ({ loading, filteredData }) => {
       dataIndex: "data",
       key: "data",
       responsive: ['sm', 'md', 'lg'],
+      render: (text) => <span className="data-bold">{text}</span>
     },
     {
       title: "Entrada",
       dataIndex: "entrada",
       key: "entrada",
       responsive: ['md', 'lg'],
-      render: (text) => <Tag color="success">{text}</Tag>
+      render: (text) => <Tag className="tag-success">{text}</Tag>
     },
     {
       title: "Saída",
       dataIndex: "saida",
       key: "saida",
       responsive: ['md', 'lg'],
-      render: (text) => text !== "-" ? <Tag color="error">{text}</Tag> : "-"
+      render: (text) => text !== "-" ? <Tag className="tag-error">{text}</Tag> : "-"
     },
     {
       title: "Tempo de Intervalo",
@@ -68,7 +69,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       responsive: ['lg'],
       render: (text) => (
         <Tooltip title={`Total de pausas: ${text}`}>
-          <Tag color="blue">{text}</Tag>
+          <Tag className="tag-blue">{text}</Tag>
         </Tooltip>
       )
     },
@@ -77,7 +78,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       dataIndex: "total_horas",
       key: "total_horas",
       responsive: ['lg'],
-      render: (text) => <Tag color="purple">{text}</Tag>
+      render: (text) => <Tag className="tag-purple">{text}</Tag>
     }
   ].filter(column => visibleColumns.includes(column.key));
 
