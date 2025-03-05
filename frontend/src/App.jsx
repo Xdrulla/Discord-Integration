@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import { AuthProvider } from "./context/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
@@ -12,6 +12,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<AuthPage />} />
 
           <Route element={<PrivateRoute><ProtectedLayout /></PrivateRoute>}>
