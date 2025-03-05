@@ -12,16 +12,6 @@ const SidebarMenu = () => {
           <Image src={logo} className="logo-menu" />
         </Col>
       </Row>
-      <Row className="powered">
-        <Col span={24} className="powered-container">
-          <span>Powered by</span>
-          <b>
-            <a rel="noopener noreferer" target="_blank" href="https://www.goepik.com.br/">
-              GoEpik
-            </a>
-          </b>
-        </Col>
-      </Row>
     </div>
   );
 };

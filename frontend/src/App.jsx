@@ -3,16 +3,16 @@ import Dashboard from "./components/Dashboard";
 import { AuthProvider } from "./context/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
 import ManageUsers from "./components/Admin/ManageUsers";
-import Login from "./pages/Login";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedLayout from "./ProtectedLayout";
+import AuthPage from "./pages/Login";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<AuthPage />} />
 
           <Route element={<PrivateRoute><ProtectedLayout /></PrivateRoute>}>
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />

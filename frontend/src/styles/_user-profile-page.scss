@@ -1,0 +1,41 @@
+@use "variables" as *;
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: $goepik-bg-color;
+}
+
+.profile-card {
+  width: 420px;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.back-button {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  color: $goepik-primary;
+  font-weight: bold;
+}
+
+.profile-avatar {
+  margin: 15px 0;
+  background-color: $goepik-light;
+}
+
+.profile-title {
+  margin-bottom: 20px;
+}
+
+.profile-text {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 8px;
+}

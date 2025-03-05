@@ -1,4 +1,20 @@
-.user-profile-dropdown {
-  font-size: 20px;
+@use "variables" as *;
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
+  padding: 8px;
+}
+
+.user-greeting {
+  font-size: 14px;
+  color: $goepik-dark;
+  font-weight: 500;
+}
+
+.user-avatar {
+  background-color: #d9d9d9;
+  border: 2px solid #fff;
 }

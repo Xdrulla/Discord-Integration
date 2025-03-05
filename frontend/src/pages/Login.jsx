@@ -1,49 +1,71 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { Input, Button, Card, Typography, message } from "antd";
+import { Input, Button, Card, Typography, message, Tabs, Form } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { setDoc, doc } from "firebase/firestore";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const AuthPage = () => {
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("login");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleAuth = async (values, isSignup = false) => {
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      message.success("Login realizado com sucesso!");
+      if (isSignup) {
+        const { email, password } = values;
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, "users", userCredential.user.uid), { email, role: "leitor" });
+        message.success("Cadastro realizado com sucesso!");
+      } else {
+        await signInWithEmailAndPassword(auth, values.email, values.password);
+        message.success("Login realizado com sucesso!");
+      }
       navigate("/dashboard");
     } catch (error) {
-      message.error("Erro ao fazer login. Verifique suas credenciais.", error);
+      message.error("Erro ao autenticar. Verifique suas credenciais.", error);
     }
     setLoading(false);
   };
 
   return (
-    <div className="login-container">
-      <Card className="login-card">
-        <Title level={2}>Login</Title>
-        <Input
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input.Password
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button type="primary" onClick={handleLogin} loading={loading}>
-          Entrar
-        </Button>
+    <div className="auth-container">
+      <Card className="auth-card">
+        <Title level={2} className="auth-title">Bem-vindo</Title>
+        <Text type="secondary">Acesse sua conta ou cadastre-se para continuar</Text>
+
+        <Tabs activeKey={activeTab} onChange={setActiveTab} className="auth-tabs">
+          <Tabs.TabPane tab="Login" key="login">
+            <Form layout="vertical" onFinish={(values) => handleAuth(values, false)}>
+              <Form.Item name="email" rules={[{ required: true, message: "Digite seu e-mail" }]}>
+                <Input prefix={<MailOutlined />} placeholder="E-mail" />
+              </Form.Item>
+              <Form.Item name="password" rules={[{ required: true, message: "Digite sua senha" }]}>
+                <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
+              </Form.Item>
+              <Button className="button-primary" type="primary" htmlType="submit" loading={loading} block>Entrar</Button>
+            </Form>
+          </Tabs.TabPane>
+
+          <Tabs.TabPane tab="Cadastro" key="register">
+            <Form layout="vertical" onFinish={(values) => handleAuth(values, true)}>
+              <Form.Item name="email" rules={[{ required: true, message: "Digite seu e-mail" }]}>
+                <Input prefix={<MailOutlined />} placeholder="E-mail" />
+              </Form.Item>
+              <Form.Item name="password" rules={[{ required: true, message: "Crie uma senha" }]}>
+                <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
+              </Form.Item>
+              <Button className="button-primary" type="primary" htmlType="submit" loading={loading} block>Cadastrar</Button>
+            </Form>
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
     </div>
   );
 };
 
-export default Login;
+export default AuthPage;

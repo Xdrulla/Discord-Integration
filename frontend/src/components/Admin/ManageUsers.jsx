@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../firebaseConfig";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
-import { Table, Select, message } from "antd";
+import { Table, Select, message, Card, Button, Typography } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -44,7 +49,29 @@ const ManageUsers = () => {
     },
   ];
 
-  return <Table dataSource={users} columns={columns} rowKey="id" />;
+  return (
+    <div className="manage-users-container">
+      <Card className="manage-users-card">
+        <Button
+          type="link"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate("/dashboard")}
+          className="back-button"
+        >
+          Voltar ao Dashboard
+        </Button>
+
+        <Title level={3} className="manage-users-title">Gerenciar Usuários</Title>
+
+        <Table
+          dataSource={users}
+          columns={columns}
+          rowKey="id"
+          className="manage-users-table"
+        />
+      </Card>
+    </div>
+  );
 };
 
 export default ManageUsers;

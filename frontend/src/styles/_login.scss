@@ -1,54 +1,41 @@
-.login-container {
+@use "variables" as *;
+
+.auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #8e6edb, #5a40b6);
+  background: $goepik-bg-color;
 }
 
-.login-card {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  background: #ffffff;
+.auth-card {
+  width: 400px;
+  padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 12px;
+  background: #fff;
   text-align: center;
+}
 
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-    color: #5a40b6;
-  }
+.auth-title {
+  margin-bottom: 10px;
+}
 
-  input {
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #d9d9d9;
-    font-size: 1rem;
-  }
-
-  button {
-    width: 100%;
-    background: #5a40b6;
-    color: white;
-    font-size: 1rem;
+.auth-tabs {
+  margin-top: 20px;
+  .ant-tabs-tab {
     font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-
-    &:hover {
-      background: #7457c8;
-    }
   }
 }
 
-@media (max-width: 480px) {
-  .login-card {
-    padding: 1.5rem;
-  }
+.auth-form {
+  margin-top: 10px;
+}
+
+.auth-form .ant-input-prefix {
+  margin-right: 5px;
+}
+
+.auth-form .ant-btn {
+  margin-top: 10px;
 }

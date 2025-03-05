@@ -1,13 +1,15 @@
 import PropTypes from "prop-types";
-import { useState } from 'react';
-import { UserOutlined, SettingOutlined } from '@ant-design/icons';
-import { Dropdown, Menu } from "antd";
+import { useState } from "react";
+import { UserOutlined, SettingOutlined } from "@ant-design/icons";
+import { Dropdown, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 
 const UserProfile = () => {
   const [open, setOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const userName = user.email
+
   const navigate = useNavigate();
 
   const handleMenuClick = ({ key }) => {
@@ -34,8 +36,11 @@ const UserProfile = () => {
       open={open}
       onOpenChange={setOpen}
     >
-      <UserOutlined className="user-profile-dropdown" />
-      </Dropdown>
+      <div className="user-profile">
+        <span className="user-greeting">Olá! <strong>{userName.split("@")[0] || "Usuário"}</strong></span>
+        <Avatar icon={<UserOutlined />} className="user-avatar" />
+      </div>
+    </Dropdown>
   );
 };
 
