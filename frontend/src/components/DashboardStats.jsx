@@ -17,16 +17,17 @@ const DashboardStats = ({ data }) => {
   const filteredData = role === "leitor"
     ? data.filter((record) => record.usuario === user.email)
     : searchUser
-    ? data.filter((record) => record.usuario.toLowerCase().includes(searchUser.toLowerCase()))
-    : data;
+      ? data.filter((record) => record.usuario.toLowerCase().includes(searchUser.toLowerCase()))
+      : data;
 
   const totalBancoHoras = filteredData.reduce((acc, record) => {
     const bancoHoras = record.banco_horas || "0h 0m";
-    const match = bancoHoras.match(/(\d+)h\s*(\d+)m/);
+    const match = bancoHoras.match(/(-?\d+)h\s*(-?\d+)m/);
+
     if (match) {
       const horasNum = parseInt(match[1]) || 0;
       const minutosNum = parseInt(match[2]) || 0;
-      return acc + horasNum + minutosNum / 60;
+      return acc + (horasNum + minutosNum / 60);
     }
     return acc;
   }, 0);
@@ -42,7 +43,20 @@ const DashboardStats = ({ data }) => {
     return acc;
   }, 0);
 
-  const mediaHorasExtrasDiaria = totalBancoHoras > 0 ? (totalBancoHoras / filteredData.length).toFixed(1) : "0h 0m";
+  const diasComHorasExtras = filteredData.filter(record => {
+    const bancoHoras = record.banco_horas || "0h 0m";
+    const match = bancoHoras.match(/(-?\d+)h\s*(-?\d+)m/);
+    if (match) {
+      const horasNum = parseInt(match[1]) || 0;
+      const minutosNum = parseInt(match[2]) || 0;
+      return horasNum > 0 || minutosNum > 0;
+    }
+    return false;
+  }).length;
+
+  const mediaHorasExtrasDiaria = diasComHorasExtras > 0
+    ? (totalBancoHoras / diasComHorasExtras).toFixed(1)
+    : "0h 0m";
 
   return (
     <div className="stats-container">
