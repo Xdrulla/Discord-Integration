@@ -68,6 +68,63 @@ app.post('/register', async (req, res) => {
 	}
 });
 
+app.post('/pause', async (req, res) => {
+	try {
+		const { usuario, inicio } = req.body;
+		const dataFormatada = inicio.split("T")[0]; // YYYY-MM-DD
+
+		const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
+		const doc = await registroRef.get();
+
+		let dadosRegistro = doc.exists ? doc.data() : { usuario, data: dataFormatada, pausas: [] };
+
+		if (!dadosRegistro.pausas || dadosRegistro.pausas.length === 0 || dadosRegistro.pausas[dadosRegistro.pausas.length - 1].fim) {
+			dadosRegistro.pausas.push({ inicio });
+			await registroRef.set(dadosRegistro, { merge: true });
+
+			res.json({ success: true, message: "Pausa registrada!" });
+		} else {
+			res.status(400).json({ error: "Já existe uma pausa em andamento." });
+		}
+	} catch (error) {
+		console.error("Erro ao registrar pausa:", error);
+		res.status(500).json({ error: "Erro ao registrar pausa no banco" });
+	}
+});
+
+app.post('/resume', async (req, res) => {
+	try {
+		const { usuario, fim } = req.body;
+		const dataFormatada = fim.split("T")[0]; // YYYY-MM-DD
+
+		const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
+		const doc = await registroRef.get();
+
+		if (!doc.exists) {
+			return res.status(404).json({ error: "Nenhum registro encontrado para esse usuário." });
+		}
+
+		let dadosRegistro = doc.data();
+
+		const ultimaPausa = dadosRegistro.pausas && dadosRegistro.pausas.length > 0
+			? dadosRegistro.pausas[dadosRegistro.pausas.length - 1]
+			: null;
+
+		if (!ultimaPausa || ultimaPausa.fim) {
+			return res.status(400).json({ error: "Nenhuma pausa ativa para finalizar." });
+		}
+
+		ultimaPausa.fim = fim;
+
+		await registroRef.set(dadosRegistro, { merge: true });
+
+		res.json({ success: true, message: "Pausa finalizada!" });
+	} catch (error) {
+		console.error("Erro ao finalizar pausa:", error);
+		res.status(500).json({ error: "Erro ao finalizar pausa no banco" });
+	}
+});
+
 function calcularHorasTrabalhadas(entrada, saida, pausas) {
 	const totalMinutos = (parseInt(saida.split(":")[0]) * 60 + parseInt(saida.split(":")[1])) -
 		(parseInt(entrada.split(":")[0]) * 60 + parseInt(entrada.split(":")[1]));
