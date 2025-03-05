@@ -76,9 +76,12 @@ app.post('/pause', async (req, res) => {
 		const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
 		const doc = await registroRef.get();
 
-		let dadosRegistro = doc.exists ? doc.data() : { usuario, data: dataFormatada, pausas: [] };
+		let dadosRegistro = doc.exists ? doc.data() : { usuario, data: dataFormatada };
+		if (!dadosRegistro.pausas) {
+			dadosRegistro.pausas = [];
+		}
 
-		if (!dadosRegistro.pausas || dadosRegistro.pausas.length === 0 || dadosRegistro.pausas[dadosRegistro.pausas.length - 1].fim) {
+		if (dadosRegistro.pausas.length === 0 || dadosRegistro.pausas[dadosRegistro.pausas.length - 1].fim) {
 			dadosRegistro.pausas.push({ inicio });
 			await registroRef.set(dadosRegistro, { merge: true });
 
@@ -106,7 +109,11 @@ app.post('/resume', async (req, res) => {
 
 		let dadosRegistro = doc.data();
 
-		const ultimaPausa = dadosRegistro.pausas && dadosRegistro.pausas.length > 0
+		if (!dadosRegistro.pausas) {
+			dadosRegistro.pausas = [];
+		}
+
+		const ultimaPausa = dadosRegistro.pausas.length > 0
 			? dadosRegistro.pausas[dadosRegistro.pausas.length - 1]
 			: null;
 
