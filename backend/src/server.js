@@ -123,9 +123,12 @@ app.post('/resume', async (req, res) => {
 
 		ultimaPausa.fim = fim;
 
+		const { totalPausas } = calcularHorasTrabalhadas(dadosRegistro.entrada, fim, dadosRegistro.pausas);
+		dadosRegistro.total_pausas = totalPausas;
+
 		await registroRef.set(dadosRegistro, { merge: true });
 
-		res.json({ success: true, message: "Pausa finalizada!" });
+		res.json({ success: true, message: "Pausa finalizada!", total_pausas: totalPausas })
 	} catch (error) {
 		console.error("Erro ao finalizar pausa:", error);
 		res.status(500).json({ error: "Erro ao finalizar pausa no banco" });
