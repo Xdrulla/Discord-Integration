@@ -1,6 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { ajustarFusoHorario, calcularTotalPausas, extrairMinutosDeString, formatarTempo } from "../utils/timeUtils";
+import { ajustarFusoHorario, extrairMinutosDeString, formatarTempo, formatarTotalPausas } from "../utils/timeUtils";
 
 export async function fetchRegistros() {
   const querySnapshot = await getDocs(collection(db, "registros"));
@@ -9,7 +9,6 @@ export async function fetchRegistros() {
 
     const totalMinutosTrabalhados = extrairMinutosDeString(data.total_horas);
     const jornadaPadrao = 8 * 60;
-
     const saldoMinutos = totalMinutosTrabalhados - jornadaPadrao;
     const bancoHoras = saldoMinutos !== 0 ? formatarTempo(saldoMinutos) : "0h 0m";
 
@@ -20,7 +19,7 @@ export async function fetchRegistros() {
       entrada: ajustarFusoHorario(data.entrada) || "-",
       saida: ajustarFusoHorario(data.saida) || "-",
       total_horas: formatarTempo(totalMinutosTrabalhados),
-      total_pausas: calcularTotalPausas(data.pausas || []),
+      total_pausas: formatarTotalPausas(data.total_pausas),
       banco_horas: bancoHoras,
     };
   });

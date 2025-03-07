@@ -24,9 +24,6 @@ export function formatarTempo(minutos) {
 
 export function extrairMinutosDeString(tempoString) {
   if (!tempoString) return 0;
-  if (typeof tempoString === "object" && tempoString.totalHoras) {
-    tempoString = tempoString.totalHoras;
-  }
   if (typeof tempoString !== "string") return 0;
 
   const partes = tempoString.match(/(\d+)h\s*(\d+(\.\d+)?)m/);
@@ -38,17 +35,17 @@ export function extrairMinutosDeString(tempoString) {
   return 0;
 }
 
-export function calcularTotalPausas(pausas) {
-  if (!pausas || pausas.length === 0) return "0h 0m";
-  let totalMinutos = pausas.reduce((total, p) => {
-    if (!p.duracao) return total;
-    const partes = p.duracao.match(/(\d+)h(\d+(\.\d+)?)m/);
-    if (partes) {
-      const horas = parseInt(partes[1]) || 0;
-      const minutos = parseFloat(partes[2]) || 0;
-      return total + horas * 60 + minutos;
-    }
-    return total;
-  }, 0);
-  return formatarTempo(totalMinutos);
+export function formatarTotalPausas(tempoString) {
+  if (!tempoString || typeof tempoString !== "string") return "0h 0m";
+
+  const partes = tempoString.match(/(\d+)h\s*(\d+(\.\d+)?)m/);
+  if (partes) {
+    const horas = parseInt(partes[1]) || 0;
+    let minutos = parseFloat(partes[2]) || 0;
+
+    minutos = Math.round(minutos)
+
+    return `${horas}h ${minutos}m`;
+  }
+  return "0h 0m";
 }
