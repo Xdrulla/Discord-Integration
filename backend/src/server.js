@@ -35,8 +35,8 @@ app.post('/register', async (req, res) => {
 	try {
 		const { usuario, mensagem } = req.body;
 		const agora = new Date();
-		const dataFormatada = agora.toISOString().split("T")[0]; // YYYY-MM-DD
-		const horaAtual = agora.toTimeString().split(" ")[0].substring(0, 5); // HH:mm
+		const dataFormatada = agora.toISOString().split("T")[0];
+		const horaAtual = agora.toTimeString().split(" ")[0].substring(0, 5);
 
 		const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
 		const doc = await registroRef.get();
@@ -50,6 +50,15 @@ app.post('/register', async (req, res) => {
 			dadosRegistro.entrada = horaAtual;
 		} else {
 			const registroAtual = doc.data();
+
+			if (registroAtual.pausas) {
+				registroAtual.pausas.forEach(pausa => {
+					if (!pausa.fim) {
+						pausa.fim = `${dataFormatada}T${horaAtual}`;
+					}
+				});
+			}
+
 			if (mensagem.toLowerCase().includes("até amanhã")) {
 				dadosRegistro.saida = horaAtual;
 				if (registroAtual.entrada) {
