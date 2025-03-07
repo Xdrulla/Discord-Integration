@@ -2,6 +2,43 @@ require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
+const removerAcentos = (texto) => {
+	return texto
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLowerCase();
+};
+
+const PALAVRAS_ENTRADA = ["bom dia"];
+
+const PALAVRAS_SAIDA = [
+	"até amanhã",
+	"até mais pessoal",
+	"até pessoal",
+	"bom final de semana pessoal",
+	"até pessoal bom final de semana",
+	"até mais pessoal bom final de semana",
+	"até pessoal bom feriado",
+	"até mais pessoal bom feriado",
+	"até logo",
+	"até breve",
+	"até mais",
+	"até segunda",
+	"até terça",
+	"até quarta",
+	"até quinta",
+	"até sexta",
+	"até sábado",
+	"até domingo",
+	"até semana que vem",
+	"até mês que vem",
+	"até ano que vem",
+	"até depois",
+	"flw",
+	"falou",
+	"fui"
+];
+
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -18,17 +55,31 @@ client.once('ready', () => {
 client.on('messageCreate', async (message) => {
 	if (message.author.bot) return;
 
-	const lowerMessage = message.content.toLowerCase();
+	const mensagemProcessada = removerAcentos(message.content);
 
-	if (lowerMessage.includes("bom dia") || lowerMessage.includes("até amanhã")) {
+	if (PALAVRAS_ENTRADA.some(palavra => mensagemProcessada.includes(palavra))) {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
 				usuario: message.author.username,
 				mensagem: message.content
 			});
+			console.log(`✅ Entrada registrada para ${message.author.username}`);
 		} catch (error) {
 			console.error("❌ Erro ao registrar ponto:", error);
 			await message.reply("❌ Ocorreu um erro ao registrar seu ponto.");
+		}
+	}
+
+	if (PALAVRAS_SAIDA.some(palavra => mensagemProcessada.includes(palavra))) {
+		try {
+			await axios.post(`${process.env.API_URL}/register`, {
+				usuario: message.author.username,
+				mensagem: message.content
+			});
+			console.log(`✅ Saída registrada para ${message.author.username}`);
+		} catch (error) {
+			console.error("❌ Erro ao registrar saída:", error);
+			await message.reply("❌ Ocorreu um erro ao registrar sua saída.");
 		}
 	}
 });
