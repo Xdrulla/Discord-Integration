@@ -91,6 +91,22 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 
 	console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`);
 
+	try {
+		const { data: registro } = await axios.get(`${process.env.API_URL}/registro/${usuario}`);
+
+		if (registro.saida) {
+			console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`);
+			return;
+		}
+	} catch (error) {
+		if (error.response && error.response.status === 404) {
+			console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`);
+		} else {
+			console.error("❌ Erro ao verificar status do usuário:", error);
+			return;
+		}
+	}
+
 	if (statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline")) {
 		try {
 			await axios.post(`${process.env.API_URL}/pause`, {
