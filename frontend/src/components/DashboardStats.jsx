@@ -14,8 +14,10 @@ const DashboardStats = ({ data }) => {
     setSearchUser(searchUser.trim());
   };
 
+  const userEmailPrefix = user.email.split("@")[0];
+
   const filteredData = role === "leitor"
-    ? data.filter((record) => record.usuario === user.email)
+    ? data.filter((record) => record.usuario === userEmailPrefix)
     : searchUser
       ? data.filter((record) => record.usuario.toLowerCase().includes(searchUser.toLowerCase()))
       : data;
