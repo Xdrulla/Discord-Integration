@@ -90,7 +90,7 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 	const statusAtual = newPresence.status;
 
 	console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`);
-	let registro
+	let registro;
 	try {
 		const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`);
 		registro = response.data;
@@ -108,7 +108,7 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		}
 	}
 
-	if (statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline")) {
+	if (!registro.saida && (statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline"))) {
 		try {
 			await axios.post(`${process.env.API_URL}/pause`, {
 				usuario,
@@ -120,7 +120,7 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		}
 	}
 
-	if ((statusAntigo === "idle" || statusAntigo === "offline") && statusAtual === "online") {
+	if (!registro.saida && ((statusAntigo === "idle" || statusAntigo === "offline") && statusAtual === "online")) {
 		try {
 			await axios.post(`${process.env.API_URL}/resume`, {
 				usuario,
