@@ -1,21 +1,52 @@
 function calcularHorasTrabalhadas(entrada, saida, pausas) {
-  const totalMinutos = (parseInt(saida.split(":")[0]) * 60 + parseInt(saida.split(":")[1])) -
-    (parseInt(entrada.split(":")[0]) * 60 + parseInt(entrada.split(":")[1]));
+  try {
+    if (!entrada || !saida) {
+      console.error("❌ Erro: Entrada ou saída ausente no cálculo!", { entrada, saida });
+      return { totalHoras: "0h 0m", totalPausas: "0h 0m" };
+    }
 
-  let minutosPausa = 0;
+    const [entradaHoras, entradaMinutos] = entrada.split(":").map(Number);
+    const [saidaHoras, saidaMinutos] = saida.split(":").map(Number);
 
-  if (pausas && pausas.length > 0) {
-    pausas.forEach(p => {
-      if (p.inicio && p.fim) {
-        minutosPausa += (new Date(p.fim) - new Date(p.inicio)) / 60000;
-      }
-    });
+    if (isNaN(entradaHoras) || isNaN(entradaMinutos) || isNaN(saidaHoras) || isNaN(saidaMinutos)) {
+      console.error("❌ Erro: Horários de entrada ou saída inválidos!", { entrada, saida });
+      return { totalHoras: "0h 0m", totalPausas: "0h 0m" };
+    }
+
+    const minutosEntrada = entradaHoras * 60 + entradaMinutos;
+    const minutosSaida = saidaHoras * 60 + saidaMinutos;
+
+    let totalMinutos = minutosSaida - minutosEntrada;
+
+    let minutosPausa = 0;
+
+    if (pausas && pausas.length > 0) {
+      pausas.forEach(p => {
+        if (p.inicio && p.fim) {
+          const pausaInicio = new Date(p.inicio);
+          const pausaFim = new Date(p.fim);
+
+          if (!isNaN(pausaInicio.getTime()) && !isNaN(pausaFim.getTime())) {
+            minutosPausa += (pausaFim - pausaInicio) / 60000;
+          } else {
+            console.error("❌ Erro: Formato de pausa inválido!", p);
+          }
+        }
+      });
+    }
+
+    if (isNaN(totalMinutos) || isNaN(minutosPausa)) {
+      return { totalHoras: "0h 0m", totalPausas: "0h 0m" };
+    }
+
+    return {
+      totalHoras: formatarTempo(Math.max(0, totalMinutos - minutosPausa)),
+      totalPausas: formatarTempo(Math.max(0, minutosPausa))
+    };
+  } catch (error) {
+    console.error("❌ Erro inesperado ao calcular horas trabalhadas:", error);
+    return { totalHoras: "0h 0m", totalPausas: "0h 0m" };
   }
-
-  return {
-    totalHoras: formatarTempo(totalMinutos - minutosPausa),
-    totalPausas: formatarTempo(minutosPausa)
-  };
 }
 
 function formatarTempo(minutos) {

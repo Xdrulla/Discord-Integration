@@ -58,7 +58,16 @@ exports.pause = async (req, res) => {
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
     const doc = await registroRef.get();
 
-    let dadosRegistro = doc.exists ? doc.data() : { usuario, data: dataFormatada };
+    if (!doc.exists) {
+      return res.status(400).json({ error: "Nenhum registro de entrada encontrado para este usuário." });
+    }
+
+    let dadosRegistro = doc.data();
+
+    if (dadosRegistro.saida) {
+      return res.status(400).json({ error: "O usuário já encerrou o expediente. Pausas não podem ser registradas após a saída." });
+    }
+
     if (!dadosRegistro.pausas) dadosRegistro.pausas = [];
 
     if (dadosRegistro.pausas.length === 0 || dadosRegistro.pausas[dadosRegistro.pausas.length - 1].fim) {
