@@ -3,11 +3,8 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
 const removerAcentos = (texto) => {
-	return texto
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.toLowerCase();
-};
+	return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
 
 const PALAVRAS_ENTRADA = ["bom dia"];
 
@@ -44,7 +41,8 @@ const client = new Client({
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildPresences
+		GatewayIntentBits.GuildPresences,
+		GatewayIntentBits.GuildMembers,
 	]
 });
 
@@ -70,7 +68,7 @@ client.on('messageCreate', async (message) => {
 		}
 	}
 
-	if (PALAVRAS_SAIDA.some(palavra => mensagemProcessada.includes(palavra))) {
+	if (PALAVRAS_SAIDA.some(palavra => removerAcentos(mensagem).includes(removerAcentos(palavra)))) {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
 				usuario: message.author.username,

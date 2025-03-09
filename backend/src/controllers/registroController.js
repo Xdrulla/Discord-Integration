@@ -1,5 +1,5 @@
 const db = require("../config/firebase");
-const { default: PALAVRAS_SAIDA } = require("../utils/enum");
+const PALAVRAS_SAIDA = require("../utils/enum");
 const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
 exports.register = async (req, res) => {
@@ -13,11 +13,15 @@ exports.register = async (req, res) => {
     const doc = await registroRef.get();
 
     let dadosRegistro = { usuario, data: dataFormatada };
+    console.log("Dados que serão salvos:", dadosRegistro);
+
 
     if (!doc.exists) {
       dadosRegistro.entrada = horaAtual;
     } else {
       const registroAtual = doc.data();
+
+      Object.assign(dadosRegistro, registroAtual);
 
       if (registroAtual.pausas) {
         registroAtual.pausas.forEach((pausa) => {

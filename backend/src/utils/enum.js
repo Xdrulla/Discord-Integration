@@ -26,4 +26,4 @@ const PALAVRAS_SAIDA = [
   "fui"
 ];
 
-export default PALAVRAS_SAIDA
+module.exports = PALAVRAS_SAIDA
