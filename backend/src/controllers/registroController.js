@@ -65,6 +65,7 @@ exports.pause = async (req, res) => {
     let dadosRegistro = doc.data();
 
     if (dadosRegistro.saida) {
+      console.log(`⛔ Tentativa de pausa após saída para ${usuario}`);
       return res.status(400).json({ error: "O usuário já encerrou o expediente. Pausas não podem ser registradas após a saída." });
     }
 
