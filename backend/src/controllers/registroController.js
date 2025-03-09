@@ -118,24 +118,24 @@ exports.resume = async (req, res) => {
     console.error("Erro ao finalizar pausa:", error);
     res.status(500).json({ error: "Erro ao finalizar pausa no banco" });
   }
+}
 
-  exports.getRegistro = async (req, res) => {
-    try {
-      const { usuario } = req.params;
-      const agora = new Date();
-      const dataFormatada = agora.toISOString().split("T")[0];
+exports.getRegistro = async (req, res) => {
+  try {
+    const { usuario } = req.params;
+    const agora = new Date();
+    const dataFormatada = agora.toISOString().split("T")[0];
 
-      const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
-      const doc = await registroRef.get();
+    const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
+    const doc = await registroRef.get();
 
-      if (!doc.exists) {
-        return res.status(404).json({ error: "Nenhum registro encontrado para este usuário hoje." });
-      }
-
-      res.json(doc.data());
-    } catch (error) {
-      console.error("Erro ao buscar registro:", error);
-      res.status(500).json({ error: "Erro ao buscar registro no banco" });
+    if (!doc.exists) {
+      return res.status(404).json({ error: "Nenhum registro encontrado para este usuário hoje." });
     }
-  };
+
+    res.json(doc.data());
+  } catch (error) {
+    console.error("Erro ao buscar registro:", error);
+    res.status(500).json({ error: "Erro ao buscar registro no banco" });
+  }
 };
