@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
 const removerAcentos = (texto) => {
-	return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+	return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
 }
 
 const PALAVRAS_ENTRADA = ["bom dia"];
@@ -68,7 +68,7 @@ client.on('messageCreate', async (message) => {
 		}
 	}
 
-	if (PALAVRAS_SAIDA.some(palavra => removerAcentos(mensagem).includes(removerAcentos(palavra)))) {
+	if (PALAVRAS_SAIDA.some(palavra => removerAcentos(mensagemProcessada).includes(removerAcentos(palavra)))) {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
 				usuario: message.author.username,

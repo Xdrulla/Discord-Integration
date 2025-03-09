@@ -13,8 +13,6 @@ exports.register = async (req, res) => {
     const doc = await registroRef.get();
 
     let dadosRegistro = { usuario, data: dataFormatada };
-    console.log("Dados que serão salvos:", dadosRegistro);
-
 
     if (!doc.exists) {
       dadosRegistro.entrada = horaAtual;
@@ -44,7 +42,6 @@ exports.register = async (req, res) => {
         }
       }
     }
-
     await registroRef.set(dadosRegistro, { merge: true });
     res.json({ success: true, message: "Registro atualizado!" });
   } catch (error) {

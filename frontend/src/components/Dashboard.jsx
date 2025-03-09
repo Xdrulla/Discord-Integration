@@ -49,9 +49,6 @@ const Dashboard = () => {
     setFilteredData(filtered);
   };
 
-  console.log('data', data);
-
-
   return (
     <Layout className="dashboard-container">
       <Header className="dashboard-header">
