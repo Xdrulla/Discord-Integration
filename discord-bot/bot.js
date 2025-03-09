@@ -90,9 +90,10 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 	const statusAtual = newPresence.status;
 
 	console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`);
-
+	let registro
 	try {
-		const { data: registro } = await axios.get(`${process.env.API_URL}/registro/${usuario}`);
+		const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`);
+		registro = response.data;
 
 		if (registro.saida) {
 			console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`);
