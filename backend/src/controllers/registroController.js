@@ -1,4 +1,5 @@
 const db = require("../config/firebase");
+const { default: PALAVRAS_SAIDA } = require("../utils/enum");
 const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
 exports.register = async (req, res) => {
@@ -26,7 +27,7 @@ exports.register = async (req, res) => {
         });
       }
 
-      if (mensagem.toLowerCase().includes("até amanhã")) {
+      if (PALAVRAS_SAIDA.some(palavra => mensagem.toLowerCase().includes(palavra))) {
         dadosRegistro.saida = horaAtual;
         if (registroAtual.entrada) {
           const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
