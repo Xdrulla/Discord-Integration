@@ -64,7 +64,6 @@ client.on('messageCreate', async (message) => {
 			console.log(`✅ Entrada registrada para ${message.author.username}`);
 		} catch (error) {
 			console.error("❌ Erro ao registrar ponto:", error);
-			await message.reply("❌ Ocorreu um erro ao registrar seu ponto.");
 		}
 	}
 
@@ -77,59 +76,62 @@ client.on('messageCreate', async (message) => {
 			console.log(`✅ Saída registrada para ${message.author.username}`);
 		} catch (error) {
 			console.error("❌ Erro ao registrar saída:", error);
-			await message.reply("❌ Ocorreu um erro ao registrar sua saída.");
 		}
 	}
 });
 
 client.on('presenceUpdate', async (oldPresence, newPresence) => {
-	if (!oldPresence || !newPresence) return;
-
-	const usuario = newPresence.user.username;
-	const statusAntigo = oldPresence.status;
-	const statusAtual = newPresence.status;
-
-	console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`);
-	let registro;
 	try {
-		const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`);
-		registro = response.data;
+		if (!oldPresence || !newPresence) return
 
-		if (registro.saida) {
-			console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`);
-			return;
+		const usuario = newPresence.user.username
+		const statusAntigo = oldPresence.status
+		const statusAtual = newPresence.status
+
+		console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`)
+		let registro = {}
+
+		try {
+			const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`)
+			registro = response.data
+
+			if (registro.saida) {
+				console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`)
+				return
+			}
+		} catch (error) {
+			if (error.response && error.response.status === 404) {
+				console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`)
+			} else {
+				console.error("❌ Erro ao buscar registro:", error)
+			}
+		}
+
+		if (!registro.saida && (statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline"))) {
+			try {
+				await axios.post(`${process.env.API_URL}/pause`, {
+					usuario,
+					inicio: new Date().toISOString()
+				});
+				console.log(`⏸️ Pausa iniciada para ${usuario}`);
+			} catch (error) {
+				console.error("❌ Erro ao registrar pausa:", error);
+			}
+		}
+
+		if (!registro.saida && ((statusAntigo === "idle" || statusAntigo === "offline") && statusAtual === "online")) {
+			try {
+				await axios.post(`${process.env.API_URL}/resume`, {
+					usuario,
+					fim: new Date().toISOString()
+				})
+				console.log(`▶️ Pausa finalizada para ${usuario}`)
+			} catch (error) {
+				console.error("❌ Erro ao registrar fim da pausa:", error)
+			}
 		}
 	} catch (error) {
-		if (error.response && error.response.status === 404) {
-			console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`);
-		} else {
-			console.error("❌ Erro ao verificar status do usuário:", error);
-			return;
-		}
-	}
-
-	if (!registro.saida && (statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline"))) {
-		try {
-			await axios.post(`${process.env.API_URL}/pause`, {
-				usuario,
-				inicio: new Date().toISOString()
-			});
-			console.log(`⏸️ Pausa iniciada para ${usuario}`);
-		} catch (error) {
-			console.error("❌ Erro ao registrar pausa:", error);
-		}
-	}
-
-	if (!registro.saida && ((statusAntigo === "idle" || statusAntigo === "offline") && statusAtual === "online")) {
-		try {
-			await axios.post(`${process.env.API_URL}/resume`, {
-				usuario,
-				fim: new Date().toISOString()
-			});
-			console.log(`▶️ Pausa finalizada para ${usuario}`);
-		} catch (error) {
-			console.error("❌ Erro ao registrar fim da pausa:", error);
-		}
+		console.error("❌ Erro inesperado na atualização de presença:", error)
 	}
 });
 
