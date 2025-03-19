@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Input, Button, Card, Typography, message, Tabs, Form } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { setDoc, doc } from "firebase/firestore";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const { Title, Text } = Typography;
 
@@ -12,6 +14,15 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useContext(AuthContext);
+
+  if (authLoading) {
+    return <div>Carregando...</div>;
+  }
+
+  if (user) {
+    navigate("/dashboard", { replace: true });
+  }
 
   const handleAuth = async (values, isSignup = false) => {
     setLoading(true);
@@ -25,9 +36,9 @@ const AuthPage = () => {
         await signInWithEmailAndPassword(auth, values.email, values.password);
         message.success("Login realizado com sucesso!");
       }
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     } catch (error) {
-      message.error("Erro ao autenticar. Verifique suas credenciais.", error);
+      message.error(`Erro ao autenticar: ${error.message}`);
     }
     setLoading(false);
   };

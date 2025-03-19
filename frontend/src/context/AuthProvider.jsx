@@ -12,29 +12,29 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {                
-        try {
-          const usersRef = collection(db, "users");
-          const q = query(usersRef, where("email", "==", currentUser.email));
-          const querySnapshot = await getDocs(q);
-          
-          if (!querySnapshot.empty) {
-            const userData = querySnapshot.docs[0].data();
-            setRole(userData.role || "leitor");
-          } else {
-            console.warn("Usuário não encontrado no Firestore, definindo como leitor.");
-            setRole("leitor");
-          }
-
-          setUser(currentUser);
-        } catch (error) {
-          console.error("Erro ao buscar role no Firestore:", error);
-          setRole("leitor");
-        }
-      } else {
-        console.warn("Nenhum usuário autenticado.");
+      if (!currentUser) {
         setUser(null);
         setRole(null);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", currentUser.email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          setRole(userData.role || "leitor");
+        } else {
+          setRole("leitor");
+        }
+
+        setUser(currentUser);
+      } catch (error) {
+        console.error("Erro ao buscar role no Firestore:", error);
+        setRole("leitor");
       }
       setLoading(false);
     });
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, role, logout, loading }}>
-      {children}
+      {loading ? <div>Carregando...</div> : children}
     </AuthContext.Provider>
   );
 };
