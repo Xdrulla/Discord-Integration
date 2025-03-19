@@ -1,40 +1,36 @@
-require('dotenv').config();
-const { Client, GatewayIntentBits } = require('discord.js');
-const axios = require('axios');
+require('dotenv').config()
+const { Client, GatewayIntentBits } = require('discord.js')
+const axios = require('axios')
+const { NlpManager } = require('node-nlp')
 
 const removerAcentos = (texto) => {
 	return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
 }
 
-const PALAVRAS_ENTRADA = ["bom dia"];
+const manager = new NlpManager({ languages: ['pt'] })
 
-const PALAVRAS_SAIDA = [
-	"até amanhã",
-	"até mais pessoal",
-	"até pessoal",
-	"bom final de semana pessoal",
-	"até pessoal bom final de semana",
-	"até mais pessoal bom final de semana",
-	"até pessoal bom feriado",
-	"até mais pessoal bom feriado",
-	"até logo",
-	"até breve",
-	"até mais",
-	"até segunda",
-	"até terça",
-	"até quarta",
-	"até quinta",
-	"até sexta",
-	"até sábado",
-	"até domingo",
-	"até semana que vem",
-	"até mês que vem",
-	"até ano que vem",
-	"até depois",
-	"flw",
-	"falou",
-	"fui"
-];
+manager.addDocument('pt', 'bom dia', 'entrada')
+manager.addDocument('pt', 'bom dia pessoal', 'entrada')
+manager.addDocument('pt', 'e aí, bom dia', 'entrada')
+manager.addDocument('pt', 'cheguei, bom dia', 'entrada')
+
+manager.addDocument('pt', 'até logo', 'saida')
+manager.addDocument('pt', 'até breve', 'saida')
+manager.addDocument('pt', 'até mais pessoal', 'saida')
+manager.addDocument('pt', 'até amanhã', 'saida')
+manager.addDocument('pt', 'até depois', 'saida')
+manager.addDocument('pt', 'até semana que vem', 'saida')
+manager.addDocument('pt', 'falou', 'saida')
+manager.addDocument('pt', 'fui', 'saida')
+manager.addDocument('pt', 'bom final de semana pessoal', 'saida');
+manager.addDocument('pt', 'até mais pessoal bom final de semana', 'saida');
+manager.addDocument('pt', 'bom feriado pessoal', 'saida');
+
+(async () => {
+    await manager.train()
+    manager.save()
+    console.log("✅ Modelo de NLP treinado e salvo!")
+})()
 
 const client = new Client({
 	intents: [
@@ -44,41 +40,47 @@ const client = new Client({
 		GatewayIntentBits.GuildPresences,
 		GatewayIntentBits.GuildMembers,
 	]
-});
+})
 
 client.once('ready', () => {
-	console.log(`✅ Bot ${client.user.tag} está online!`);
-});
+	console.log(`✅ Bot ${client.user.tag} está online!`)
+})
+
+const classificarMensagem = async (mensagem) => {
+    const response = await manager.process('pt', mensagem)
+    return response.intent
+}
 
 client.on('messageCreate', async (message) => {
-	if (message.author.bot) return;
+	if (message.author.bot) return
 
-	const mensagemProcessada = removerAcentos(message.content);
+	const mensagemProcessada = removerAcentos(message.content)
+	const classificacao = await classificarMensagem(mensagemProcessada)
 
-	if (PALAVRAS_ENTRADA.some(palavra => mensagemProcessada.includes(palavra))) {
+	if (classificacao === 'entrada') {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
 				usuario: message.author.username,
 				mensagem: message.content
-			});
-			console.log(`✅ Entrada registrada para ${message.author.username}`);
+			})
+			console.log(`✅ Entrada registrada para ${message.author.username}`)
 		} catch (error) {
-			console.error("❌ Erro ao registrar ponto:", error);
+			console.error("❌ Erro ao registrar ponto:", error)
 		}
 	}
 
-	if (PALAVRAS_SAIDA.some(palavra => removerAcentos(mensagemProcessada).includes(removerAcentos(palavra)))) {
+	if (classificacao === 'saida') {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
 				usuario: message.author.username,
 				mensagem: message.content
-			});
-			console.log(`✅ Saída registrada para ${message.author.username}`);
+			})
+			console.log(`✅ Saída registrada para ${message.author.username}`)
 		} catch (error) {
-			console.error("❌ Erro ao registrar saída:", error);
+			console.error("❌ Erro ao registrar saída:", error)
 		}
 	}
-});
+})
 
 client.on('presenceUpdate', async (oldPresence, newPresence) => {
 	try {
@@ -112,10 +114,10 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 				await axios.post(`${process.env.API_URL}/pause`, {
 					usuario,
 					inicio: new Date().toISOString()
-				});
-				console.log(`⏸️ Pausa iniciada para ${usuario}`);
+				})
+				console.log(`⏸️ Pausa iniciada para ${usuario}`)
 			} catch (error) {
-				console.error("❌ Erro ao registrar pausa:", error);
+				console.error("❌ Erro ao registrar pausa:", error)
 			}
 		}
 
@@ -133,6 +135,6 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 	} catch (error) {
 		console.error("❌ Erro inesperado na atualização de presença:", error)
 	}
-});
+})
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+client.login(process.env.DISCORD_BOT_TOKEN)

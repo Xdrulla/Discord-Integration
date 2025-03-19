@@ -1,23 +1,19 @@
-function calcularHorasTrabalhadas(entrada, saida, pausas) {
+function calcularHorasTrabalhadas(inicio, fim, pausas) {
   try {
-    if (!entrada || !saida) {
-      console.error("❌ Erro: Entrada ou saída ausente no cálculo!", { entrada, saida });
+    if (!inicio || !fim) {
+      console.error("❌ Erro: Início ou fim ausente no cálculo!", { inicio, fim });
       return { totalHoras: "0h 0m", totalPausas: "0h 0m" };
     }
 
-    const [entradaHoras, entradaMinutos] = entrada.split(":").map(Number);
-    const [saidaHoras, saidaMinutos] = saida.split(":").map(Number);
+    const inicioData = new Date(inicio);
+    const fimData = new Date(fim);
 
-    if (isNaN(entradaHoras) || isNaN(entradaMinutos) || isNaN(saidaHoras) || isNaN(saidaMinutos)) {
-      console.error("❌ Erro: Horários de entrada ou saída inválidos!", { entrada, saida });
+    if (isNaN(inicioData.getTime()) || isNaN(fimData.getTime())) {
+      console.error("❌ Erro: Datas de início ou fim inválidas!", { inicio, fim });
       return { totalHoras: "0h 0m", totalPausas: "0h 0m" };
     }
 
-    const minutosEntrada = entradaHoras * 60 + entradaMinutos;
-    const minutosSaida = saidaHoras * 60 + saidaMinutos;
-
-    let totalMinutos = minutosSaida - minutosEntrada;
-
+    let totalMinutos = (fimData - inicioData) / 60000;
     let minutosPausa = 0;
 
     if (pausas && pausas.length > 0) {
