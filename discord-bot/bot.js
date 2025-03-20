@@ -27,9 +27,9 @@ manager.addDocument('pt', 'até mais pessoal bom final de semana', 'saida');
 manager.addDocument('pt', 'bom feriado pessoal', 'saida');
 
 (async () => {
-    await manager.train()
-    manager.save()
-    console.log("✅ Modelo de NLP treinado e salvo!")
+	await manager.train()
+	manager.save()
+	console.log("✅ Modelo de NLP treinado e salvo!")
 })()
 
 const client = new Client({
@@ -47,8 +47,8 @@ client.once('ready', () => {
 })
 
 const classificarMensagem = async (mensagem) => {
-    const response = await manager.process('pt', mensagem)
-    return response.intent
+	const response = await manager.process('pt', mensagem)
+	return response.intent
 }
 
 client.on('messageCreate', async (message) => {
@@ -109,7 +109,12 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			}
 		}
 
-		if (!registro.saida && (statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline"))) {
+		const pausaAtiva = registro.pausas?.length > 0 && !registro.pausas[registro.pausas.length - 1].fim
+		if (!registro.saida && !pausaAtiva && (
+			(statusAntigo === "online" && (statusAtual === "idle" || statusAtual === "offline")) ||
+			(statusAntigo === "dnd" && (statusAtual === "idle" || statusAtual === "offline")) ||
+			(statusAntigo === "dnd" && statusAtual === "idle")
+		)) {
 			try {
 				await axios.post(`${process.env.API_URL}/pause`, {
 					usuario,
@@ -121,7 +126,12 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			}
 		}
 
-		if (!registro.saida && ((statusAntigo === "idle" || statusAntigo === "offline") && statusAtual === "online")) {
+		if (pausaAtiva && (
+			(statusAntigo === "idle" && statusAtual === "dnd") ||
+			(statusAntigo === "offline" && statusAtual === "dnd") ||
+			(statusAntigo === "idle" && statusAtual === "online") ||
+			(statusAntigo === "offline" && statusAtual === "online")
+		)) {
 			try {
 				await axios.post(`${process.env.API_URL}/resume`, {
 					usuario,

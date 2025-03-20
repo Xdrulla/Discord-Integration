@@ -32,13 +32,23 @@ exports.register = async (req, res) => {
       if (PALAVRAS_SAIDA.some(palavra => mensagem.toLowerCase().includes(palavra))) {
         dadosRegistro.saida = horaAtual;
         if (registroAtual.entrada) {
+          const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
+          const dataCompletaSaida = `${dataFormatada}T${dadosRegistro.saida}:00`
           const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
-            registroAtual.entrada,
-            horaAtual,
+            dataCompletaEntrada,
+            dataCompletaSaida,
             registroAtual.pausas || []
           );
-          dadosRegistro.total_horas = totalHoras;
-          dadosRegistro.total_pausas = totalPausas;
+          if (totalHoras !== "0h 0m") {
+            dadosRegistro.total_horas = totalHoras;
+          } else if (registroAtual.total_horas) {
+            dadosRegistro.total_horas = registroAtual.total_horas;
+          }
+          if (totalPausas !== "0h 0m") {
+            dadosRegistro.total_pausas = totalPausas;
+          } else if (registroAtual.total_pausas) {
+            dadosRegistro.total_pausas = registroAtual.total_pausas;
+          }
         }
       }
     }
@@ -108,7 +118,7 @@ exports.resume = async (req, res) => {
 
     ultimaPausa.fim = fim;
 
-    const { totalPausas } = calcularHorasTrabalhadas(dadosRegistro.entrada, fim, dadosRegistro.pausas);
+    const { totalPausas } = calcularHorasTrabalhadas(ultimaPausa.inicio, fim, dadosRegistro.pausas)
     dadosRegistro.total_pausas = totalPausas;
 
     await registroRef.set(dadosRegistro, { merge: true });
