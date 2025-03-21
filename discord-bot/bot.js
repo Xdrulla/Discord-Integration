@@ -25,6 +25,8 @@ manager.addDocument('pt', 'fui', 'saida')
 manager.addDocument('pt', 'bom final de semana pessoal', 'saida');
 manager.addDocument('pt', 'até mais pessoal bom final de semana', 'saida');
 manager.addDocument('pt', 'bom feriado pessoal', 'saida');
+manager.addDocument('pt', 'bom fim de semana galera', 'saida');
+manager.addDocument('pt', 'bom fim de semana pessoal', 'saida');
 
 (async () => {
 	await manager.train()
@@ -59,27 +61,19 @@ client.on('messageCreate', async (message) => {
 	const nomeUsuario = message.member ? message.member.displayName : message.author.username;
 
 	if (classificacao === 'entrada') {
-		try {
-			await axios.post(`${process.env.API_URL}/register`, {
-				usuario: nomeUsuario,
-				mensagem: message.content
-			})
-			console.log(`✅ Entrada registrada para ${nomeUsuario}`)
-		} catch (error) {
-			console.error("❌ Erro ao registrar ponto:", error)
-		}
+		await axios.post(`${process.env.API_URL}/register`, {
+			usuario: nomeUsuario,
+			mensagem: message.content
+		})
+		console.log(`✅ Entrada registrada para ${nomeUsuario}`)
 	}
 
 	if (classificacao === 'saida') {
-		try {
-			await axios.post(`${process.env.API_URL}/register`, {
-				usuario: nomeUsuario,
-				mensagem: message.content
-			})
-			console.log(`✅ Saída registrada para ${nomeUsuario}`)
-		} catch (error) {
-			console.error("❌ Erro ao registrar saída:", error)
-		}
+		await axios.post(`${process.env.API_URL}/register`, {
+			usuario: nomeUsuario,
+			mensagem: message.content
+		})
+		console.log(`✅ Saída registrada para ${nomeUsuario}`)
 	}
 })
 
@@ -94,20 +88,15 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`)
 		let registro = {}
 
-		try {
-			const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`)
-			registro = response.data
+		const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`)
+		registro = response.data
 
-			if (registro.saida) {
-				console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`)
-				return
-			}
-		} catch (error) {
-			if (error.response && error.response.status === 404) {
-				console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`)
-			} else {
-				console.error("❌ Erro ao buscar registro:", error)
-			}
+		if (registro.saida) {
+			console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`)
+			return
+		}
+		if (error.response && error.response.status === 404) {
+			console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`)
 		}
 
 		const pausaAtiva = registro.pausas?.length > 0 && !registro.pausas[registro.pausas.length - 1].fim
@@ -116,15 +105,11 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			(statusAntigo === "dnd" && (statusAtual === "idle" || statusAtual === "offline")) ||
 			(statusAntigo === "dnd" && statusAtual === "idle")
 		)) {
-			try {
-				await axios.post(`${process.env.API_URL}/pause`, {
-					usuario,
-					inicio: new Date().toISOString()
-				})
-				console.log(`⏸️ Pausa iniciada para ${usuario}`)
-			} catch (error) {
-				console.error("❌ Erro ao registrar pausa:", error)
-			}
+			await axios.post(`${process.env.API_URL}/pause`, {
+				usuario,
+				inicio: new Date().toISOString()
+			})
+			console.log(`⏸️ Pausa iniciada para ${usuario}`)
 		}
 
 		if (pausaAtiva && (
@@ -133,15 +118,11 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			(statusAntigo === "idle" && statusAtual === "online") ||
 			(statusAntigo === "offline" && statusAtual === "online")
 		)) {
-			try {
-				await axios.post(`${process.env.API_URL}/resume`, {
-					usuario,
-					fim: new Date().toISOString()
-				})
-				console.log(`▶️ Pausa finalizada para ${usuario}`)
-			} catch (error) {
-				console.error("❌ Erro ao registrar fim da pausa:", error)
-			}
+			await axios.post(`${process.env.API_URL}/resume`, {
+				usuario,
+				fim: new Date().toISOString()
+			})
+			console.log(`▶️ Pausa finalizada para ${usuario}`)
 		}
 	} catch (error) {
 		console.error("❌ Erro inesperado na atualização de presença:", error)

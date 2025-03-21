@@ -1,5 +1,5 @@
 const db = require("../config/firebase");
-const PALAVRAS_SAIDA = require("../utils/enum");
+const { removerAcentos, classificarMensagem } = require("../utils/nlpUtils");
 const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
 exports.register = async (req, res) => {
@@ -13,6 +13,8 @@ exports.register = async (req, res) => {
     const doc = await registroRef.get();
 
     let dadosRegistro = { usuario, data: dataFormatada };
+    const mensagemProcessada = removerAcentos(mensagem)
+    const classificacao = await classificarMensagem(mensagemProcessada)
 
     if (!doc.exists) {
       dadosRegistro.entrada = horaAtual;
@@ -29,7 +31,7 @@ exports.register = async (req, res) => {
         });
       }
 
-      if (PALAVRAS_SAIDA.some(palavra => mensagem.toLowerCase().includes(palavra))) {
+      if (classificacao === saida) {
         dadosRegistro.saida = horaAtual;
         if (registroAtual.entrada) {
           const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
