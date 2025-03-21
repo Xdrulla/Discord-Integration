@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
-import { Input, Button, DatePicker, Space } from "antd";
+import { Input, DatePicker, Space } from "antd";
 import { useState } from "react";
 
 const { RangePicker } = DatePicker;
 
-const FilterBar = ({ searchUser, setSearchUser, handleFilter, setDateRange }) => {
+const FilterBar = ({ searchUser, setSearchUser, setDateRange }) => {
   const [localDateRange, setLocalDateRange] = useState([null, null]);
 
   const onDateChange = (dates) => {
@@ -29,10 +29,6 @@ const FilterBar = ({ searchUser, setSearchUser, handleFilter, setDateRange }) =>
           format="DD/MM/YYYY"
           className="date-picker"
         />
-
-        <Button className="button-primary" type="primary" onClick={handleFilter}>
-          Filtrar
-        </Button>
       </Space>
     </div>
   );
@@ -41,7 +37,6 @@ const FilterBar = ({ searchUser, setSearchUser, handleFilter, setDateRange }) =>
 FilterBar.propTypes = {
   searchUser: PropTypes.string.isRequired,
   setSearchUser: PropTypes.func.isRequired,
-  handleFilter: PropTypes.func.isRequired,
   setDateRange: PropTypes.func.isRequired,
 };
 

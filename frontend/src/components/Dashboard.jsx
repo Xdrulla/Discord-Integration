@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Layout, Typography, Tabs } from "antd";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
@@ -8,6 +8,7 @@ import { fetchRegistros } from "../services/registroService";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import debounce from "lodash.debounce";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -46,7 +47,7 @@ const Dashboard = () => {
     carregarRegistros();
   }, [role, userName]);
 
-  const handleFilter = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...data];
     if (searchUser) {
       filtered = filtered.filter((record) =>
@@ -65,7 +66,17 @@ const Dashboard = () => {
     }
 
     setFilteredData(filtered);
-  };
+  }, [data, searchUser, dateRange]);
+
+  useEffect(() => {
+    const debouncedFilter = debounce(() => applyFilters(), 500);
+    debouncedFilter();
+    return () => debouncedFilter.cancel();
+  }, [searchUser, applyFilters]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [dateRange, applyFilters]);
 
   return (
     <Layout className="dashboard-container">
@@ -81,7 +92,6 @@ const Dashboard = () => {
               <FilterBar
                 searchUser={searchUser}
                 setSearchUser={setSearchUser}
-                handleFilter={handleFilter}
                 setDateRange={setDateRange}
               />
             )}
