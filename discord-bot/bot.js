@@ -64,7 +64,7 @@ client.on('messageCreate', async (message) => {
 				usuario: nomeUsuario,
 				mensagem: message.content
 			})
-			console.log(`✅ Entrada registrada para ${message.author.username}`)
+			console.log(`✅ Entrada registrada para ${nomeUsuario}`)
 		} catch (error) {
 			console.error("❌ Erro ao registrar ponto:", error)
 		}
@@ -76,7 +76,7 @@ client.on('messageCreate', async (message) => {
 				usuario: nomeUsuario,
 				mensagem: message.content
 			})
-			console.log(`✅ Saída registrada para ${message.author.username}`)
+			console.log(`✅ Saída registrada para ${nomeUsuario}`)
 		} catch (error) {
 			console.error("❌ Erro ao registrar saída:", error)
 		}
