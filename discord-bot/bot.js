@@ -56,11 +56,12 @@ client.on('messageCreate', async (message) => {
 
 	const mensagemProcessada = removerAcentos(message.content)
 	const classificacao = await classificarMensagem(mensagemProcessada)
+	const nomeUsuario = message.member ? message.member.displayName : message.author.username;
 
 	if (classificacao === 'entrada') {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
-				usuario: message.author.username,
+				usuario: nomeUsuario,
 				mensagem: message.content
 			})
 			console.log(`✅ Entrada registrada para ${message.author.username}`)
@@ -72,7 +73,7 @@ client.on('messageCreate', async (message) => {
 	if (classificacao === 'saida') {
 		try {
 			await axios.post(`${process.env.API_URL}/register`, {
-				usuario: message.author.username,
+				usuario: nomeUsuario,
 				mensagem: message.content
 			})
 			console.log(`✅ Saída registrada para ${message.author.username}`)
@@ -86,7 +87,7 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 	try {
 		if (!oldPresence || !newPresence) return
 
-		const usuario = newPresence.user.username
+		const usuario = newPresence.guild?.members.cache.get(newPresence.userId)?.displayName || newPresence.user.username;
 		const statusAntigo = oldPresence.status
 		const statusAtual = newPresence.status
 
