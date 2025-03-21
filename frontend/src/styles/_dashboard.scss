@@ -77,3 +77,14 @@
     width: 100%;
   }
 }
+
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.date-picker {
+  width: 250px;
+}

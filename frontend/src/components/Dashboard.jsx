@@ -5,6 +5,12 @@ import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
 import { useAuth } from "../context/useAuth";
 import { fetchRegistros } from "../services/registroService";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -17,6 +23,7 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchUser, setSearchUser] = useState("");
+  const [dateRange, setDateRange] = useState([null, null]);
 
   useEffect(() => {
     const carregarRegistros = async () => {
@@ -46,6 +53,17 @@ const Dashboard = () => {
         record.usuario.toLowerCase().includes(searchUser.toLowerCase())
       );
     }
+
+    if (dateRange[0] && dateRange[1]) {
+      filtered = filtered.filter((record) => {
+        const recordDate = dayjs(record.data);
+        return (
+          recordDate.isSameOrAfter(dayjs(dateRange[0]).startOf("day")) &&
+          recordDate.isSameOrBefore(dayjs(dateRange[1]).endOf("day"))
+        );
+      });
+    }
+
     setFilteredData(filtered);
   };
 
@@ -60,7 +78,12 @@ const Dashboard = () => {
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Registros de Ponto" key="1">
             {role === "admin" && (
-              <FilterBar searchUser={searchUser} setSearchUser={setSearchUser} handleFilter={handleFilter} />
+              <FilterBar
+                searchUser={searchUser}
+                setSearchUser={setSearchUser}
+                handleFilter={handleFilter}
+                setDateRange={setDateRange}
+              />
             )}
             <RecordsTable loading={loading} filteredData={filteredData} />
           </Tabs.TabPane>

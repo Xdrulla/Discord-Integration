@@ -1,15 +1,39 @@
 import PropTypes from "prop-types";
-import { Input, Button } from "antd";
+import { Input, Button, DatePicker, Space } from "antd";
+import { useState } from "react";
 
-const FilterBar = ({ searchUser, setSearchUser, handleFilter }) => {
+const { RangePicker } = DatePicker;
+
+const FilterBar = ({ searchUser, setSearchUser, handleFilter, setDateRange }) => {
+  const [localDateRange, setLocalDateRange] = useState([null, null]);
+
+  const onDateChange = (dates) => {
+    setLocalDateRange(dates || [null, null]);
+    setDateRange(dates || [null, null]);
+  };
+
   return (
     <div className="filter-container">
-      <Input
-        placeholder="Filtrar por usuário"
-        value={searchUser}
-        onChange={(e) => setSearchUser(e.target.value)}
-      />
-      <Button className="button-primary" type="primary" onClick={handleFilter}>Filtrar</Button>
+      <Space className="filter-elements">
+        <Input
+          placeholder="Filtrar por usuário"
+          value={searchUser}
+          onChange={(e) => setSearchUser(e.target.value)}
+          className="filter-input"
+        />
+
+        <RangePicker
+          value={localDateRange}
+          onChange={onDateChange}
+          allowClear
+          format="DD/MM/YYYY"
+          className="date-picker"
+        />
+
+        <Button className="button-primary" type="primary" onClick={handleFilter}>
+          Filtrar
+        </Button>
+      </Space>
     </div>
   );
 };
@@ -18,6 +42,7 @@ FilterBar.propTypes = {
   searchUser: PropTypes.string.isRequired,
   setSearchUser: PropTypes.func.isRequired,
   handleFilter: PropTypes.func.isRequired,
+  setDateRange: PropTypes.func.isRequired,
 };
 
 export default FilterBar;

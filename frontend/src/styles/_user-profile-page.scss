@@ -9,7 +9,8 @@
 }
 
 .profile-card {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   text-align: center;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -32,10 +33,43 @@
 
 .profile-title {
   margin-bottom: 20px;
+  color: #333;
 }
 
 .profile-text {
   display: block;
   font-size: 16px;
+  color: #666;
   margin-bottom: 8px;
+}
+
+.profile-actions {
+  margin-top: 20px;
+}
+
+.change-password-button {
+  width: 100%;
+  background: #5a40b6;
+  border: none;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: #8e6edb;
+  }
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.password-input {
+  margin-top: 10px;
 }
