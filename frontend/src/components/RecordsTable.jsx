@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip, Modal, Input, Select, Space, DatePicker } from "antd";
+import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip, Modal, Input, Select, Space, DatePicker, message } from "antd";
 import { SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useAuth } from "../context/useAuth";
 import dayjs from "dayjs";
+import { upsertJustificativa } from "../services/justificativaService";
 
 const { Option } = Select;
 
@@ -56,17 +57,40 @@ const RecordsTable = ({ loading, filteredData }) => {
     setIsModalVisible(true);
   };
 
-  const handleJustificationSubmit = () => {
-    setJustifications((prev) => ({
-      ...prev,
-      [currentRecord.id]: {
-        text: justificationText,
-        status,
-        newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
-        newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null
+  const handleJustificationSubmit = async () => {
+    const justificativaPayload = {
+      usuario: currentRecord.usuario,
+      data: currentRecord.data,
+      text: justificationText,
+      newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
+      newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
+      status: role === "admin" ? status : "pendente",
+    };
+
+    try {
+      const result = await upsertJustificativa(justificativaPayload);
+      if (result.success) {
+        message.success("Justificativa atualizada com sucesso!");
+
+        setJustifications((prev) => ({
+          ...prev,
+          [currentRecord.id]: {
+            text: justificationText,
+            status: role === "admin" ? status : "pendente",
+            newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
+            newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
+          },
+        }));
+
+        setIsModalVisible(false);
+
+      } else {
+        message.error(result.error || "Erro ao atualizar justificativa");
       }
-    }));
-    setIsModalVisible(false);
+    } catch (error) {
+      console.error("Erro na chamada de justificativa:", error);
+      message.error("Erro ao atualizar justificativa");
+    }
   };
 
   const handleApproval = (recordId, newStatus) => {
@@ -222,11 +246,13 @@ const RecordsTable = ({ loading, filteredData }) => {
           className="input-margin"
         />
 
-        <Select value={status} onChange={setStatus} className="input-margin">
-          <Option value="pendente">Pendente</Option>
-          <Option value="aprovado">Aprovado</Option>
-          <Option value="reprovado">Reprovado</Option>
-        </Select>
+        {role === "admin" && (
+          <Select value={status} onChange={setStatus} className="input-margin">
+            <Option value="pendente">Pendente</Option>
+            <Option value="aprovado">Aprovado</Option>
+            <Option value="reprovado">Reprovado</Option>
+          </Select>
+        )}
       </Modal>
     </div>
   );
