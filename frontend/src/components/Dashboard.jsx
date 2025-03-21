@@ -32,7 +32,9 @@ const Dashboard = () => {
         let registros = await fetchRegistros();
 
         if (role === "leitor") {
-          registros = registros.filter((record) => record.usuario.includes(userName));
+          registros = registros.filter((record) =>
+            record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
+          )
         }
 
         setData(registros);
