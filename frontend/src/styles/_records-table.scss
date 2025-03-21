@@ -63,6 +63,12 @@
   text-align: center;
 }
 
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 // Atualização para color.adjust() no lugar de lighten() e darken()
 .tag-success {
   background-color: color.adjust($goepik-done-background, $lightness: 5%);

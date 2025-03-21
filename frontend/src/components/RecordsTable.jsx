@@ -1,12 +1,24 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip, Modal, Input, Select, Space, DatePicker } from "antd";
+import { SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { useAuth } from "../context/useAuth";
+import dayjs from "dayjs";
+
+const { Option } = Select;
 
 const RecordsTable = ({ loading, filteredData }) => {
+  const { role } = useAuth(); // Verifica se o usuário é admin
   const [visibleColumns, setVisibleColumns] = useState([
-    "usuario", "data", "entrada", "saida", "total_pausas", "total_horas"
+    "usuario", "data", "entrada", "saida", "total_pausas", "total_horas", "justificativa"
   ]);
+  const [justifications, setJustifications] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState(null);
+  const [justificationText, setJustificationText] = useState("");
+  const [status, setStatus] = useState("pendente");
+  const [newEntry, setNewEntry] = useState(null);
+  const [newExit, setNewExit] = useState(null);
 
   const toggleColumn = (columnKey) => {
     setVisibleColumns((prev) =>
@@ -20,7 +32,8 @@ const RecordsTable = ({ loading, filteredData }) => {
     { key: "entrada", label: "Entrada" },
     { key: "saida", label: "Saída" },
     { key: "total_pausas", label: "Tempo de Intervalo" },
-    { key: "total_horas", label: "Horas Trabalhadas" }
+    { key: "total_horas", label: "Horas Trabalhadas" },
+    { key: "justificativa", label: "Justificativa" }
   ];
 
   const menu = (
@@ -32,6 +45,36 @@ const RecordsTable = ({ loading, filteredData }) => {
       ))}
     </Menu>
   );
+
+  const showJustificationModal = (record) => {
+    setCurrentRecord(record);
+    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null };
+    setJustificationText(justification.text);
+    setStatus(justification.status);
+    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null);
+    setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
+    setIsModalVisible(true);
+  };
+
+  const handleJustificationSubmit = () => {
+    setJustifications((prev) => ({
+      ...prev,
+      [currentRecord.id]: {
+        text: justificationText,
+        status,
+        newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
+        newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null
+      }
+    }));
+    setIsModalVisible(false);
+  };
+
+  const handleApproval = (recordId, newStatus) => {
+    setJustifications((prev) => ({
+      ...prev,
+      [recordId]: { ...prev[recordId], status: newStatus }
+    }));
+  };
 
   const columns = [
     {
@@ -79,6 +122,56 @@ const RecordsTable = ({ loading, filteredData }) => {
       key: "total_horas",
       responsive: ['lg'],
       render: (text) => <Tag className="tag-purple">{text}</Tag>
+    },
+    {
+      title: "Justificativa",
+      dataIndex: "justificativa",
+      key: "justificativa",
+      responsive: ['lg'],
+      render: (_, record) => (
+        <Space>
+          <Tooltip title={justifications[record.id]?.text || "Nenhuma justificativa"}>
+            <Button
+              icon={<EditOutlined />}
+              onClick={() => showJustificationModal(record)}
+            >
+              {justifications[record.id] ? "Editar" : "Adicionar"}
+            </Button>
+          </Tooltip>
+
+          {role === "admin" && justifications[record.id] && justifications[record.id].status === "pendente" && (
+            <>
+              <Button
+                type="primary"
+                icon={<CheckCircleOutlined />}
+                onClick={() => handleApproval(record.id, "aprovado")}
+              >
+                Aprovar
+              </Button>
+              <Button
+                type="danger"
+                icon={<CloseCircleOutlined />}
+                onClick={() => handleApproval(record.id, "reprovado")}
+              >
+                Reprovar
+              </Button>
+            </>
+          )}
+        </Space>
+      )
+    },
+    {
+      title: "Status",
+      key: "status",
+      responsive: ['lg'],
+      render: (_, record) => {
+        const status = justifications[record.id]?.status || "pendente";
+        return (
+          <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
+            {status.toUpperCase()}
+          </Tag>
+        );
+      }
     }
   ].filter(column => visibleColumns.includes(column.key));
 
@@ -89,7 +182,52 @@ const RecordsTable = ({ loading, filteredData }) => {
           <Button icon={<SettingOutlined />} className="column-btn">Configurar Colunas</Button>
         </Dropdown>
       </div>
-      {loading ? <Spin size="large" className="loading-spinner" /> : <Table columns={columns} dataSource={filteredData} rowKey="id" />}
+      {loading ? (
+        <Spin size="large" className="loading-spinner" />
+      ) : (
+        <Table columns={columns} dataSource={filteredData} rowKey="id" />
+      )}
+
+      <Modal
+        title="Justificar Horário"
+        open={isModalVisible}
+        onOk={handleJustificationSubmit}
+        onCancel={() => setIsModalVisible(false)}
+        okText="Salvar"
+        cancelText="Cancelar"
+      >
+        <p>
+          Justifique por que houve um horário diferente ou um intervalo adicional para o usuário <b>{currentRecord?.usuario}</b> no dia <b>{currentRecord?.data}</b>.
+        </p>
+        <Input.TextArea
+          rows={4}
+          value={justificationText}
+          onChange={(e) => setJustificationText(e.target.value)}
+          placeholder="Descreva a justificativa..."
+        />
+
+        <DatePicker
+          showTime
+          value={newEntry}
+          onChange={setNewEntry}
+          placeholder="Entrada manual"
+          className="input-margin"
+        />
+
+        <DatePicker
+          showTime
+          value={newExit}
+          onChange={setNewExit}
+          placeholder="Saída manual"
+          className="input-margin"
+        />
+
+        <Select value={status} onChange={setStatus} className="input-margin">
+          <Option value="pendente">Pendente</Option>
+          <Option value="aprovado">Aprovado</Option>
+          <Option value="reprovado">Reprovado</Option>
+        </Select>
+      </Modal>
     </div>
   );
 };
