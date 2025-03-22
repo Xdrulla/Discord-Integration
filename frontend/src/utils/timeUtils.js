@@ -49,3 +49,26 @@ export function formatarTotalPausas(tempoString) {
   }
   return "0h 0m";
 }
+
+export const converterParaMinutos = (horasString) => {
+  const match = horasString.match(/(-?\d+)h\s*(-?\d+)m/);
+  if (!match) return 0;
+
+  const horas = parseInt(match[1], 10);
+  const minutos = parseInt(match[2], 10);
+  return horas * 60 + minutos;
+};
+
+export const formatarMinutosParaHoras = (minutosTotais) => {
+  const sinal = minutosTotais < 0 ? "-" : "";
+  const minutosAbs = Math.abs(minutosTotais);
+  const horas = Math.floor(minutosAbs / 60);
+  const minutos = minutosAbs % 60;
+  return `${sinal}${horas}h ${minutos}m`;
+};
+
+export function horaStringParaMinutos(hora) {
+  if (!hora || typeof hora !== "string") return 0;
+  const [h, m] = hora.split(":").map(Number);
+  return h * 60 + m;
+}

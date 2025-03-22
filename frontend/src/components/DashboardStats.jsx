@@ -5,6 +5,7 @@ import { FileExcelOutlined, FilePdfOutlined } from "@ant-design/icons";
 import { exportCSV, exportPDF } from "../helper/exportUtils";
 import FilterBar from "./FilterBar";
 import { useAuth } from "../context/useAuth";
+import { converterParaMinutos, formatarMinutosParaHoras } from "../utils/timeUtils";
 
 const DashboardStats = ({ data }) => {
   const { role, user } = useAuth();
@@ -21,44 +22,23 @@ const DashboardStats = ({ data }) => {
     : searchUser
       ? data.filter((record) => record.usuario.toLowerCase().includes(searchUser.toLowerCase()))
       : data;
+  const registrosConcluidos = filteredData.filter((record) => record.saida && record.saida !== "-");
 
-  const totalBancoHoras = filteredData.reduce((acc, record) => {
-    const bancoHoras = record.banco_horas || "0h 0m";
-    const match = bancoHoras.match(/(-?\d+)h\s*(-?\d+)m/);
-
-    if (match) {
-      const horasNum = parseInt(match[1]) || 0;
-      const minutosNum = parseInt(match[2]) || 0;
-      return acc + (horasNum + minutosNum / 60);
-    }
-    return acc;
+  const totalMinutosBanco = registrosConcluidos.reduce((acc, record) => {
+    return acc + converterParaMinutos(record.banco_horas || "0h 0m");
   }, 0);
 
-  const totalHorasTrabalhadas = filteredData.reduce((acc, record) => {
-    const horas = record.total_horas || "0h 0m";
-    const match = horas.match(/(\d+)h\s*(\d+)m/);
-    if (match) {
-      const horasNum = parseInt(match[1]) || 0;
-      const minutosNum = parseInt(match[2]) || 0;
-      return acc + horasNum + minutosNum / 60;
-    }
-    return acc;
+  const totalMinutosTrabalhados = registrosConcluidos.reduce((acc, record) => {
+    return acc + converterParaMinutos(record.total_horas || "0h 0m");
   }, 0);
 
-  const diasComHorasExtras = filteredData.filter(record => {
-    const bancoHoras = record.banco_horas || "0h 0m";
-    const match = bancoHoras.match(/(-?\d+)h\s*(-?\d+)m/);
-    if (match) {
-      const horasNum = parseInt(match[1]) || 0;
-      const minutosNum = parseInt(match[2]) || 0;
-      return horasNum > 0 || minutosNum > 0;
-    }
-    return false;
+  const diasComHorasExtras = registrosConcluidos.filter(record => {
+    return converterParaMinutos(record.banco_horas || "0h 0m") > 0;
   }).length;
 
-  const mediaHorasExtrasDiaria = diasComHorasExtras > 0
-    ? (totalBancoHoras / diasComHorasExtras).toFixed(1)
-    : "0h 0m";
+  const mediaMinutosExtras = diasComHorasExtras > 0
+    ? Math.round(totalMinutosBanco / diasComHorasExtras)
+    : 0;
 
   return (
     <div className="stats-container">
@@ -71,17 +51,17 @@ const DashboardStats = ({ data }) => {
           <Row gutter={16}>
             <Col span={8}>
               <Card>
-                <Statistic title="Banco de Horas Total" value={`${totalBancoHoras.toFixed(1)}h`} />
+                <Statistic title="Banco de Horas Total" value={formatarMinutosParaHoras(totalMinutosBanco)} />
               </Card>
             </Col>
             <Col span={8}>
               <Card>
-                <Statistic title="Média de Horas Extras Diárias" value={`${mediaHorasExtrasDiaria}h`} />
+                <Statistic title="Média de Horas Extras Diárias" value={formatarMinutosParaHoras(mediaMinutosExtras)} />
               </Card>
             </Col>
             <Col span={8}>
               <Card>
-                <Statistic title="Total de Horas Trabalhadas no Mês" value={`${totalHorasTrabalhadas.toFixed(1)}h`} />
+                <Statistic title="Total de Horas Trabalhadas no Mês" value={formatarMinutosParaHoras(totalMinutosTrabalhados)} />
               </Card>
             </Col>
           </Row>

@@ -5,11 +5,12 @@ import { SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined
 import { useAuth } from "../context/useAuth";
 import dayjs from "dayjs";
 import { upsertJustificativa } from "../services/justificativaService";
+import { extrairMinutosDeString } from "../utils/timeUtils";
 
 const { Option } = Select;
 
 const RecordsTable = ({ loading, filteredData }) => {
-  const { role } = useAuth(); // Verifica se o usuário é admin
+  const { role } = useAuth();
   const [visibleColumns, setVisibleColumns] = useState([
     "usuario", "data", "entrada", "saida", "total_pausas", "total_horas", "justificativa"
   ]);
@@ -20,6 +21,10 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [status, setStatus] = useState("pendente");
   const [newEntry, setNewEntry] = useState(null);
   const [newExit, setNewExit] = useState(null);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
 
   const toggleColumn = (columnKey) => {
     setVisibleColumns((prev) =>
@@ -105,6 +110,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       title: "Usuário",
       dataIndex: "usuario",
       key: "usuario",
+      sorter: (a, b) => a.usuario.localeCompare(b.usuario),
       responsive: ['xs', 'sm', 'md', 'lg'],
       render: (text) => <strong className="user-text">{text}</strong>,
     },
@@ -112,6 +118,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       title: "Data",
       dataIndex: "data",
       key: "data",
+      sorter: (a, b) => dayjs(a.data).unix() - dayjs(b.data).unix(),
       responsive: ['sm', 'md', 'lg'],
       render: (text) => <span className="data-bold">{text}</span>
     },
@@ -119,6 +126,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       title: "Entrada",
       dataIndex: "entrada",
       key: "entrada",
+      sorter: (a, b) => a.entrada.localeCompare(b.entrada),
       responsive: ['md', 'lg'],
       render: (text) => <Tag className="tag-success">{text}</Tag>
     },
@@ -126,6 +134,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       title: "Saída",
       dataIndex: "saida",
       key: "saida",
+      sorter: (a, b) => a.saida.localeCompare(b.saida),
       responsive: ['md', 'lg'],
       render: (text) => text !== "-" ? <Tag className="tag-error">{text}</Tag> : "-"
     },
@@ -133,6 +142,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       title: "Tempo de Intervalo",
       dataIndex: "total_pausas",
       key: "total_pausas",
+      sorter: (a, b) => extrairMinutosDeString(a.total_pausas) - extrairMinutosDeString(b.total_pausas),
       responsive: ['lg'],
       render: (text) => (
         <Tooltip title={`Total de pausas: ${text}`}>
@@ -144,6 +154,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       title: "Horas Trabalhadas",
       dataIndex: "total_horas",
       key: "total_horas",
+      sorter: (a, b) => extrairMinutosDeString(a.total_horas) - extrairMinutosDeString(b.total_horas),
       responsive: ['lg'],
       render: (text) => <Tag className="tag-purple">{text}</Tag>
     },
@@ -209,7 +220,20 @@ const RecordsTable = ({ loading, filteredData }) => {
       {loading ? (
         <Spin size="large" className="loading-spinner" />
       ) : (
-        <Table columns={columns} dataSource={filteredData} rowKey="id" />
+        <Table
+          columns={columns}
+          dataSource={filteredData}
+          rowKey="id"
+          pagination={{
+            ...pagination,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '20', '50'],
+            showTotal: (total) => `Total de ${total} registros`,
+          }}
+          onChange={(paginationConfig) => {
+            setPagination(paginationConfig);
+          }}
+        />
       )}
 
       <Modal
