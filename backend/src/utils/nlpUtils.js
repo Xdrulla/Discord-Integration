@@ -27,11 +27,16 @@ manager.addDocument('pt', 'bom fim de semana pessoal', 'saida');
   console.log("✅ Modelo de NLP treinado e salvo!")
 })()
 
-export const classificarMensagem = async (mensagem) => {
-    const response = await manager.process('pt', mensagem)
-    return response.intent
+const classificarMensagem = async (mensagem) => {
+  const response = await manager.process('pt', mensagem)
+  return response.intent
 }
 
-export const removerAcentos = (texto) => {
-    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
+const removerAcentos = (texto) => {
+  return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
+}
+
+module.exports = {
+  classificarMensagem,
+  removerAcentos,
 }
