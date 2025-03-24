@@ -88,15 +88,20 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`)
 		let registro = {}
 
-		const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`)
-		registro = response.data
+		try {
+			const response = await axios.get(`${process.env.API_URL}/registro/${usuario}`)
+			registro = response.data
 
-		if (registro.saida) {
-			console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`)
-			return
-		}
-		if (error.response && error.response.status === 404) {
-			console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`)
+			if (registro.saida) {
+				console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`)
+				return
+			}
+		} catch (error) {
+			if (error.response && error.response.status === 404) {
+				console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`)
+			} else {
+				console.error("❌ Erro ao buscar registro:", error)
+			}
 		}
 
 		const pausaAtiva = registro.pausas?.length > 0 && !registro.pausas[registro.pausas.length - 1].fim
