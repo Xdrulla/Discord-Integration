@@ -10,7 +10,7 @@ import { extrairMinutosDeString } from "../utils/timeUtils"
 const { Option } = Select
 
 const RecordsTable = ({ loading, filteredData }) => {
-  const { role } = useAuth()
+  const { role, user } = useAuth()
   const [visibleColumns, setVisibleColumns] = useState([
     "usuario", "data", "entrada", "saida", "total_pausas", "total_horas", "justificativa"
   ])
@@ -31,6 +31,8 @@ const RecordsTable = ({ loading, filteredData }) => {
       prev.includes(columnKey) ? prev.filter((key) => key !== columnKey) : [...prev, columnKey]
     )
   }
+
+  const ROOTUSER = 'luan@goepik.com.br'
 
   const columnOptions = [
     { key: "usuario", label: "Usuário" },
@@ -206,61 +208,66 @@ const RecordsTable = ({ loading, filteredData }) => {
       responsive: ['lg'],
       render: (text) => <Tag className="tag-purple">{text}</Tag>
     },
-    {
-      title: "Status",
-      key: "status",
-      responsive: ['lg'],
-      render: (_, record) => {
-        const backendStatus = record.justificativa?.status
-        const localStatus = justifications[record.id]?.status
-        const status = localStatus || backendStatus
-        if (!status) return "-"
-        return (
-          <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
-            {status.toUpperCase()}
-          </Tag>
-        )
-      }
-    },
-    {
-      title: "Justificativa",
-      dataIndex: "justificativa",
-      key: "justificativa",
-      responsive: ['lg'],
-      render: (_, record) => (
-        <Space>
-          <Tooltip title={justifications[record.id]?.text || "Nenhuma justificativa"}>
-            <Button
-              icon={<EditOutlined />}
-              onClick={() => showJustificationModal(record)}
-            >
-              {justifications[record.id] ? "Editar" : "Adicionar"}
-            </Button>
-          </Tooltip>
+    ...(
+      user?.email?.includes(ROOTUSER)
+        ? [
+          {
+            title: "Status",
+            key: "status",
+            responsive: ['lg'],
+            render: (_, record) => {
+              const backendStatus = record.justificativa?.status
+              const localStatus = justifications[record.id]?.status
+              const status = localStatus || backendStatus
+              if (!status) return "-"
+              return (
+                <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
+                  {status.toUpperCase()}
+                </Tag>
+              )
+            }
+          },
+          {
+            title: "Justificativa",
+            dataIndex: "justificativa",
+            key: "justificativa",
+            responsive: ['lg'],
+            render: (_, record) => (
+              <Space>
+                <Tooltip title={justifications[record.id]?.text || "Nenhuma justificativa"}>
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={() => showJustificationModal(record)}
+                  >
+                    {justifications[record.id] ? "Editar" : "Adicionar"}
+                  </Button>
+                </Tooltip>
 
-          {role === "admin" && justifications[record.id] && justifications[record.id].status === "pendente" && (
-            <>
-              <Button
-                type="primary"
-                icon={<CheckCircleOutlined />}
-                onClick={() => handleApproval(record.id, "aprovado")}
-              >
-                Aprovar
-              </Button>
-              <Button
-                type="danger"
-                icon={<CloseCircleOutlined />}
-                onClick={() => handleApproval(record.id, "reprovado")}
-              >
-                Reprovar
-              </Button>
-            </>
-          )}
-        </Space>
-      )
-    },
+                {role === "admin" && justifications[record.id] && justifications[record.id].status === "pendente" && (
+                  <>
+                    <Button
+                      type="primary"
+                      icon={<CheckCircleOutlined />}
+                      onClick={() => handleApproval(record.id, "aprovado")}
+                    >
+                      Aprovar
+                    </Button>
+                    <Button
+                      type="danger"
+                      icon={<CloseCircleOutlined />}
+                      onClick={() => handleApproval(record.id, "reprovado")}
+                    >
+                      Reprovar
+                    </Button>
+                  </>
+                )}
+              </Space>
+            )
+          }
+        ]
+        : []
+    )
   ].filter(column => visibleColumns.includes(column.key))
-  console.log('filteredData', filteredData)
 
   return (
     <div className="table-container">
