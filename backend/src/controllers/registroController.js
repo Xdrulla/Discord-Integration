@@ -20,7 +20,6 @@ exports.register = async (req, res) => {
       dadosRegistro.entrada = horaAtual;
     } else {
       const registroAtual = doc.data();
-
       Object.assign(dadosRegistro, registroAtual);
 
       if (registroAtual.pausas) {
@@ -33,14 +32,29 @@ exports.register = async (req, res) => {
 
       if (classificacao === 'saida') {
         dadosRegistro.saida = horaAtual;
+
         if (registroAtual.entrada) {
           const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
           const dataCompletaSaida = `${dataFormatada}T${dadosRegistro.saida}:00`
+
+          console.log("📌 dataCompletaEntrada:", dataCompletaEntrada)
+          console.log("📌 dataCompletaSaida:", dataCompletaSaida)
+
           const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
             dataCompletaEntrada,
             dataCompletaSaida,
             registroAtual.pausas || []
           );
+
+          console.log("✅ totalHoras calculado:", totalHoras)
+          console.log("✅ totalPausas calculado:", totalPausas)
+
+          // Forçando o set para debug — remova se preferir lógica condicional
+          // dadosRegistro.total_horas = totalHoras;
+          // dadosRegistro.total_pausas = totalPausas;
+
+          // Se preferir manter as condições, comente as linhas acima e descomente essas:
+
           if (totalHoras !== "0h 0m") {
             dadosRegistro.total_horas = totalHoras;
           } else if (registroAtual.total_horas) {
@@ -51,13 +65,14 @@ exports.register = async (req, res) => {
           } else if (registroAtual.total_pausas) {
             dadosRegistro.total_pausas = registroAtual.total_pausas;
           }
+
         }
       }
     }
     await registroRef.set(dadosRegistro, { merge: true });
     res.json({ success: true, message: "Registro atualizado!" });
   } catch (error) {
-    console.error("Erro ao salvar no banco:", error);
+    console.error("❌ Erro ao salvar no banco:", error);
     res.status(500).json({ error: "Erro ao salvar no banco de dados" });
   }
 };
