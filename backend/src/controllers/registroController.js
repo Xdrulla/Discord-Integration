@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
         });
       }
 
-      if (classificacao === saida) {
+      if (classificacao === 'saida') {
         dadosRegistro.saida = horaAtual;
         if (registroAtual.entrada) {
           const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
