@@ -43,6 +43,7 @@ export async function fetchRegistros() {
       total_horas: formatarTempo(minutosTrabalhados),
       total_pausas: formatarTotalPausas(data.total_pausas),
       banco_horas: bancoHoras,
+      justificativa: data.justificativa || null
     };
   });
 }

@@ -1,36 +1,36 @@
-import PropTypes from "prop-types";
-import { useState } from "react";
-import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip, Modal, Input, Select, Space, DatePicker, message } from "antd";
-import { SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { useAuth } from "../context/useAuth";
-import dayjs from "dayjs";
-import { upsertJustificativa } from "../services/justificativaService";
-import { extrairMinutosDeString } from "../utils/timeUtils";
+import PropTypes from "prop-types"
+import { useEffect, useState } from "react"
+import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip, Modal, Input, Select, Space, DatePicker, message } from "antd"
+import { SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons"
+import { useAuth } from "../context/useAuth"
+import dayjs from "dayjs"
+import { upsertJustificativa } from "../services/justificativaService"
+import { extrairMinutosDeString } from "../utils/timeUtils"
 
-const { Option } = Select;
+const { Option } = Select
 
 const RecordsTable = ({ loading, filteredData }) => {
-  const { role } = useAuth();
+  const { role } = useAuth()
   const [visibleColumns, setVisibleColumns] = useState([
     "usuario", "data", "entrada", "saida", "total_pausas", "total_horas", "justificativa"
-  ]);
-  const [justifications, setJustifications] = useState({});
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentRecord, setCurrentRecord] = useState(null);
-  const [justificationText, setJustificationText] = useState("");
-  const [status, setStatus] = useState("pendente");
-  const [newEntry, setNewEntry] = useState(null);
-  const [newExit, setNewExit] = useState(null);
+  ])
+  const [justifications, setJustifications] = useState({})
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [currentRecord, setCurrentRecord] = useState(null)
+  const [justificationText, setJustificationText] = useState("")
+  const [status, setStatus] = useState("pendente")
+  const [newEntry, setNewEntry] = useState(null)
+  const [newExit, setNewExit] = useState(null)
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
-  });
+  })
 
   const toggleColumn = (columnKey) => {
     setVisibleColumns((prev) =>
       prev.includes(columnKey) ? prev.filter((key) => key !== columnKey) : [...prev, columnKey]
-    );
-  };
+    )
+  }
 
   const columnOptions = [
     { key: "usuario", label: "Usuário" },
@@ -39,8 +39,9 @@ const RecordsTable = ({ loading, filteredData }) => {
     { key: "saida", label: "Saída" },
     { key: "total_pausas", label: "Tempo de Intervalo" },
     { key: "total_horas", label: "Horas Trabalhadas" },
+    { key: "status", label: "Status" },
     { key: "justificativa", label: "Justificativa" }
-  ];
+  ]
 
   const menu = (
     <Menu className="column-menu">
@@ -50,17 +51,39 @@ const RecordsTable = ({ loading, filteredData }) => {
         </Menu.Item>
       ))}
     </Menu>
-  );
+  )
+
+  useEffect(() => {
+    const hasAnyJustification = filteredData.some(reg => reg.justificativa)
+    if (hasAnyJustification && !visibleColumns.includes("status")) {
+      setVisibleColumns((prev) => [...prev, "status"])
+    }
+  }, [filteredData, visibleColumns])
+
+  useEffect(() => {
+    const mapped = {}
+    filteredData.forEach((record) => {
+      if (record.justificativa) {
+        mapped[record.id] = {
+          text: record.justificativa.text || "",
+          status: record.justificativa.status || "pendente",
+          newEntry: record.justificativa.newEntry || null,
+          newExit: record.justificativa.newExit || null,
+        }
+      }
+    })
+    setJustifications(mapped)
+  }, [filteredData])
 
   const showJustificationModal = (record) => {
-    setCurrentRecord(record);
-    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null };
-    setJustificationText(justification.text);
-    setStatus(justification.status);
-    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null);
-    setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
-    setIsModalVisible(true);
-  };
+    setCurrentRecord(record)
+    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null }
+    setJustificationText(justification.text)
+    setStatus(justification.status)
+    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null)
+    setNewExit(justification.newExit ? dayjs(justification.newExit) : null)
+    setIsModalVisible(true)
+  }
 
   const handleJustificationSubmit = async () => {
     const justificativaPayload = {
@@ -70,12 +93,12 @@ const RecordsTable = ({ loading, filteredData }) => {
       newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
       newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
       status: role === "admin" ? status : "pendente",
-    };
+    }
 
     try {
-      const result = await upsertJustificativa(justificativaPayload);
+      const result = await upsertJustificativa(justificativaPayload)
       if (result.success) {
-        message.success("Justificativa atualizada com sucesso!");
+        message.success("Justificativa atualizada com sucesso!")
 
         setJustifications((prev) => ({
           ...prev,
@@ -85,25 +108,50 @@ const RecordsTable = ({ loading, filteredData }) => {
             newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
             newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
           },
+        }))
+
+        setIsModalVisible(false)
+
+      } else {
+        message.error(result.error || "Erro ao atualizar justificativa")
+      }
+    } catch (error) {
+      console.error("Erro na chamada de justificativa:", error)
+      message.error("Erro ao atualizar justificativa")
+    }
+  }
+
+  const handleApproval = async (recordId, newStatus) => {
+    const justification = justifications[recordId];
+    if (!justification) return;
+
+    const [usuario, data] = recordId.split("_");
+
+    const justificativaPayload = {
+      usuario,
+      data,
+      text: justification.text,
+      newEntry: justification.newEntry ? dayjs(justification.newEntry).format("YYYY-MM-DD HH:mm") : null,
+      newExit: justification.newExit ? dayjs(justification.newExit).format("YYYY-MM-DD HH:mm") : null,
+      status: newStatus,
+    };
+
+    try {
+      const result = await upsertJustificativa(justificativaPayload);
+      if (result.success) {
+        message.success(`Justificativa ${newStatus} com sucesso!`);
+        setJustifications((prev) => ({
+          ...prev,
+          [recordId]: { ...prev[recordId], status: newStatus },
         }));
-
-        setIsModalVisible(false);
-
       } else {
         message.error(result.error || "Erro ao atualizar justificativa");
       }
     } catch (error) {
-      console.error("Erro na chamada de justificativa:", error);
+      console.error("Erro ao aprovar/reprovar justificativa:", error);
       message.error("Erro ao atualizar justificativa");
     }
-  };
-
-  const handleApproval = (recordId, newStatus) => {
-    setJustifications((prev) => ({
-      ...prev,
-      [recordId]: { ...prev[recordId], status: newStatus }
-    }));
-  };
+  }
 
   const columns = [
     {
@@ -159,6 +207,22 @@ const RecordsTable = ({ loading, filteredData }) => {
       render: (text) => <Tag className="tag-purple">{text}</Tag>
     },
     {
+      title: "Status",
+      key: "status",
+      responsive: ['lg'],
+      render: (_, record) => {
+        const backendStatus = record.justificativa?.status
+        const localStatus = justifications[record.id]?.status
+        const status = localStatus || backendStatus
+        if (!status) return "-"
+        return (
+          <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
+            {status.toUpperCase()}
+          </Tag>
+        )
+      }
+    },
+    {
       title: "Justificativa",
       dataIndex: "justificativa",
       key: "justificativa",
@@ -195,20 +259,8 @@ const RecordsTable = ({ loading, filteredData }) => {
         </Space>
       )
     },
-    {
-      title: "Status",
-      key: "status",
-      responsive: ['lg'],
-      render: (_, record) => {
-        const status = justifications[record.id]?.status || "pendente";
-        return (
-          <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
-            {status.toUpperCase()}
-          </Tag>
-        );
-      }
-    }
-  ].filter(column => visibleColumns.includes(column.key));
+  ].filter(column => visibleColumns.includes(column.key))
+  console.log('filteredData', filteredData)
 
   return (
     <div className="table-container">
@@ -231,7 +283,7 @@ const RecordsTable = ({ loading, filteredData }) => {
             showTotal: (total) => `Total de ${total} registros`,
           }}
           onChange={(paginationConfig) => {
-            setPagination(paginationConfig);
+            setPagination(paginationConfig)
           }}
         />
       )}
@@ -279,12 +331,12 @@ const RecordsTable = ({ loading, filteredData }) => {
         )}
       </Modal>
     </div>
-  );
-};
+  )
+}
 
 RecordsTable.propTypes = {
   loading: PropTypes.bool.isRequired,
   filteredData: PropTypes.arrayOf(PropTypes.object).isRequired
-};
+}
 
-export default RecordsTable;
+export default RecordsTable
