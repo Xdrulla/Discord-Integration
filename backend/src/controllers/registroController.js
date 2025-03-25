@@ -37,11 +37,17 @@ exports.register = async (req, res) => {
           const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
           const dataCompletaSaida = `${dataFormatada}T${dadosRegistro.saida}:00`
 
+          console.log("📌 dataCompletaEntrada:", dataCompletaEntrada)
+          console.log("📌 dataCompletaSaida:", dataCompletaSaida)
+
           const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
             dataCompletaEntrada,
             dataCompletaSaida,
             registroAtual.pausas || []
           );
+
+          console.log("✅ totalHoras calculado:", totalHoras)
+          console.log("✅ totalPausas calculado:", totalPausas)
 
           // Forçando o set para debug — remova se preferir lógica condicional
           dadosRegistro.total_horas = totalHoras;
