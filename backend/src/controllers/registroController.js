@@ -37,34 +37,28 @@ exports.register = async (req, res) => {
           const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
           const dataCompletaSaida = `${dataFormatada}T${dadosRegistro.saida}:00`
 
-          console.log("📌 dataCompletaEntrada:", dataCompletaEntrada)
-          console.log("📌 dataCompletaSaida:", dataCompletaSaida)
-
           const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
             dataCompletaEntrada,
             dataCompletaSaida,
             registroAtual.pausas || []
           );
 
-          console.log("✅ totalHoras calculado:", totalHoras)
-          console.log("✅ totalPausas calculado:", totalPausas)
-
           // Forçando o set para debug — remova se preferir lógica condicional
-          // dadosRegistro.total_horas = totalHoras;
-          // dadosRegistro.total_pausas = totalPausas;
+          dadosRegistro.total_horas = totalHoras;
+          dadosRegistro.total_pausas = totalPausas;
 
           // Se preferir manter as condições, comente as linhas acima e descomente essas:
 
-          if (totalHoras !== "0h 0m") {
-            dadosRegistro.total_horas = totalHoras;
-          } else if (registroAtual.total_horas) {
-            dadosRegistro.total_horas = registroAtual.total_horas;
-          }
-          if (totalPausas !== "0h 0m") {
-            dadosRegistro.total_pausas = totalPausas;
-          } else if (registroAtual.total_pausas) {
-            dadosRegistro.total_pausas = registroAtual.total_pausas;
-          }
+          // if (totalHoras !== "0h 0m") {
+          //   dadosRegistro.total_horas = totalHoras;
+          // } else if (registroAtual.total_horas) {
+          //   dadosRegistro.total_horas = registroAtual.total_horas;
+          // }
+          // if (totalPausas !== "0h 0m") {
+          //   dadosRegistro.total_pausas = totalPausas;
+          // } else if (registroAtual.total_pausas) {
+          //   dadosRegistro.total_pausas = registroAtual.total_pausas;
+          // }
 
         }
       }
