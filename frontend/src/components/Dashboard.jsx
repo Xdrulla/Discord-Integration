@@ -9,12 +9,14 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import debounce from "lodash.debounce";
+import { io } from "socket.io-client";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
+const socket = io(import.meta.env.VITE_API_URL);
 
 const Dashboard = () => {
   const { user, role } = useAuth();
@@ -79,6 +81,21 @@ const Dashboard = () => {
   useEffect(() => {
     applyFilters();
   }, [dateRange, applyFilters]);
+
+  useEffect(() => {
+    socket.on("registro-atualizado", (data) => {
+      console.log("📡 Registro atualizado em tempo real!", data);
+      setData((prev) => {
+        const atualizado = prev.filter(item => item.id !== data.usuario + "_" + data.data);
+        return [...atualizado, {
+          id: data.usuario + "_" + data.data,
+          ...data
+        }];
+      });
+    });
+
+    return () => socket.off("registro-atualizado");
+  }, []);
 
   return (
     <Layout className="dashboard-container">

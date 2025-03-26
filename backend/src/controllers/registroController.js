@@ -63,6 +63,8 @@ exports.register = async (req, res) => {
     console.error("❌ Erro ao salvar no banco:", error);
     res.status(500).json({ error: "Erro ao salvar no banco de dados" });
   }
+  const io = req.app.get("io");
+  io.emit("registro-atualizado", { usuario, data: dadosRegistro });
 };
 
 exports.pause = async (req, res) => {
@@ -98,6 +100,9 @@ exports.pause = async (req, res) => {
     console.error("Erro ao registrar pausa:", error);
     res.status(500).json({ error: "Erro ao registrar pausa no banco" });
   }
+  const io = req.app.get("io");
+  io.emit("registro-atualizado", { usuario, data: dadosRegistro });
+
 };
 
 exports.resume = async (req, res) => {
@@ -133,6 +138,9 @@ exports.resume = async (req, res) => {
     console.error("Erro ao finalizar pausa:", error);
     res.status(500).json({ error: "Erro ao finalizar pausa no banco" });
   }
+  const io = req.app.get("io");
+  io.emit("registro-atualizado", { usuario, data: dadosRegistro });
+
 }
 
 exports.getRegistro = async (req, res) => {

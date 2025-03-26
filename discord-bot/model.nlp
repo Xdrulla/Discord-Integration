@@ -1,0 +1,528 @@
+{
+  "settings": {
+    "languages": [
+      "pt"
+    ],
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "pt"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "pt": {
+        "settings": {
+          "locale": "pt",
+          "trainByDomain": false,
+          "tag": "domain-manager-pt",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "bom,dia": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "bom,dia,pessoal": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "ai,bom,dia,e": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "bom,chegu,dia": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "ate,log": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,brev": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,mais,pessoal": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "amanh,ate": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,depo": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,que,seman,vem": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "fal": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "fui": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "bom,de,final,pessoal,seman": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,bom,de,final,mais,pessoal,seman": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "bom,feri,pessoal": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "bom,de,fim,gal,seman": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "bom,de,fim,pessoal,seman": {
+            "intent": "saida",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "entrada": "default",
+          "saida": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "bom dia",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "bom dia pessoal",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "e aí, bom dia",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "cheguei, bom dia",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "até logo",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até breve",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até mais pessoal",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até amanhã",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até depois",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até semana que vem",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "falou",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "fui",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "bom final de semana pessoal",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até mais pessoal bom final de semana",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "bom feriado pessoal",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "bom fim de semana galera",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "bom fim de semana pessoal",
+            "intent": "saida"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "pt",
+              "tag": "nlu-pt",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "bom": 1,
+              "dia": 1,
+              "pessoal": 1,
+              "e": 1,
+              "ai": 1,
+              "chegu": 1,
+              "ate": 1,
+              "log": 1,
+              "brev": 1,
+              "mais": 1,
+              "amanh": 1,
+              "depo": 1,
+              "seman": 1,
+              "que": 1,
+              "vem": 1,
+              "fal": 1,
+              "fui": 1,
+              "final": 1,
+              "de": 1,
+              "feri": 1,
+              "fim": 1,
+              "gal": 1
+            },
+            "intents": {
+              "entrada": 1,
+              "saida": 1
+            },
+            "intentFeatures": {
+              "entrada": {
+                "bom": 1,
+                "dia": 1,
+                "pessoal": 1,
+                "e": 1,
+                "ai": 1,
+                "chegu": 1
+              },
+              "saida": {
+                "ate": 1,
+                "log": 1,
+                "brev": 1,
+                "mais": 1,
+                "pessoal": 1,
+                "amanh": 1,
+                "depo": 1,
+                "seman": 1,
+                "que": 1,
+                "vem": 1,
+                "fal": 1,
+                "fui": 1,
+                "bom": 1,
+                "final": 1,
+                "de": 1,
+                "feri": 1,
+                "fim": 1,
+                "gal": 1
+              }
+            },
+            "featuresToIntent": {
+              "bom": [
+                "entrada",
+                "saida"
+              ],
+              "dia": [
+                "entrada"
+              ],
+              "pessoal": [
+                "entrada",
+                "saida"
+              ],
+              "e": [
+                "entrada"
+              ],
+              "ai": [
+                "entrada"
+              ],
+              "chegu": [
+                "entrada"
+              ],
+              "ate": [
+                "saida"
+              ],
+              "log": [
+                "saida"
+              ],
+              "brev": [
+                "saida"
+              ],
+              "mais": [
+                "saida"
+              ],
+              "amanh": [
+                "saida"
+              ],
+              "depo": [
+                "saida"
+              ],
+              "seman": [
+                "saida"
+              ],
+              "que": [
+                "saida"
+              ],
+              "vem": [
+                "saida"
+              ],
+              "fal": [
+                "saida"
+              ],
+              "fui": [
+                "saida"
+              ],
+              "final": [
+                "saida"
+              ],
+              "de": [
+                "saida"
+              ],
+              "feri": [
+                "saida"
+              ],
+              "fim": [
+                "saida"
+              ],
+              "gal": [
+                "saida"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "pt",
+                "tag": "nlu-pt",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "bom",
+                "dia",
+                "pessoal",
+                "e",
+                "ai",
+                "chegu",
+                "ate",
+                "log",
+                "brev",
+                "mais",
+                "amanh",
+                "depo",
+                "seman",
+                "que",
+                "vem",
+                "fal",
+                "fui",
+                "final",
+                "de",
+                "feri",
+                "fim",
+                "gal"
+              ],
+              "intents": [
+                "entrada",
+                "saida"
+              ],
+              "perceptrons": [
+                [
+                  3.6910743713378906,
+                  9.935216903686523,
+                  0.0018998126033693552,
+                  0.001099400338716805,
+                  0.001099400338716805,
+                  0.0030172173865139484,
+                  -1.2842681407928467,
+                  -0.17330001294612885,
+                  -0.15295249223709106,
+                  -0.46729224920272827,
+                  -0.1135382428765297,
+                  -0.0974605455994606,
+                  -1.9393953084945679,
+                  -0.03359575942158699,
+                  -0.03359575942158699,
+                  -0.719861626625061,
+                  -0.711717426776886,
+                  -1.0668001174926758,
+                  -1.8722060918807983,
+                  -4.35014533996582,
+                  -0.7115375399589539,
+                  -0.42024877667427063,
+                  0.6573649545446906
+                ],
+                [
+                  -3.598135232925415,
+                  -9.809235572814941,
+                  3.835383892059326,
+                  -0.6379558444023132,
+                  -0.6379558444023132,
+                  -0.6541487574577332,
+                  3.193080186843872,
+                  1.482972502708435,
+                  1.4897805452346802,
+                  -2.616373300552368,
+                  1.4709993600845337,
+                  1.4658422470092773,
+                  1.6656887531280518,
+                  -0.1023278683423996,
+                  -0.1023278683423996,
+                  4.713626861572266,
+                  4.71580171585083,
+                  0.6543440222740173,
+                  1.7679473161697388,
+                  4.449583530426025,
+                  1.1202569007873535,
+                  3.5977420806884766,
+                  9.61321139072762
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "pt",
+        "bom dia"
+      ],
+      [
+        "pt",
+        "bom dia pessoal"
+      ],
+      [
+        "pt",
+        "e aí, bom dia"
+      ],
+      [
+        "pt",
+        "cheguei, bom dia"
+      ],
+      [
+        "pt",
+        "até logo"
+      ],
+      [
+        "pt",
+        "até breve"
+      ],
+      [
+        "pt",
+        "até mais pessoal"
+      ],
+      [
+        "pt",
+        "até amanhã"
+      ],
+      [
+        "pt",
+        "até depois"
+      ],
+      [
+        "pt",
+        "até semana que vem"
+      ],
+      [
+        "pt",
+        "falou"
+      ],
+      [
+        "pt",
+        "fui"
+      ],
+      [
+        "pt",
+        "bom final de semana pessoal"
+      ],
+      [
+        "pt",
+        "até mais pessoal bom final de semana"
+      ],
+      [
+        "pt",
+        "bom feriado pessoal"
+      ],
+      [
+        "pt",
+        "bom fim de semana galera"
+      ],
+      [
+        "pt",
+        "bom fim de semana pessoal"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {}
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}
