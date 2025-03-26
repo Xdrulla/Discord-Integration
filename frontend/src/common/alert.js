@@ -9,3 +9,15 @@ export const savePassword = () => {
     timer: 2000,
   })
 }
+
+export const notifyRealtimeUpdate = () => {
+  ReactSwal.fire({
+    toast: true,
+    position: "top-end",
+    icon: "info",
+    title: "Registros atualizados automaticamente",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+  })
+}

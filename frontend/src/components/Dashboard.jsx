@@ -10,6 +10,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
+import { notifyRealtimeUpdate } from "../common/alert";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -84,14 +85,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     socket.on("registro-atualizado", async () => {
-      console.log("📡 Registro atualizado em tempo real!");
+      if (role === "admin") {
+        notifyRealtimeUpdate();
+      }
       const registros = await fetchRegistros();
       setData(registros);
       setFilteredData(registros);
     });
 
     return () => socket.off("registro-atualizado");
-  }, []);
+  }, [role]);
 
   return (
     <Layout className="dashboard-container">
