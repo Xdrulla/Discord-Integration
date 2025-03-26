@@ -59,12 +59,14 @@ exports.register = async (req, res) => {
     }
     await registroRef.set(dadosRegistro, { merge: true });
     res.json({ success: true, message: "Registro atualizado!" });
+
+    const io = req.app.get("io");
+    io.emit("registro-atualizado", { usuario, data: dadosRegistro });
+
   } catch (error) {
     console.error("❌ Erro ao salvar no banco:", error);
     res.status(500).json({ error: "Erro ao salvar no banco de dados" });
   }
-  const io = req.app.get("io");
-  io.emit("registro-atualizado", { usuario, data: dadosRegistro });
 };
 
 exports.pause = async (req, res) => {
@@ -96,13 +98,14 @@ exports.pause = async (req, res) => {
     } else {
       res.status(400).json({ error: "Já existe uma pausa em andamento." });
     }
+
+    const io = req.app.get("io");
+    io.emit("registro-atualizado", { usuario, data: dadosRegistro });
+
   } catch (error) {
     console.error("Erro ao registrar pausa:", error);
     res.status(500).json({ error: "Erro ao registrar pausa no banco" });
   }
-  const io = req.app.get("io");
-  io.emit("registro-atualizado", { usuario, data: dadosRegistro });
-
 };
 
 exports.resume = async (req, res) => {
@@ -133,14 +136,14 @@ exports.resume = async (req, res) => {
 
     await registroRef.set(dadosRegistro, { merge: true });
 
+    const io = req.app.get("io");
+    io.emit("registro-atualizado", { usuario, data: dadosRegistro });
+
     res.json({ success: true, message: "Pausa finalizada!", total_pausas: totalPausas });
   } catch (error) {
     console.error("Erro ao finalizar pausa:", error);
     res.status(500).json({ error: "Erro ao finalizar pausa no banco" });
   }
-  const io = req.app.get("io");
-  io.emit("registro-atualizado", { usuario, data: dadosRegistro });
-
 }
 
 exports.getRegistro = async (req, res) => {

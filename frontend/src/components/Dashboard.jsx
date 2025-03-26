@@ -83,15 +83,11 @@ const Dashboard = () => {
   }, [dateRange, applyFilters]);
 
   useEffect(() => {
-    socket.on("registro-atualizado", (data) => {
-      console.log("📡 Registro atualizado em tempo real!", data);
-      setData((prev) => {
-        const atualizado = prev.filter(item => item.id !== data.usuario + "_" + data.data);
-        return [...atualizado, {
-          id: data.usuario + "_" + data.data,
-          ...data
-        }];
-      });
+    socket.on("registro-atualizado", async () => {
+      console.log("📡 Registro atualizado em tempo real!");
+      const registros = await fetchRegistros();
+      setData(registros);
+      setFilteredData(registros);
     });
 
     return () => socket.off("registro-atualizado");
