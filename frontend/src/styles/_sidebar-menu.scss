@@ -184,4 +184,39 @@
       width: 100px;
     }
   }
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    height: auto;
+    position: relative;
+    padding: 10px;
+
+    .logo-container {
+      height: auto;
+      padding: 10px 0;
+
+      .logo-menu {
+        max-width: 120px;
+      }
+    }
+
+    .list-group {
+      position: relative;
+      top: 0;
+    }
+
+    .list-group-item {
+      padding: 8px 12px;
+      font-size: 14px;
+
+      span.label {
+        margin-left: 10px;
+      }
+    }
+
+    [class*="toggle-menu-"] {
+      right: 10px;
+      top: 10px;
+    }
+  }
 }

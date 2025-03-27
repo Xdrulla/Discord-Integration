@@ -10,12 +10,23 @@
   align-items: center;
   width: 100%;
   max-width: 1500px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+  }
 }
 
 .filter-elements {
   display: flex;
   gap: 15px;
   width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 .filter-input {
@@ -24,23 +35,16 @@
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 16px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .date-picker {
   width: 250px;
-}
 
-@media (max-width: 768px) {
-  .filter-elements {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .filter-input {
-    width: 100%;
-  }
-
-  .date-picker {
+  @media (max-width: 768px) {
     width: 100%;
   }
 }
