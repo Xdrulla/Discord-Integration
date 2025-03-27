@@ -36,8 +36,6 @@ const UserProfile = () => {
 
         if (!registrosSnap.empty) {
           const registro = registrosSnap.docs[0].data();
-          console.log('registro', registro);
-          
           if (registro?.usuario) {
             setDisplayName(registro.usuario);
             return;
@@ -46,16 +44,12 @@ const UserProfile = () => {
       } catch (error) {
         console.error("Erro ao buscar nome do usuário via registros:", error);
       }
-      console.log('user', user);
-      
 
       setDisplayName(user?.email.split("@")[0] || "Usuário");
     };
 
     fetchDisplayName();
   }, [user]);
-  console.log('displayName', displayName);
-  
 
   const handleMenuClick = ({ key }) => {
     if (key === "user_profile") {
