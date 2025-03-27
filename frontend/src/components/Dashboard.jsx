@@ -4,13 +4,13 @@ import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
 import { useAuth } from "../context/useAuth";
-import { fetchRegistros } from "../services/registroService";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
+import { carregarRegistrosFiltrados } from "../helper/useFilteredRecord";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -20,8 +20,7 @@ const { Title } = Typography;
 const socket = io(import.meta.env.VITE_API_URL);
 
 const Dashboard = () => {
-  const { user, role, discordId } = useAuth();
-  const userName = user.email.split("@")[0];
+  const { role, discordId } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -30,27 +29,8 @@ const Dashboard = () => {
   const [dateRange, setDateRange] = useState([null, null]);
 
   useEffect(() => {
-    const carregarRegistros = async () => {
-      try {
-        let registros = await fetchRegistros();
-
-        if (role === "leitor") {
-          registros = registros.filter((record) =>
-            record.discordId === discordId
-          )
-        }
-
-        setData(registros);
-        setFilteredData(registros);
-      } catch (error) {
-        console.error("Erro ao carregar registros:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    carregarRegistros();
-  }, [role, userName, discordId]);
+    carregarRegistrosFiltrados(role, discordId, setData, setFilteredData, setLoading);
+  }, [role, discordId]);
 
   const applyFilters = useCallback(() => {
     let filtered = [...data];
@@ -84,17 +64,19 @@ const Dashboard = () => {
   }, [dateRange, applyFilters]);
 
   useEffect(() => {
-    socket.on("registro-atualizado", async () => {
+    const atualizarRegistros = async () => {
+      await carregarRegistrosFiltrados(role, discordId, setData, setFilteredData, setLoading);
+    };
+
+    socket.on("registro-atualizado", () => {
       if (role === "admin") {
         notifyRealtimeUpdate();
       }
-      const registros = await fetchRegistros();
-      setData(registros);
-      setFilteredData(registros);
+      atualizarRegistros();
     });
 
     return () => socket.off("registro-atualizado");
-  }, [role]);
+  }, [role, discordId]);
 
   return (
     <Layout className="dashboard-container">
