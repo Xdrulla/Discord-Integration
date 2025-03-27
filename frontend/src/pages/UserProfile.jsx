@@ -4,7 +4,7 @@ import { UserOutlined, SettingOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const UserProfile = () => {
@@ -27,7 +27,11 @@ const UserProfile = () => {
         if (!discordId) return;
 
         const registrosRef = collection(db, "registros");
-        const q = query(registrosRef, where("discordId", "==", discordId));
+        const q = query(
+          registrosRef,
+          where("discordId", "==", discordId),
+          orderBy("data", "desc")
+        );
         const registrosSnap = await getDocs(q);
 
         if (!registrosSnap.empty) {
@@ -41,7 +45,6 @@ const UserProfile = () => {
         console.error("Erro ao buscar nome do usuário via registros:", error);
       }
 
-      // 
       setDisplayName(user?.email.split("@")[0] || "Usuário");
     };
 
