@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
     const doc = await registroRef.get();
 
-    let dadosRegistro = { usuario, data: dataFormatada };
+    let dadosRegistro = { usuario, data: dataFormatada, discordId };
     const mensagemProcessada = removerAcentos(mensagem)
     const classificacao = await classificarMensagem(mensagemProcessada)
 
@@ -105,6 +105,8 @@ exports.pause = async (req, res) => {
 
     let dadosRegistro = doc.data();
 
+    dadosRegistro.discordId = discordId
+
     if (dadosRegistro.saida) {
       console.log(`⛔ Tentativa de pausa após saída para ${usuario}`);
       return res.status(400).json({ error: "O usuário já encerrou o expediente. Pausas não podem ser registradas após a saída." });
@@ -150,6 +152,9 @@ exports.resume = async (req, res) => {
     }
 
     let dadosRegistro = doc.data();
+
+    dadosRegistro.discordId = discordId;
+
     if (!dadosRegistro.pausas) dadosRegistro.pausas = [];
 
     const ultimaPausa = dadosRegistro.pausas.length > 0 ? dadosRegistro.pausas[dadosRegistro.pausas.length - 1] : null;
