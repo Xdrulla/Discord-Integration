@@ -23,16 +23,16 @@ export function formatarTempo(minutos) {
 }
 
 export function extrairMinutosDeString(tempoString) {
-  if (!tempoString) return 0;
-  if (typeof tempoString !== "string") return 0;
+  if (!tempoString || typeof tempoString !== "string") return 0;
 
-  const partes = tempoString.match(/(\d+)h\s*(\d+(\.\d+)?)m/);
-  if (partes) {
-    const horas = parseInt(partes[1]) || 0;
-    const minutos = parseFloat(partes[2]) || 0;
-    return horas * 60 + minutos;
-  }
-  return 0;
+  const match = tempoString.trim().match(/^(-?)(\d+)h\s*(\d+(\.\d+)?)(m|min)$/i);
+  if (!match) return 0;
+
+  const sinal = match[1] === "-" ? -1 : 1;
+  const horas = parseInt(match[2]) || 0;
+  const minutos = Math.round(parseFloat(match[3]) || 0);
+
+  return sinal * (horas * 60 + minutos);
 }
 
 export function formatarTotalPausas(tempoString) {
@@ -50,13 +50,14 @@ export function formatarTotalPausas(tempoString) {
   return "0h 0m";
 }
 
-export const converterParaMinutos = (horasString) => {
-  const match = horasString.match(/(-?\d+)h\s*(-?\d+)m/);
-  if (!match) return 0;
+export const converterParaMinutos = (tempo) => {
+  if (!tempo) return 0;
 
-  const horas = parseInt(match[1], 10);
-  const minutos = parseInt(match[2], 10);
-  return horas * 60 + minutos;
+  const isNegativo = tempo.startsWith("-");
+  const [horas, minutos] = tempo.replace("-", "").match(/\d+/g)?.map(Number) || [0, 0];
+
+  const total = (horas * 60) + minutos;
+  return isNegativo ? -total : total;
 };
 
 export const formatarMinutosParaHoras = (minutosTotais) => {

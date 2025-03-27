@@ -4,9 +4,7 @@ import {
   ajustarFusoHorario,
   extrairMinutosDeString,
   formatarMinutosParaHoras,
-  formatarTempo,
   formatarTotalPausas,
-  horaStringParaMinutos
 } from "../utils/timeUtils";
 
 export async function fetchRegistros() {
@@ -16,31 +14,39 @@ export async function fetchRegistros() {
 
     const entrada = data.entrada;
     const saida = data.saida;
-    const totalPausasMin = extrairMinutosDeString(data.total_pausas);
+    const usuario = data.usuario;
+    const dataDia = data.data;
+
+    const rawHoras = data.total_horas;
+    const minutosTrabalhados = (() => {
+      if (!rawHoras) return 0;
+      return extrairMinutosDeString(typeof rawHoras === "string" ? rawHoras : `${rawHoras}`);
+    })();
 
     let bancoHoras = "0h 0m";
+    let saldoMinutos = 0;
 
     if (entrada && saida && entrada !== "-" && saida !== "-") {
-      const entradaMin = horaStringParaMinutos(entrada);
-      const saidaMin = horaStringParaMinutos(saida);
-      const duracaoDia = saidaMin - entradaMin;
-
-      const jornadaCom1HoraPausa = 9 * 60;
-      const pausaExcedente = Math.max(totalPausasMin - 60, 0);
-
-      const saldoMinutos = duracaoDia - jornadaCom1HoraPausa - pausaExcedente;
+      const jornadaBase = 8 * 60;
+      saldoMinutos = minutosTrabalhados - jornadaBase;
       bancoHoras = formatarMinutosParaHoras(saldoMinutos);
     }
 
-    const minutosTrabalhados = extrairMinutosDeString(data.total_horas);
+    console.log(`[${usuario} - ${dataDia}]`);
+    console.log(`  Entrada: ${entrada}, Saída: ${saida}`);
+    console.log(`  total_horas bruto: ${rawHoras}`);
+    console.log(`  total_horas convertidos: ${minutosTrabalhados} minutos`);
+    console.log(`  saldoMinutos: ${saldoMinutos}`);
+    console.log(`  banco_horas formatado: ${bancoHoras}`);
+    console.log("-------------------------------------");
 
     return {
       id: doc.id,
-      usuario: data.usuario,
-      data: data.data,
+      usuario,
+      data: dataDia,
       entrada: ajustarFusoHorario(entrada) || "-",
       saida: ajustarFusoHorario(saida) || "-",
-      total_horas: formatarTempo(minutosTrabalhados),
+      total_horas: formatarMinutosParaHoras(minutosTrabalhados),
       total_pausas: formatarTotalPausas(data.total_pausas),
       banco_horas: bancoHoras,
       justificativa: data.justificativa || null
