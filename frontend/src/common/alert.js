@@ -21,3 +21,22 @@ export const notifyRealtimeUpdate = () => {
     timerProgressBar: true,
   })
 }
+
+
+export const successDiscordIdUpdate = () => {
+  ReactSwal.fire({
+    text: "Discord ID atualizado com sucesso!",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+export const errorDiscordIdUpdate = () => {
+  ReactSwal.fire({
+    text: "Erro ao atualizar o Discord ID. Tente novamente.",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 2500,
+  });
+};

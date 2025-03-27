@@ -2,9 +2,23 @@ const db = require("../config/firebase");
 const { removerAcentos, classificarMensagem } = require("../utils/nlpUtils");
 const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
+async function getUsuarioByDiscordId(discordId) {
+  const snapshot = await db.collection("users").where("discordId", "==", discordId).limit(1).get();
+  if (snapshot.empty) return null;
+  const userData = snapshot.docs[0].data();
+  return userData.email.split("@")[0];
+}
+
 exports.register = async (req, res) => {
   try {
-    const { usuario, mensagem } = req.body;
+    let { usuario, mensagem, discordId } = req.body;
+
+    if (discordId && !usuario) {
+      const nomeUsuario = await getUsuarioByDiscordId(discordId);
+      if (!nomeUsuario) return res.status(404).json({ error: "Usuário não encontrado pelo Discord ID." });
+      usuario = nomeUsuario;
+    }
+
     const agora = new Date();
     const dataFormatada = agora.toISOString().split("T")[0];
     const horaAtual = agora.toTimeString().split(" ")[0].substring(0, 5);
@@ -71,7 +85,15 @@ exports.register = async (req, res) => {
 
 exports.pause = async (req, res) => {
   try {
-    const { usuario, inicio } = req.body;
+    const { usuario: bodyUsuario, inicio, discordId } = req.body;
+    let usuario = bodyUsuario;
+
+    if (discordId && !usuario) {
+      const nomeUsuario = await getUsuarioByDiscordId(discordId);
+      if (!nomeUsuario) return res.status(404).json({ error: "Usuário não encontrado pelo Discord ID." });
+      usuario = nomeUsuario;
+    }
+
     const dataFormatada = inicio.split("T")[0];
 
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
@@ -110,7 +132,14 @@ exports.pause = async (req, res) => {
 
 exports.resume = async (req, res) => {
   try {
-    const { usuario, fim } = req.body;
+    const { usuario, fim, discordId } = req.body;
+
+    if (discordId && !usuario) {
+      const nomeUsuario = await getUsuarioByDiscordId(discordId);
+      if (!nomeUsuario) return res.status(404).json({ error: "Usuário não encontrado pelo Discord ID." });
+      usuario = nomeUsuario;
+    }
+
     const dataFormatada = fim.split("T")[0];
 
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);

@@ -59,11 +59,13 @@ client.on('messageCreate', async (message) => {
 	const mensagemProcessada = removerAcentos(message.content)
 	const classificacao = await classificarMensagem(mensagemProcessada)
 	const nomeUsuario = message.member ? message.member.displayName : message.author.username;
+	const discordId = message.author.id
 
 	if (classificacao === 'entrada') {
 		await axios.post(`${process.env.API_URL}/register`, {
 			usuario: nomeUsuario,
-			mensagem: message.content
+			mensagem: message.content,
+			discordId
 		})
 		console.log(`✅ Entrada registrada para ${nomeUsuario}`)
 	}
@@ -71,7 +73,8 @@ client.on('messageCreate', async (message) => {
 	if (classificacao === 'saida') {
 		await axios.post(`${process.env.API_URL}/register`, {
 			usuario: nomeUsuario,
-			mensagem: message.content
+			mensagem: message.content,
+			discordId
 		})
 		console.log(`✅ Saída registrada para ${nomeUsuario}`)
 	}
@@ -81,7 +84,9 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 	try {
 		if (!oldPresence || !newPresence) return
 
-		const usuario = newPresence.guild?.members.cache.get(newPresence.userId)?.displayName || newPresence.user.username;
+		const member = newPresence.guild?.members.cache.get(newPresence.userId)
+		const usuario = member?.displayName || newPresence.user.username
+		const discordId = newPresence.userId
 		const statusAntigo = oldPresence.status
 		const statusAtual = newPresence.status
 
@@ -112,7 +117,8 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		)) {
 			await axios.post(`${process.env.API_URL}/pause`, {
 				usuario,
-				inicio: new Date().toISOString()
+				inicio: new Date().toISOString(),
+				discordId
 			})
 			console.log(`⏸️ Pausa iniciada para ${usuario}`)
 		}
@@ -125,7 +131,8 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		)) {
 			await axios.post(`${process.env.API_URL}/resume`, {
 				usuario,
-				fim: new Date().toISOString()
+				fim: new Date().toISOString(),
+				discordId
 			})
 			console.log(`▶️ Pausa finalizada para ${usuario}`)
 		}

@@ -28,9 +28,13 @@ const AuthPage = () => {
     setLoading(true);
     try {
       if (isSignup) {
-        const { email, password } = values;
+        const { email, password, discordId } = values;
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, "users", userCredential.user.uid), { email, role: "leitor" });
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          email,
+          role: "leitor",
+          discordId
+        })
         message.success("Cadastro realizado com sucesso!");
       } else {
         await signInWithEmailAndPassword(auth, values.email, values.password);
@@ -69,6 +73,9 @@ const AuthPage = () => {
               </Form.Item>
               <Form.Item name="password" rules={[{ required: true, message: "Crie uma senha" }]}>
                 <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
+              </Form.Item>
+              <Form.Item name="discordId" rules={[{ required: true, message: "Digite seu ID do Discord" }]}>
+                <Input placeholder="ID do Discord" />
               </Form.Item>
               <Button className="button-primary" type="primary" htmlType="submit" loading={loading} block>Cadastrar</Button>
             </Form>

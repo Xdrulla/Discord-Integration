@@ -32,14 +32,6 @@ export async function fetchRegistros() {
       bancoHoras = formatarMinutosParaHoras(saldoMinutos);
     }
 
-    console.log(`[${usuario} - ${dataDia}]`);
-    console.log(`  Entrada: ${entrada}, Saída: ${saida}`);
-    console.log(`  total_horas bruto: ${rawHoras}`);
-    console.log(`  total_horas convertidos: ${minutosTrabalhados} minutos`);
-    console.log(`  saldoMinutos: ${saldoMinutos}`);
-    console.log(`  banco_horas formatado: ${bancoHoras}`);
-    console.log("-------------------------------------");
-
     return {
       id: doc.id,
       usuario,

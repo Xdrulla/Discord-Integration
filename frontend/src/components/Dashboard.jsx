@@ -20,7 +20,7 @@ const { Title } = Typography;
 const socket = io(import.meta.env.VITE_API_URL);
 
 const Dashboard = () => {
-  const { user, role } = useAuth();
+  const { user, role, discordId } = useAuth();
   const userName = user.email.split("@")[0];
 
   const [loading, setLoading] = useState(true);
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
         if (role === "leitor") {
           registros = registros.filter((record) =>
-            record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
+            record.discordId === discordId
           )
         }
 
@@ -50,7 +50,7 @@ const Dashboard = () => {
     };
 
     carregarRegistros();
-  }, [role, userName]);
+  }, [role, userName, discordId]);
 
   const applyFilters = useCallback(() => {
     let filtered = [...data];

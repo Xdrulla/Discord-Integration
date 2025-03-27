@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [discordId, setDiscordId] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }) => {
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
           setRole(userData.role || "leitor");
+          setDiscordId(userData.discordId || null);
         } else {
           setRole("leitor");
         }
@@ -49,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, logout, loading }}>
+    <AuthContext.Provider value={{ user, role, discordId, logout, loading }}>
       {loading ? <div>Carregando...</div> : children}
     </AuthContext.Provider>
   );
