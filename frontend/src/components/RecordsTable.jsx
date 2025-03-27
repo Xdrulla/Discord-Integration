@@ -1,7 +1,12 @@
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react"
-import { Table, Spin, Tag, Button, Dropdown, Menu, Tooltip, Modal, Input, Select, Space, DatePicker, message } from "antd"
-import { SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons"
+import {
+  Table, Spin, Tag, Button, Dropdown, Menu, Tooltip,
+  Modal, Input, Select, Space, DatePicker, message
+} from "antd"
+import {
+  SettingOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined
+} from "@ant-design/icons"
 import { useAuth } from "../context/useAuth"
 import dayjs from "dayjs"
 import { upsertJustificativa } from "../services/justificativaService"
@@ -21,18 +26,14 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [status, setStatus] = useState("pendente")
   const [newEntry, setNewEntry] = useState(null)
   const [newExit, setNewExit] = useState(null)
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-  })
+  const [isReadOnly, setIsReadOnly] = useState(false)
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 })
 
   const toggleColumn = (columnKey) => {
     setVisibleColumns((prev) =>
       prev.includes(columnKey) ? prev.filter((key) => key !== columnKey) : [...prev, columnKey]
     )
   }
-
-  const ROOTUSER = 'luan@goepik.com.br'
 
   const columnOptions = [
     { key: "usuario", label: "Usuário" },
@@ -44,16 +45,6 @@ const RecordsTable = ({ loading, filteredData }) => {
     { key: "status", label: "Status" },
     { key: "justificativa", label: "Justificativa" }
   ]
-
-  const menu = (
-    <Menu className="column-menu">
-      {columnOptions.map(({ key, label }) => (
-        <Menu.Item key={key} onClick={() => toggleColumn(key)}>
-          <input type="checkbox" checked={visibleColumns.includes(key)} readOnly className="checkbox" /> {label}
-        </Menu.Item>
-      ))}
-    </Menu>
-  )
 
   useEffect(() => {
     const hasAnyJustification = filteredData.some(reg => reg.justificativa)
@@ -77,15 +68,24 @@ const RecordsTable = ({ loading, filteredData }) => {
     setJustifications(mapped)
   }, [filteredData])
 
+  const userName = user.email.split("@")[0];
+
   const showJustificationModal = (record) => {
-    setCurrentRecord(record)
-    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null }
-    setJustificationText(justification.text)
-    setStatus(justification.status)
-    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null)
-    setNewExit(justification.newExit ? dayjs(justification.newExit) : null)
-    setIsModalVisible(true)
-  }
+
+    setCurrentRecord(record);
+    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null };
+    setJustificationText(justification.text);
+    setStatus(justification.status);
+    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null);
+    setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
+
+    const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
+    const isAprovado = justification.status === "aprovado";
+    const isAdminViewingOthers = role === "admin" && !isOwnRecord;
+
+    setIsReadOnly(isAprovado || isAdminViewingOthers);
+    setIsModalVisible(true);
+  };
 
   const handleJustificationSubmit = async () => {
     const justificativaPayload = {
@@ -106,9 +106,9 @@ const RecordsTable = ({ loading, filteredData }) => {
           ...prev,
           [currentRecord.id]: {
             text: justificationText,
-            status: role === "admin" ? status : "pendente",
-            newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
-            newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
+            status: justificativaPayload.status,
+            newEntry: justificativaPayload.newEntry,
+            newExit: justificativaPayload.newExit,
           },
         }))
 
@@ -133,8 +133,8 @@ const RecordsTable = ({ loading, filteredData }) => {
       usuario,
       data,
       text: justification.text,
-      newEntry: justification.newEntry ? dayjs(justification.newEntry).format("YYYY-MM-DD HH:mm") : null,
-      newExit: justification.newExit ? dayjs(justification.newExit).format("YYYY-MM-DD HH:mm") : null,
+      newEntry: justification.newEntry,
+      newExit: justification.newExit,
       status: newStatus,
     };
 
@@ -208,71 +208,71 @@ const RecordsTable = ({ loading, filteredData }) => {
       responsive: ['lg'],
       render: (text) => <Tag className="tag-purple">{text}</Tag>
     },
-    ...(
-      user?.email?.includes(ROOTUSER)
-        ? [
-          {
-            title: "Status",
-            key: "status",
-            responsive: ['lg'],
-            render: (_, record) => {
-              const backendStatus = record.justificativa?.status
-              const localStatus = justifications[record.id]?.status
-              const status = localStatus || backendStatus
-              if (!status) return "-"
-              return (
-                <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
-                  {status.toUpperCase()}
-                </Tag>
-              )
-            }
-          },
-          {
-            title: "Justificativa",
-            dataIndex: "justificativa",
-            key: "justificativa",
-            responsive: ['lg'],
-            render: (_, record) => (
-              <Space>
-                <Tooltip title={justifications[record.id]?.text || "Nenhuma justificativa"}>
-                  <Button
-                    icon={<EditOutlined />}
-                    onClick={() => showJustificationModal(record)}
-                  >
-                    {justifications[record.id] ? "Editar" : "Adicionar"}
-                  </Button>
-                </Tooltip>
+    {
+      title: "Status",
+      key: "status",
+      responsive: ["lg"],
+      render: (_, record) => {
+        const status = justifications[record.id]?.status || record.justificativa?.status
+        if (!status) return "-"
+        return (
+          <Tag color={status === "aprovado" ? "green" : status === "reprovado" ? "red" : "orange"}>
+            {status.toUpperCase()}
+          </Tag>
+        )
+      },
+    },
+    {
+      title: "Justificativa",
+      dataIndex: "justificativa",
+      key: "justificativa",
+      responsive: ['lg'],
+      render: (_, record) => (
+        <Space>
+          <Tooltip title={justifications[record.id]?.text || "Nenhuma justificativa"}>
+            <Button
+              icon={<EditOutlined />}
+              onClick={() => showJustificationModal(record)}
+            >
+              {(() => {
+                const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(user.email.split("@")[0].toLowerCase());
+                if (role === "admin" && !isOwnRecord) return "Visualizar";
+                return justifications[record.id] ? "Editar" : "Adicionar";
+              })()}
+            </Button>
+          </Tooltip>
 
-                {role === "admin" && justifications[record.id] && justifications[record.id].status === "pendente" && (
-                  <>
-                    <Button
-                      type="primary"
-                      icon={<CheckCircleOutlined />}
-                      onClick={() => handleApproval(record.id, "aprovado")}
-                    >
-                      Aprovar
-                    </Button>
-                    <Button
-                      type="danger"
-                      icon={<CloseCircleOutlined />}
-                      onClick={() => handleApproval(record.id, "reprovado")}
-                    >
-                      Reprovar
-                    </Button>
-                  </>
-                )}
-              </Space>
-            )
-          }
-        ]
-        : []
-    )
+          {role === "admin" && justifications[record.id] && justifications[record.id].status === "pendente" && (
+            <>
+              <Button
+                type="primary"
+                icon={<CheckCircleOutlined />}
+                onClick={() => handleApproval(record.id, "aprovado")}
+              >
+                Aprovar
+              </Button>
+              <Button
+                type="danger"
+                icon={<CloseCircleOutlined />}
+                onClick={() => handleApproval(record.id, "reprovado")}
+              >
+                Reprovar
+              </Button>
+            </>
+          )}
+        </Space>
+      ),
+    },
   ].filter(column => visibleColumns.includes(column.key))
 
   return (
     <div className="table-container">
       <div className="table-header">
-        <Dropdown overlay={menu} trigger={["click"]} className="column-dropdown">
+        <Dropdown overlay={<Menu>{columnOptions.map(({ key, label }) => (
+          <Menu.Item key={key} onClick={() => toggleColumn(key)}>
+            <input type="checkbox" checked={visibleColumns.includes(key)} readOnly className="checkbox" /> {label}
+          </Menu.Item>
+        ))}</Menu>} trigger={["click"]} className="column-dropdown">
           <Button icon={<SettingOutlined />} className="column-btn">Configurar Colunas</Button>
         </Dropdown>
       </div>
@@ -286,31 +286,31 @@ const RecordsTable = ({ loading, filteredData }) => {
           pagination={{
             ...pagination,
             showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '50'],
+            pageSizeOptions: ["10", "20", "50"],
             showTotal: (total) => `Total de ${total} registros`,
           }}
-          onChange={(paginationConfig) => {
-            setPagination(paginationConfig)
-          }}
+          onChange={(paginationConfig) => setPagination(paginationConfig)}
         />
       )}
 
       <Modal
-        title="Justificar Horário"
+        title={role === "admin" ? "Visualizar Justificativa" : "Justificar Horário"}
         open={isModalVisible}
         onOk={handleJustificationSubmit}
         onCancel={() => setIsModalVisible(false)}
         okText="Salvar"
         cancelText="Cancelar"
+        footer={isReadOnly ? null : undefined}
       >
         <p>
-          Justifique por que houve um horário diferente ou um intervalo adicional para o usuário <b>{currentRecord?.usuario}</b> no dia <b>{currentRecord?.data}</b>.
+          {role === "admin" ? "Visualização de justificativa para o usuário" : "Justifique por que houve um horário diferente ou um intervalo adicional para o usuário"} <b>{currentRecord?.usuario}</b> no dia <b>{currentRecord?.data}</b>.
         </p>
         <Input.TextArea
           rows={4}
           value={justificationText}
           onChange={(e) => setJustificationText(e.target.value)}
           placeholder="Descreva a justificativa..."
+          disabled={isReadOnly}
         />
 
         <DatePicker
@@ -319,6 +319,7 @@ const RecordsTable = ({ loading, filteredData }) => {
           onChange={setNewEntry}
           placeholder="Entrada manual"
           className="input-margin"
+          disabled={isReadOnly}
         />
 
         <DatePicker
@@ -327,10 +328,18 @@ const RecordsTable = ({ loading, filteredData }) => {
           onChange={setNewExit}
           placeholder="Saída manual"
           className="input-margin"
+          disabled={isReadOnly}
         />
 
         {role === "admin" && (
-          <Select value={status} onChange={setStatus} className="input-margin">
+          <Select
+            value={status}
+            onChange={(value) => {
+              setStatus(value)
+              handleApproval(currentRecord.id, value)
+            }}
+            className="input-margin"
+          >
             <Option value="pendente">Pendente</Option>
             <Option value="aprovado">Aprovado</Option>
             <Option value="reprovado">Reprovado</Option>
