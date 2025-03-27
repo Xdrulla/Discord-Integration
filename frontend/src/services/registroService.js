@@ -16,6 +16,7 @@ export async function fetchRegistros() {
     const saida = data.saida;
     const usuario = data.usuario;
     const dataDia = data.data;
+    const discordId = data.discordId;
 
     const rawHoras = data.total_horas;
     const minutosTrabalhados = (() => {
@@ -41,7 +42,8 @@ export async function fetchRegistros() {
       total_horas: formatarMinutosParaHoras(minutosTrabalhados),
       total_pausas: formatarTotalPausas(data.total_pausas),
       banco_horas: bancoHoras,
-      justificativa: data.justificativa || null
+      justificativa: data.justificativa || null,
+      discordId,
     };
   });
 }
