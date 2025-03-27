@@ -8,20 +8,19 @@ import { useAuth } from "../context/useAuth";
 import { converterParaMinutos, formatarMinutosParaHoras } from "../utils/timeUtils";
 
 const DashboardStats = ({ data }) => {
-  const { role, user } = useAuth();
+  const { role, discordId } = useAuth();
   const [searchUser, setSearchUser] = useState("");
 
   const handleFilter = () => {
     setSearchUser(searchUser.trim());
   };
 
-  const userEmailPrefix = user.email.split("@")[0];
-
   const filteredData = role === "leitor"
-    ? data.filter((record) => record.usuario === userEmailPrefix)
+    ? data.filter((record) => record.discordId === discordId)
     : searchUser
       ? data.filter((record) => record.usuario.toLowerCase().includes(searchUser.toLowerCase()))
       : data;
+
   const registrosConcluidos = filteredData.filter((record) => record.saida && record.saida !== "-");
 
   const totalMinutosBanco = registrosConcluidos.reduce((acc, record) => {
