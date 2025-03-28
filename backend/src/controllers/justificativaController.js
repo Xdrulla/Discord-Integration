@@ -20,14 +20,47 @@ async function getUserRole(email) {
   return snapshot.docs[0].data().role || "leitor";
 }
 
+exports.deleteJustificativa = async (req, res) => {
+  try {
+    const { usuario, data } = req.body;
+    const email = req.user.email;
+
+    const registroId = `${usuario}_${data}`;
+    const registroRef = db.collection("registros").doc(registroId);
+    const doc = await registroRef.get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ error: "Registro não encontrado." });
+    }
+
+    const snapshot = await db.collection("users").where("email", "==", email).get();
+    if (snapshot.empty) return res.status(403).json({ error: "Usuário não encontrado." });
+    
+    const userData = snapshot.docs[0].data();
+    const userDiscordId = userData.discordId;
+    
+    if (!userDiscordId || doc.data().discordId !== userDiscordId) {
+      return res.status(403).json({ error: "Você não tem permissão para deletar esta justificativa." });
+    }    
+
+    await registroRef.set({ justificativa: null }, { merge: true });
+
+    const io = req.app.get("io");
+    io.emit("registro-atualizado", { usuario, data });
+
+    return res.json({ success: true, message: "Justificativa deletada com sucesso." });
+  } catch (error) {
+    console.error("Erro ao deletar justificativa:", error);
+    return res.status(500).json({ error: "Erro ao deletar justificativa." });
+  }
+}
+
 exports.upsertJustificativa = async (req, res) => {
   try {
-    const { usuario, data, text, newEntry, newExit, status } = req.body;
+    const { usuario, data, text, newEntry, newExit, status, file, fileName } = req.body;
     const email = req.user.email;
 
     const userRole = await getUserRole(email);
-    console.log('userRole', userRole);
-
     const justificativaStatus = userRole === "admin" && status ? status : "pendente";
 
     const registroId = `${usuario}_${data}`;
@@ -43,13 +76,15 @@ exports.upsertJustificativa = async (req, res) => {
       status: justificativaStatus,
       newEntry: newEntry || null,
       newExit: newExit || null,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      file: file || null,
+      fileName: fileName || null,
     };
 
     await registroRef.set({ justificativa }, { merge: true });
 
     const io = req.app.get("io");
-    io.emit("registro-atualizado", { usuario, data: dadosRegistro });
+    io.emit("registro-atualizado", { usuario, data });
 
     return res.json({ success: true, message: "Justificativa registrada/atualizada com sucesso." });
   } catch (error) {

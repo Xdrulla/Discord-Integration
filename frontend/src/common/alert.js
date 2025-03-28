@@ -40,3 +40,16 @@ export const errorDiscordIdUpdate = () => {
     timer: 2500,
   });
 };
+
+export const confirmDeleteJustificativa = () => {
+  return ReactSwal.fire({
+    title: "Tem certeza?",
+    text: "Esta ação não poderá ser desfeita!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, excluir",
+    cancelButtonText: "Cancelar",
+  });
+};

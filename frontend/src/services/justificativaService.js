@@ -1,4 +1,5 @@
 import { auth } from "../firebaseConfig";
+import axios from "axios";
 
 export async function upsertJustificativa(justificativaData) {
   const token = await auth.currentUser.getIdToken();
@@ -12,4 +13,16 @@ export async function upsertJustificativa(justificativaData) {
     body: JSON.stringify(justificativaData),
   });
   return await response.json();
+}
+
+export async function deleteJustificativa({ usuario, data }) {
+  const token = await auth.currentUser.getIdToken()
+
+  const response = await axios.delete("http://localhost:5000/justificativa", {
+    data: { usuario, data },
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+  return response.data;
 }
