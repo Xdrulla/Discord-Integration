@@ -315,9 +315,6 @@ const RecordsTable = ({ loading, filteredData }) => {
     },
   ].filter(column => visibleColumns.includes(column.key))
 
-  console.log("discordId do registro:", currentRecord?.discordId);
-  console.log("meu discordId:", discordId);
-
   return (
     <div className="table-container">
       <div className="table-header">
