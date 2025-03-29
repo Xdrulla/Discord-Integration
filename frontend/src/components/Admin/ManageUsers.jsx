@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebaseConfig";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
-import { Table, Select, message, Card, Button, Typography } from "antd";
+import { Table, Select, message, Card, Button, Typography, Switch } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
@@ -45,6 +45,52 @@ const ManageUsers = () => {
           <Select.Option value="admin">Admin</Select.Option>
           <Select.Option value="leitor">Leitor</Select.Option>
         </Select>
+      ),
+    },
+    {
+      title: "Notificações (Admin)",
+      dataIndex: "receberNotificacoes",
+      key: "receberNotificacoes",
+      render: (value, record) => (
+        <Switch
+          checked={value}
+          onChange={async (checked) => {
+            try {
+              const userRef = doc(db, "users", record.id);
+              await updateDoc(userRef, { receberNotificacoes: checked });
+              setUsers((prev) =>
+                prev.map((u) => u.id === record.id ? { ...u, receberNotificacoes: checked } : u)
+              );
+              message.success("Notificação atualizada com sucesso!");
+            } catch (err) {
+              message.error("Erro ao atualizar notificações.", err);
+            }
+          }}
+          disabled={record.role !== "admin"}
+        />
+      ),
+    },
+    {
+      title: "Notificações (Leitor)",
+      dataIndex: "receberNotificacoesLeitor",
+      key: "receberNotificacoesLeitor",
+      render: (value, record) => (
+        <Switch
+          checked={value}
+          onChange={async (checked) => {
+            try {
+              const userRef = doc(db, "users", record.id);
+              await updateDoc(userRef, { receberNotificacoesLeitor: checked });
+              setUsers((prev) =>
+                prev.map((u) => u.id === record.id ? { ...u, receberNotificacoesLeitor: checked } : u)
+              );
+              message.success("Notificação para leitor atualizada com sucesso!");
+            } catch (err) {
+              message.error("Erro ao atualizar notificações.", err);
+            }
+          }}
+          disabled={record.role !== "leitor"}
+        />
       ),
     },
   ];

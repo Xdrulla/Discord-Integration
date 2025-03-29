@@ -10,16 +10,23 @@ import { converterParaMinutos, formatarMinutosParaHoras } from "../utils/timeUti
 const DashboardStats = ({ data }) => {
   const { role, discordId } = useAuth();
   const [searchUser, setSearchUser] = useState("");
+  const [dateRange, setDateRange] = useState([null, null]);
 
-  const handleFilter = () => {
-    setSearchUser(searchUser.trim());
-  };
 
-  const filteredData = role === "leitor"
-    ? data.filter((record) => record.discordId === discordId)
-    : searchUser
-      ? data.filter((record) => record.usuario.toLowerCase().includes(searchUser.toLowerCase()))
-      : data;
+  const filteredData = data.filter((record) => {
+    const isFromUser = role === "leitor"
+      ? record.discordId === discordId
+      : searchUser
+        ? record.usuario.toLowerCase().includes(searchUser.toLowerCase())
+        : true;
+
+    const [start, end] = dateRange;
+    const isWithinDateRange = start && end
+      ? new Date(record.data) >= start.toDate() && new Date(record.data) <= end.toDate()
+      : true;
+
+    return isFromUser && isWithinDateRange;
+  });
 
   const registrosConcluidos = filteredData.filter((record) => record.saida && record.saida !== "-");
 
@@ -43,7 +50,11 @@ const DashboardStats = ({ data }) => {
   return (
     <div className="stats-container">
       {role === "admin" && (
-        <FilterBar searchUser={searchUser} setSearchUser={setSearchUser} handleFilter={handleFilter} />
+        <FilterBar
+          searchUser={searchUser}
+          setSearchUser={setSearchUser}
+          setDateRange={setDateRange}
+        />
       )}
 
       {filteredData.length > 0 ? (

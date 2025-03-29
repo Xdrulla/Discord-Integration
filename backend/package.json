@@ -13,6 +13,7 @@
     "express": "^4.21.2",
     "firebase-admin": "^13.1.0",
     "node-nlp": "^5.0.0-alpha.5",
+    "nodemailer": "^6.10.0",
     "socket.io": "^4.8.1"
   }
 }
