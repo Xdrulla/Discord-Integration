@@ -28,6 +28,7 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [currentRecord, setCurrentRecord] = useState(null)
   const [justificationText, setJustificationText] = useState("")
   const [justificationFile, setJustificationFile] = useState(null)
+  const [abonoHoras, setAbonoHoras] = useState("")
   const [status, setStatus] = useState("pendente")
   const [viewerVisible, setViewerVisible] = useState(false)
   const [viewerFile, setViewerFile] = useState({ url: "", name: "" })
@@ -71,6 +72,7 @@ const RecordsTable = ({ loading, filteredData }) => {
           status: record.justificativa.status || "pendente",
           newEntry: record.justificativa.newEntry || null,
           newExit: record.justificativa.newExit || null,
+          abonoHoras: record.justificativa.abonoHoras || "",
         }
       }
     })
@@ -87,6 +89,7 @@ const RecordsTable = ({ loading, filteredData }) => {
     setStatus(justification.status);
     setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null);
     setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
+    setAbonoHoras(justification.abonoHoras || "")
 
     const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
     const isAprovado = justification.status === "aprovado";
@@ -115,6 +118,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       text: justificationText,
       newEntry: newEntry ? newEntry.format("YYYY-MM-DD HH:mm") : null,
       newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
+      abonoHoras: abonoHoras || null,
       status: role === "admin" ? status : "pendente",
       file: base64File,
       fileName,

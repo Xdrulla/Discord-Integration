@@ -42,7 +42,12 @@ export async function fetchRegistros() {
       total_horas: formatarMinutosParaHoras(minutosTrabalhados),
       total_pausas: formatarTotalPausas(data.total_pausas),
       banco_horas: bancoHoras,
-      justificativa: data.justificativa || null,
+      justificativa: data.justificativa
+        ? {
+          ...data.justificativa,
+          abonoHoras: data.justificativa.abonoHoras || "",
+        }
+        : null,
       discordId,
     };
   });

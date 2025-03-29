@@ -1,4 +1,5 @@
 const db = require("../config/firebase");
+const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
 /**
  * Esse endpoint espera um body com:
@@ -35,13 +36,13 @@ exports.deleteJustificativa = async (req, res) => {
 
     const snapshot = await db.collection("users").where("email", "==", email).get();
     if (snapshot.empty) return res.status(403).json({ error: "Usuário não encontrado." });
-    
+
     const userData = snapshot.docs[0].data();
     const userDiscordId = userData.discordId;
-    
+
     if (!userDiscordId || doc.data().discordId !== userDiscordId) {
       return res.status(403).json({ error: "Você não tem permissão para deletar esta justificativa." });
-    }    
+    }
 
     await registroRef.set({ justificativa: null }, { merge: true });
 
@@ -57,8 +58,10 @@ exports.deleteJustificativa = async (req, res) => {
 
 exports.upsertJustificativa = async (req, res) => {
   try {
-    const { usuario, data, text, newEntry, newExit, status, file, fileName } = req.body;
+    const { usuario, data, text, newEntry, newExit, abonoHoras, status, file, fileName } = req.body;
     const email = req.user.email;
+    const entradaDate = new Date(newEntry);
+    const saidaDate = new Date(newExit);
 
     const userRole = await getUserRole(email);
     const justificativaStatus = userRole === "admin" && status ? status : "pendente";
@@ -71,17 +74,41 @@ exports.upsertJustificativa = async (req, res) => {
       return res.status(404).json({ error: "Registro não encontrado para esse usuário e data." });
     }
 
+    const registroAtual = doc.data();
+
     const justificativa = {
       text,
       status: justificativaStatus,
       newEntry: newEntry || null,
       newExit: newExit || null,
+      abonoHoras: abonoHoras?.trim() || null,
       updatedAt: new Date().toISOString(),
       file: file || null,
       fileName: fileName || null,
     };
 
-    await registroRef.set({ justificativa }, { merge: true });
+    const atualizacao = { justificativa };
+
+    if (justificativaStatus === "aprovado" && newEntry && newExit) {
+      const entrada = entradaDate.toTimeString().slice(0, 5);
+      const saida = saidaDate.toTimeString().slice(0, 5);
+      const dataFormatada = data;
+
+      const pausas = registroAtual.pausas || [];
+
+      const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
+        `${dataFormatada}T${entrada}:00`,
+        `${dataFormatada}T${saida}:00`,
+        pausas
+      );
+
+      atualizacao.entrada = entrada;
+      atualizacao.saida = saida;
+      atualizacao.total_horas = totalHoras || "0h 0m";
+      atualizacao.total_pausas = totalPausas || "0h 0m";
+    }
+
+    await registroRef.set(atualizacao, { merge: true });
 
     const io = req.app.get("io");
     io.emit("registro-atualizado", { usuario, data });
