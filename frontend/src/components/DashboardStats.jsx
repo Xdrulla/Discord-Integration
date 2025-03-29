@@ -24,7 +24,8 @@ const DashboardStats = ({ data }) => {
   const registrosConcluidos = filteredData.filter((record) => record.saida && record.saida !== "-");
 
   const totalMinutosBanco = registrosConcluidos.reduce((acc, record) => {
-    return acc + converterParaMinutos(record.banco_horas || "0h 0m");
+    const base = converterParaMinutos(record.banco_horas || "0h 0m");
+    return acc + base;
   }, 0);
 
   const totalMinutosTrabalhados = registrosConcluidos.reduce((acc, record) => {

@@ -38,4 +38,25 @@ function formatarTempo(minutos) {
   return `${Math.floor(minutos / 60)}h ${minutos % 60}m`;
 }
 
-module.exports = { calcularHorasTrabalhadas, formatarTempo };
+function extrairMinutosDeString(tempoString) {
+  if (!tempoString || typeof tempoString !== "string") return 0;
+
+  const match = tempoString.trim().match(/^(-?)(\d+)h\s*(\d+(\.\d+)?)(m|min)$/i);
+  if (!match) return 0;
+
+  const sinal = match[1] === "-" ? -1 : 1;
+  const horas = parseInt(match[2]) || 0;
+  const minutos = Math.round(parseFloat(match[3]) || 0);
+
+  return sinal * (horas * 60 + minutos);
+}
+
+function formatarMinutosParaHoras(minutosTotais) {
+  const sinal = minutosTotais < 0 ? "-" : "";
+  const minutosAbs = Math.abs(minutosTotais);
+  const horas = Math.floor(minutosAbs / 60);
+  const minutos = minutosAbs % 60;
+  return `${sinal}${horas}h ${minutos}m`;
+};
+
+module.exports = { calcularHorasTrabalhadas, formatarTempo, extrairMinutosDeString, formatarMinutosParaHoras };

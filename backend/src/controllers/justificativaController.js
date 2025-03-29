@@ -1,5 +1,5 @@
 const db = require("../config/firebase");
-const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
+const { calcularHorasTrabalhadas, extrairMinutosDeString, formatarMinutosParaHoras } = require("../utils/timeUtils");
 
 /**
  * Esse endpoint espera um body com:
@@ -58,7 +58,8 @@ exports.deleteJustificativa = async (req, res) => {
 
 exports.upsertJustificativa = async (req, res) => {
   try {
-    const { usuario, data, text, newEntry, newExit, abonoHoras, status, file, fileName } = req.body;
+    const { usuario, data, text, newEntry, newExit, abonoHoras, status, file, fileName, manualBreak } = req.body;
+
     const email = req.user.email;
     const entradaDate = new Date(newEntry);
     const saidaDate = new Date(newExit);
@@ -82,6 +83,7 @@ exports.upsertJustificativa = async (req, res) => {
       newEntry: newEntry || null,
       newExit: newExit || null,
       abonoHoras: abonoHoras?.trim() || null,
+      manualBreak: manualBreak?.trim() || null,
       updatedAt: new Date().toISOString(),
       file: file || null,
       fileName: fileName || null,
@@ -89,23 +91,43 @@ exports.upsertJustificativa = async (req, res) => {
 
     const atualizacao = { justificativa };
 
-    if (justificativaStatus === "aprovado" && newEntry && newExit) {
-      const entrada = entradaDate.toTimeString().slice(0, 5);
-      const saida = saidaDate.toTimeString().slice(0, 5);
-      const dataFormatada = data;
+    if (justificativaStatus === "aprovado" && (newEntry || newExit)) {
+      const entrada = newEntry
+        ? new Date(newEntry).toTimeString().slice(0, 5)
+        : registroAtual.entrada;
 
+      const saida = newExit
+        ? new Date(newExit).toTimeString().slice(0, 5)
+        : registroAtual.saida;
+
+      const dataFormatada = data;
       const pausas = registroAtual.pausas || [];
 
-      const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
-        `${dataFormatada}T${entrada}:00`,
-        `${dataFormatada}T${saida}:00`,
-        pausas
+      const pausasCalculadas = manualBreak
+        ? extrairMinutosDeString(manualBreak)
+        : (() => {
+          const { totalPausas } = calcularHorasTrabalhadas(
+            `${dataFormatada}T${entrada}:00`,
+            `${dataFormatada}T${saida}:00`,
+            pausas
+          );
+          return extrairMinutosDeString(totalPausas);
+        })();
+
+      const minutosTotais = extrairMinutosDeString(
+        calcularHorasTrabalhadas(
+          `${dataFormatada}T${entrada}:00`,
+          `${dataFormatada}T${saida}:00`,
+          []
+        ).totalHoras
       );
+
+      const horasTrabalhadas = minutosTotais - pausasCalculadas;
 
       atualizacao.entrada = entrada;
       atualizacao.saida = saida;
-      atualizacao.total_horas = totalHoras || "0h 0m";
-      atualizacao.total_pausas = totalPausas || "0h 0m";
+      atualizacao.total_horas = formatarMinutosParaHoras(horasTrabalhadas);
+      atualizacao.total_pausas = formatarMinutosParaHoras(pausasCalculadas);
     }
 
     await registroRef.set(atualizacao, { merge: true });

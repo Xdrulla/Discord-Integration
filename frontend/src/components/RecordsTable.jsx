@@ -28,6 +28,7 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [currentRecord, setCurrentRecord] = useState(null)
   const [justificationText, setJustificationText] = useState("")
   const [justificationFile, setJustificationFile] = useState(null)
+  const [manualBreak, setManualBreak] = useState("")
   const [abonoHoras, setAbonoHoras] = useState("")
   const [status, setStatus] = useState("pendente")
   const [viewerVisible, setViewerVisible] = useState(false)
@@ -73,11 +74,12 @@ const RecordsTable = ({ loading, filteredData }) => {
           newEntry: record.justificativa.newEntry || null,
           newExit: record.justificativa.newExit || null,
           abonoHoras: record.justificativa.abonoHoras || "",
+          manualBreak: record.justificativa.manualBreak || "",
         }
       }
     })
     setJustifications(mapped)
-  }, [filteredData])
+  }, [filteredData])  
 
   const userName = user.email.split("@")[0];
 
@@ -90,6 +92,7 @@ const RecordsTable = ({ loading, filteredData }) => {
     setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null);
     setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
     setAbonoHoras(justification.abonoHoras || "")
+    setManualBreak(justification.manualBreak || "")
 
     const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
     const isAprovado = justification.status === "aprovado";
@@ -122,6 +125,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       status: role === "admin" ? status : "pendente",
       file: base64File,
       fileName,
+      manualBreak: manualBreak || null,
     }
 
     try {
@@ -161,6 +165,8 @@ const RecordsTable = ({ loading, filteredData }) => {
       text: justification.text,
       newEntry: justification.newEntry,
       newExit: justification.newExit,
+      abonoHoras: abonoHoras || null,
+      manualBreak: justification.manualBreak || null,
       status: newStatus,
     };
 
@@ -432,6 +438,21 @@ const RecordsTable = ({ loading, filteredData }) => {
             placeholder="Saída manual"
             className="input-margin"
             disabled={isReadOnly}
+          />
+
+          <Input
+            placeholder="Intervalo manual (ex: 1h 15m)"
+            value={manualBreak}
+            onChange={(e) => setManualBreak(e.target.value)}
+            className="input-margin"
+            disabled={isReadOnly}
+          />
+
+          <Input
+            placeholder="Abono de horas (ex: 2h 0m)"
+            value={abonoHoras}
+            onChange={(e) => setAbonoHoras(e.target.value)}
+            className="input-margin"
           />
 
           {role === "admin" && (
