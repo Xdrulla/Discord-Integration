@@ -1,18 +1,5 @@
 export function ajustarFusoHorario(horario) {
-  if (!horario || horario === "-") return "-";
-
-  try {
-    const dataUtc = new Date(`1970-01-01T${horario}:00Z`);
-    return new Intl.DateTimeFormat("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-      timeZone: "America/Sao_Paulo",
-    }).format(dataUtc);
-  } catch (error) {
-    console.error("Erro ao converter fuso horário:", error);
-    return horario;
-  }
+  return horario || "-";
 }
 
 export function formatarTempo(minutos) {

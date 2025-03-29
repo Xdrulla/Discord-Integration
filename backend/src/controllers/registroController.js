@@ -2,6 +2,13 @@ const db = require("../config/firebase");
 const { removerAcentos, classificarMensagem } = require("../utils/nlpUtils");
 const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
+const dayjs = require("dayjs")
+const utc = require("dayjs/plugin/utc")
+const timezone = require("dayjs/plugin/timezone")
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
 async function getUsuarioByDiscordId(discordId) {
   const snapshot = await db.collection("users").where("discordId", "==", discordId).limit(1).get();
   if (snapshot.empty) return null;
@@ -19,9 +26,9 @@ exports.register = async (req, res) => {
       usuario = nomeUsuario;
     }
 
-    const agora = new Date();
-    const dataFormatada = agora.toISOString().split("T")[0];
-    const horaAtual = agora.toTimeString().split(" ")[0].substring(0, 5);
+    const agora = dayjs().tz("America/Sao_Paulo")
+    const dataFormatada = agora.format("YYYY-MM-DD")
+    const horaAtual = agora.format("HH:mm")
 
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
     const doc = await registroRef.get();
