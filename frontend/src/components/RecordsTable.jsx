@@ -19,7 +19,7 @@ import { confirmDeleteJustificativa } from "../common/alert"
 const { Option } = Select
 
 const RecordsTable = ({ loading, filteredData }) => {
-  const { role, user, discordId } = useAuth()
+  const { role, discordId } = useAuth()
   const [visibleColumns, setVisibleColumns] = useState([
     "usuario", "data", "entrada", "saida", "total_pausas", "total_horas", "justificativa"
   ])
