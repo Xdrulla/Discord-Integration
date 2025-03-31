@@ -14,7 +14,7 @@ import dayjs from "dayjs"
 import { deleteJustificativa, upsertJustificativa } from "../services/justificativaService"
 import { extrairMinutosDeString } from "../utils/timeUtils"
 import DocumentViewer from "./DocumentViewer"
-import { confirmDeleteJustificativa } from "../common/alert"
+import { closeAlert, confirmDeleteJustificativa, showError, showLoadingAlert, showSuccess } from "../common/alert"
 
 const { Option } = Select
 
@@ -38,8 +38,9 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [newExit, setNewExit] = useState(null)
   const [isReadOnly, setIsReadOnly] = useState(false)
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 })
+  const [saving, setSaving] = useState(false)
 
-  const isOwnJustification = currentRecord?.discordId && currentRecord.discordId === discordId;
+  const isOwnJustification = currentRecord?.discordId && currentRecord.discordId === discordId
 
   const toggleColumn = (columnKey) => {
     setVisibleColumns((prev) =>
@@ -85,31 +86,34 @@ const RecordsTable = ({ loading, filteredData }) => {
 
   const showJustificationModal = (record) => {
 
-    setCurrentRecord(record);
-    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null };
-    setJustificationText(justification.text);
-    setStatus(justification.status);
-    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null);
-    setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
+    setCurrentRecord(record)
+    const justification = justifications[record.id] || { text: "", status: "pendente", newEntry: null, newExit: null }
+    setJustificationText(justification.text)
+    setStatus(justification.status)
+    setNewEntry(justification.newEntry ? dayjs(justification.newEntry) : null)
+    setNewExit(justification.newExit ? dayjs(justification.newExit) : null)
     setAbonoHoras(justification.abonoHoras || "")
     setManualBreak(justification.manualBreak || "")
     setAdminNote(justification.observacaoAdmin || "")
 
-    const isOwnRecord = record.discordId && record.discordId === discordId;
-    const isAprovado = justification.status === "aprovado";
-    const isAdminViewingOthers = role === "admin" && !isOwnRecord;
+    const isOwnRecord = record.discordId && record.discordId === discordId
+    const isAprovado = justification.status === "aprovado"
+    const isAdminViewingOthers = role === "admin" && !isOwnRecord
 
-    setIsReadOnly(isAprovado || isAdminViewingOthers);
-    setIsModalVisible(true);
-  };
+    setIsReadOnly(isAprovado || isAdminViewingOthers)
+    setIsModalVisible(true)
+  }
 
   const handleJustificationSubmit = async () => {
+    setSaving(true)
+    showLoadingAlert("Salvando justificativa...")
+
     let base64File = null
     let fileName = justificationFile?.name || null
 
     if (justificationFile) {
       base64File = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onload = () => resolve(reader.result)
         reader.onerror = reject
         reader.readAsDataURL(justificationFile)
@@ -133,8 +137,6 @@ const RecordsTable = ({ loading, filteredData }) => {
     try {
       const result = await upsertJustificativa(justificativaPayload)
       if (result.success) {
-        message.success("Justificativa atualizada com sucesso!")
-
         setJustifications((prev) => ({
           ...prev,
           [currentRecord.id]: {
@@ -144,22 +146,25 @@ const RecordsTable = ({ loading, filteredData }) => {
             newExit: justificativaPayload.newExit,
           },
         }))
-
+        showSuccess("Justificativa salva com sucesso!")
         setIsModalVisible(false)
       } else {
-        message.error(result.error || "Erro ao atualizar justificativa")
+        showError(result.error || "Erro ao salvar justificativa.")
       }
     } catch (error) {
       console.error("Erro na chamada de justificativa:", error)
-      message.error("Erro ao atualizar justificativa")
+      showError("Erro ao salvar justificativa.")
+    } finally {
+      setSaving(false)
+      closeAlert()
     }
   }
 
   const handleApproval = async (recordId, newStatus) => {
-    const justification = justifications[recordId];
-    if (!justification) return;
+    const justification = justifications[recordId]
+    if (!justification) return
 
-    const [usuario, data] = recordId.split("_");
+    const [usuario, data] = recordId.split("_")
 
     const justificativaPayload = {
       usuario,
@@ -171,49 +176,59 @@ const RecordsTable = ({ loading, filteredData }) => {
       manualBreak: justification.manualBreak || null,
       status: newStatus,
       observacaoAdmin: role === "admin" ? adminNote : null,
-    };
+    }
+
+    setSaving(true)
+    showLoadingAlert("Atualizando status da justificativa...")
 
     try {
-      const result = await upsertJustificativa(justificativaPayload);
+      const result = await upsertJustificativa(justificativaPayload)
       if (result.success) {
-        message.success(`Justificativa ${newStatus} com sucesso!`);
+        showSuccess(`Justificativa ${newStatus} com sucesso!`)
         setJustifications((prev) => ({
           ...prev,
           [recordId]: { ...prev[recordId], status: newStatus },
-        }));
+        }))
+        setIsModalVisible(false)
       } else {
-        message.error(result.error || "Erro ao atualizar justificativa");
+        showError(result.error || "Erro ao atualizar justificativa.")
       }
     } catch (error) {
-      console.error("Erro ao aprovar/reprovar justificativa:", error);
-      message.error("Erro ao atualizar justificativa");
+      console.error("Erro ao atualizar status da justificativa:", error)
+      showError("Erro ao atualizar justificativa.")
+    } finally {
+      setSaving(false)
+      closeAlert()
     }
   }
 
   const confirmDelete = async () => {
-    const result = await confirmDeleteJustificativa();
+    const result = await confirmDeleteJustificativa()
 
     if (result.isConfirmed) {
+      showLoadingAlert("Excluindo justificativa...")
       try {
         const res = await deleteJustificativa({
           usuario: currentRecord.usuario,
           data: currentRecord.data,
-        });
+        })
 
         if (res.success) {
-          message.success("Justificativa excluída com sucesso!");
           setJustifications((prev) => {
-            const newMap = { ...prev };
-            delete newMap[currentRecord.id];
-            return newMap;
-          });
-          setIsModalVisible(false);
+            const newMap = { ...prev }
+            delete newMap[currentRecord.id]
+            return newMap
+          })
+          setIsModalVisible(false)
+          showSuccess("Justificativa excluída com sucesso!")
         } else {
-          message.error(res.error || "Erro ao excluir justificativa.");
+          showError(res.error || "Erro ao excluir justificativa.")
         }
       } catch (error) {
-        console.error("Erro ao excluir justificativa:", error);
-        message.error("Erro ao excluir justificativa.");
+        console.error("Erro ao excluir justificativa:", error)
+        showError("Erro ao excluir justificativa.")
+      } finally {
+        closeAlert()
       }
     }
   }
@@ -361,7 +376,8 @@ const RecordsTable = ({ loading, filteredData }) => {
         open={isModalVisible}
         onOk={handleJustificationSubmit}
         onCancel={() => setIsModalVisible(false)}
-        okText="Salvar"
+        okText={saving ? "Salvando..." : "Salvar"}
+        okButtonProps={{ disabled: saving }}
         cancelText="Cancelar"
         footer={isReadOnly ? null : undefined}
       >
@@ -379,21 +395,21 @@ const RecordsTable = ({ loading, filteredData }) => {
           {!isReadOnly && (
             <Upload
               beforeUpload={(file) => {
-                const isAllowedType = file.type === "application/pdf" || file.type.startsWith("image/");
-                const isLt5M = file.size / 1024 / 1024 < 5;
+                const isAllowedType = file.type === "application/pdf" || file.type.startsWith("image/")
+                const isLt5M = file.size / 1024 / 1024 < 5
 
                 if (!isAllowedType) {
-                  message.error("Apenas imagens ou PDF são permitidos!");
-                  return Upload.LIST_IGNORE;
+                  message.error("Apenas imagens ou PDF são permitidos!")
+                  return Upload.LIST_IGNORE
                 }
 
                 if (!isLt5M) {
-                  message.error("O arquivo deve ter menos de 5MB!");
-                  return Upload.LIST_IGNORE;
+                  message.error("O arquivo deve ter menos de 5MB!")
+                  return Upload.LIST_IGNORE
                 }
 
-                setJustificationFile(file);
-                return false;
+                setJustificationFile(file)
+                return false
               }}
               onRemove={() => setJustificationFile(null)}
               fileList={justificationFile ? [justificationFile] : []}

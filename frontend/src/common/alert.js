@@ -53,3 +53,37 @@ export const confirmDeleteJustificativa = () => {
     cancelButtonText: "Cancelar",
   });
 };
+
+export const showLoadingAlert = (title = "Aguarde...", text = "Processando...") => {
+  ReactSwal.fire({
+    title,
+    text,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      ReactSwal.showLoading()
+    }
+  })
+}
+
+export const closeAlert = () => {
+  ReactSwal.close()
+}
+
+export const showSuccess = (message = "Operação concluída com sucesso!") => {
+  ReactSwal.fire({
+    icon: "success",
+    title: "Sucesso",
+    text: message,
+    timer: 2000,
+    showConfirmButton: false,
+  })
+}
+
+export const showError = (message = "Algo deu errado. Tente novamente.") => {
+  ReactSwal.fire({
+    icon: "error",
+    title: "Erro",
+    text: message,
+  })
+}
