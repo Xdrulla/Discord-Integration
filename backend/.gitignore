@@ -10,7 +10,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # Env files (credenciais sensíveis)
-.env
 firebase-key.json
 .railway/
 
