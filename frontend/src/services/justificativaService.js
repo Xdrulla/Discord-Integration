@@ -18,7 +18,7 @@ export async function upsertJustificativa(justificativaData) {
 export async function deleteJustificativa({ usuario, data }) {
   const token = await auth.currentUser.getIdToken()
 
-  const response = await axios.delete("http://localhost:5000/justificativa", {
+  const response = await axios.delete(`${import.meta.env.VITE_API_URL}/justificativa`, {
     data: { usuario, data },
     headers: {
       "Authorization": `Bearer ${token}`,
