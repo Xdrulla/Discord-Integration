@@ -83,8 +83,6 @@ const RecordsTable = ({ loading, filteredData }) => {
     setJustifications(mapped)
   }, [filteredData])
 
-  const userName = user.email.split("@")[0];
-
   const showJustificationModal = (record) => {
 
     setCurrentRecord(record);
@@ -97,7 +95,7 @@ const RecordsTable = ({ loading, filteredData }) => {
     setManualBreak(justification.manualBreak || "")
     setAdminNote(justification.observacaoAdmin || "")
 
-    const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
+    const isOwnRecord = record.discordId && record.discordId === discordId;
     const isAprovado = justification.status === "aprovado";
     const isAdminViewingOthers = role === "admin" && !isOwnRecord;
 
@@ -300,9 +298,9 @@ const RecordsTable = ({ loading, filteredData }) => {
               onClick={() => showJustificationModal(record)}
             >
               {(() => {
-                const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(user.email.split("@")[0].toLowerCase());
-                if (role === "admin" && !isOwnRecord) return "Visualizar";
-                return justifications[record.id] ? "Editar" : "Adicionar";
+                const isOwnRecord = record.discordId && record.discordId === discordId
+                if (role === "admin" && !isOwnRecord) return "Visualizar"
+                return justifications[record.id] ? "Editar" : "Adicionar"
               })()}
             </Button>
           </Tooltip>
