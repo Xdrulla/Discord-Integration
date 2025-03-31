@@ -59,7 +59,7 @@ exports.deleteJustificativa = async (req, res) => {
 
 exports.upsertJustificativa = async (req, res) => {
   try {
-    const { usuario, data, text, newEntry, newExit, abonoHoras, status, file, fileName, manualBreak } = req.body;
+    const { usuario, data, text, newEntry, newExit, abonoHoras, status, file, fileName, manualBreak, observacaoAdmin } = req.body;
 
     const email = req.user.email;
     const userRole = await getUserRole(email);
@@ -85,6 +85,7 @@ exports.upsertJustificativa = async (req, res) => {
       updatedAt: new Date().toISOString(),
       file: file || null,
       fileName: fileName || null,
+      observacaoAdmin: observacaoAdmin?.trim() || null,
     };
 
     const atualizacao = { justificativa };
@@ -204,13 +205,17 @@ async function enviarEmailNotificacao(justificativa, usuario, data) {
     subject: `Justificativa pendente - ${usuario} (${data})`,
     html
   });
-
-  console.log("📧 E-mail enviado:", info.messageId);
 }
 
 async function enviarEmailConfirmacaoLeitor(justificativa, usuario, data, status) {
+  const registroDoc = await db.collection("registros").doc(`${usuario}_${data}`).get();
+  if (!registroDoc.exists) return;
+
+  const discordId = registroDoc.data().discordId;
+  if (!discordId) return;
+
   const snapshot = await db.collection("users")
-    .where("usuario", "==", usuario)
+    .where("discordId", "==", discordId)
     .limit(1)
     .get();
 
@@ -241,6 +246,10 @@ async function enviarEmailConfirmacaoLeitor(justificativa, usuario, data, status
       <p><strong>Status:</strong> ${status === "aprovado" ? "✅ Aprovada" : "❌ Reprovada"}</p>
       <p><strong>Justificativa enviada:</strong></p>
       <blockquote style="background: #eee; padding: 10px; border-left: 4px solid #5a40b6;">${justificativa.text}</blockquote>
+      ${justificativa.observacaoAdmin ? `
+        <p><strong>Observação do Administrador:</strong></p>
+        <blockquote style="background: #f1f1f1; padding: 10px; border-left: 4px solid #5a40b6;">${justificativa.observacaoAdmin}</blockquote>
+      ` : ''}      
       <p style="margin-top: 20px;">
         <a href="https://frontend-virid-alpha-62.vercel.app/" target="_blank"
           style="
@@ -267,6 +276,4 @@ async function enviarEmailConfirmacaoLeitor(justificativa, usuario, data, status
     subject: `Justificativa do dia ${data} foi ${status.toUpperCase()}`,
     html
   });
-
-  console.log(`📨 E-mail enviado para leitor (${userData.email}) sobre justificativa ${status}`);
 }

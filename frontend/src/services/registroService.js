@@ -51,6 +51,7 @@ export async function fetchRegistros() {
           ...data.justificativa,
           abonoHoras: data.justificativa.abonoHoras || "",
           manualBreak: data.justificativa.manualBreak || "",
+          observacaoAdmin: data.justificativa.observacaoAdmin || "",
         }
         : null,
       discordId,

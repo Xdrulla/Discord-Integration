@@ -33,6 +33,7 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [status, setStatus] = useState("pendente")
   const [viewerVisible, setViewerVisible] = useState(false)
   const [viewerFile, setViewerFile] = useState({ url: "", name: "" })
+  const [adminNote, setAdminNote] = useState("")
   const [newEntry, setNewEntry] = useState(null)
   const [newExit, setNewExit] = useState(null)
   const [isReadOnly, setIsReadOnly] = useState(false)
@@ -75,11 +76,12 @@ const RecordsTable = ({ loading, filteredData }) => {
           newExit: record.justificativa.newExit || null,
           abonoHoras: record.justificativa.abonoHoras || "",
           manualBreak: record.justificativa.manualBreak || "",
+          observacaoAdmin: record.justificativa.observacaoAdmin || "",
         }
       }
     })
     setJustifications(mapped)
-  }, [filteredData])  
+  }, [filteredData])
 
   const userName = user.email.split("@")[0];
 
@@ -93,6 +95,7 @@ const RecordsTable = ({ loading, filteredData }) => {
     setNewExit(justification.newExit ? dayjs(justification.newExit) : null);
     setAbonoHoras(justification.abonoHoras || "")
     setManualBreak(justification.manualBreak || "")
+    setAdminNote(justification.observacaoAdmin || "")
 
     const isOwnRecord = record.usuario.replace(/\s/g, "").toLowerCase().includes(userName.toLowerCase())
     const isAprovado = justification.status === "aprovado";
@@ -126,6 +129,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       file: base64File,
       fileName,
       manualBreak: manualBreak || null,
+      observacaoAdmin: role === "admin" ? adminNote : null,
     }
 
     try {
@@ -168,6 +172,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       abonoHoras: abonoHoras || null,
       manualBreak: justification.manualBreak || null,
       status: newStatus,
+      observacaoAdmin: role === "admin" ? adminNote : null,
     };
 
     try {
@@ -453,6 +458,7 @@ const RecordsTable = ({ loading, filteredData }) => {
             value={abonoHoras}
             onChange={(e) => setAbonoHoras(e.target.value)}
             className="input-margin"
+            disabled={isReadOnly && role !== "admin"}
           />
 
           {role === "admin" && (
@@ -469,6 +475,17 @@ const RecordsTable = ({ loading, filteredData }) => {
               <Option value="reprovado">Reprovado</Option>
             </Select>
           )}
+
+          {role === "admin" && (
+            <Input.TextArea
+              placeholder="Observações adicionais (ex: aprovado com alteração no abono)"
+              value={adminNote}
+              onChange={(e) => setAdminNote(e.target.value)}
+              rows={3}
+              className="input-margin"
+            />
+          )}
+
           {!isReadOnly &&
             isOwnJustification &&
             currentRecord?.justificativa && (
