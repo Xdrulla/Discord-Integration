@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../../firebaseConfig";
+import { db } from "../../config/firebaseConfig";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { Table, Select, message, Card, Button, Typography, Switch } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";

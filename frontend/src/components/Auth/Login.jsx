@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebaseConfig";
+import { auth, db } from "../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Card, Typography, message, Tabs, Form } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { setDoc, doc } from "firebase/firestore";
 import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "../../context/AuthContext";
 
 const { Title, Text } = Typography;
 

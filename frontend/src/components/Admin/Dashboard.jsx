@@ -3,14 +3,14 @@ import { Layout, Typography, Tabs } from "antd";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../../context/useAuth";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
-import { carregarRegistrosFiltrados } from "../helper/useFilteredRecord";
+import { carregarRegistrosFiltrados } from "../../helper/useFilteredRecord";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);

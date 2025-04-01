@@ -1,4 +1,4 @@
-import { auth } from "../firebaseConfig";
+import { auth } from "../config/firebaseConfig";
 import axios from "axios"
 
 export const addManualRecord = async (payload) => {

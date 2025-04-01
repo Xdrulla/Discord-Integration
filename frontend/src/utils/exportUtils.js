@@ -2,7 +2,7 @@ import { saveAs } from "file-saver"
 import { jsPDF } from "jspdf"
 import autoTable from "jspdf-autotable"
 import Papa from "papaparse"
-import { converterParaMinutos, formatarMinutosParaHoras } from "../utils/timeUtils"
+import { converterParaMinutos, formatarMinutosParaHoras } from "./timeUtils"
 
 const agruparPorUsuario = (data) => {
   const agrupado = {}

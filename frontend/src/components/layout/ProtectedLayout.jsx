@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import SidebarMenu from "./components/SidebarMenu";
-import UserProfile from "./pages/UserProfile"
+import SidebarMenu from "../layout/SidebarMenu"
+import UserProfile from "../Auth/UserProfile";
 
 const ProtectedLayout = () => {
   return (

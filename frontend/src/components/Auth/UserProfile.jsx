@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { UserOutlined, SettingOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../../context/useAuth";
 import { collection, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { db } from "../../config/firebaseConfig";
 
 const UserProfile = () => {
   const [open, setOpen] = useState(false);

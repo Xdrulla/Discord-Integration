@@ -6,8 +6,8 @@ import {
   Input,
   message,
 } from "antd"
-import { useAuth } from "../context/useAuth"
-import { addManualRecord } from "../services/manualRecordService"
+import { useAuth } from "../../context/useAuth"
+import { addManualRecord } from "../../services/manualRecordService"
 
 const AddManualRecordModal = ({ open, onClose }) => {
   const { user, discordId } = useAuth()

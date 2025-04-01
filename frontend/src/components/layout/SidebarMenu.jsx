@@ -1,4 +1,4 @@
-import goepikLogo from '../images/goepik-logo-big.png'
+import goepikLogo from '../../images/goepik-logo-big.png'
 import { Col, Image, Row } from "antd"
 
 

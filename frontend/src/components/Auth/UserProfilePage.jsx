@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Card, Typography, Button, Avatar, Modal, Input, message, Form } from "antd";
 import { ArrowLeftOutlined, UserOutlined, LockOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getAuth, updatePassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { db } from "../../config/firebaseConfig";
 import {
   errorDiscordIdUpdate,
   savePassword,
