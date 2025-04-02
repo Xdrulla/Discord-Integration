@@ -2,6 +2,7 @@ const { NlpManager } = require('node-nlp');
 
 const manager = new NlpManager({ languages: ['pt', 'en', 'es'] })
 
+// ENTRADA
 manager.addDocument('pt', 'bom dia', 'entrada')
 manager.addDocument('pt', 'bom dia pessoal', 'entrada')
 manager.addDocument('pt', 'e aí, bom dia', 'entrada')
@@ -17,6 +18,8 @@ manager.addDocument('es', 'hola, buenos días', 'entrada')
 manager.addDocument('es', 'acabo de llegar', 'entrada')
 manager.addDocument('es', 'hola a todos', 'entrada')
 
+// SAIDA
+// PT
 manager.addDocument('pt', 'até logo', 'saida')
 manager.addDocument('pt', 'até breve', 'saida')
 manager.addDocument('pt', 'até mais pessoal', 'saida')
@@ -30,12 +33,15 @@ manager.addDocument('pt', 'até mais pessoal bom final de semana', 'saida');
 manager.addDocument('pt', 'bom feriado pessoal', 'saida');
 manager.addDocument('pt', 'bom fim de semana galera', 'saida');
 manager.addDocument('pt', 'bom fim de semana pessoal', 'saida');
-
+// EN
 manager.addDocument('en', 'see you later', 'saida')
 manager.addDocument('en', 'goodbye', 'saida')
 manager.addDocument('en', 'have a nice day', 'saida')
 manager.addDocument('en', 'i\'m leaving', 'saida')
-
+manager.addDocument('en', 'bye', 'saida')
+manager.addDocument('en', 'bye bye', 'saida')
+manager.addDocument('en', 'bye, bye', 'saida')
+// ES
 manager.addDocument('es', 'hasta luego', 'saida')
 manager.addDocument('es', 'adiós', 'saida')
 manager.addDocument('es', 'que tengas un buen día', 'saida')
