@@ -27,6 +27,9 @@ manager.addDocument('pt', 'até mais pessoal bom final de semana', 'saida');
 manager.addDocument('pt', 'bom feriado pessoal', 'saida');
 manager.addDocument('pt', 'bom fim de semana galera', 'saida');
 manager.addDocument('pt', 'bom fim de semana pessoal', 'saida');
+manager.addDocument('pt', 'bye', 'saida');
+manager.addDocument('pt', 'bye, bye', 'saida');
+manager.addDocument('pt', 'bye bye', 'saida');
 
 (async () => {
 	await manager.train()
