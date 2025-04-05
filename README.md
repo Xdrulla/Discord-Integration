@@ -54,7 +54,7 @@ discord-integration/
 ### 1. Clonar o repositório
 ```bash
 git clone https://github.com/seu-usuario/Discord-Integration.git
-cd discord-integration
+cd Discord-Integration
 ```
 
 ### 2. Criar os arquivos `.env`
