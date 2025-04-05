@@ -2,7 +2,7 @@ import { Tag, Button, Tooltip, Space } from "antd"
 import { EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
 import { extrairMinutosDeString } from "../../../utils/timeUtils"
-import PauseInProgress from "../../../helper/inProgressPause"
+import PauseInProgress from "../../common/inProgressPause"
 
 export const getColumns = ({
   visibleColumns,
