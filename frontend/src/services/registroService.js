@@ -17,6 +17,7 @@ export async function fetchRegistros() {
     const usuario = data.usuario;
     const dataDia = data.data;
     const discordId = data.discordId;
+    const pausas = data.pausas || [];
 
     const rawHoras = data.total_horas;
     const minutosTrabalhados = (() => {
@@ -43,6 +44,7 @@ export async function fetchRegistros() {
       data: dataDia,
       entrada: ajustarFusoHorario(entrada) || "-",
       saida: ajustarFusoHorario(saida) || "-",
+      pausas,
       total_horas: formatarMinutosParaHoras(minutosTrabalhados),
       total_pausas: formatarTotalPausas(data.total_pausas),
       banco_horas: bancoHoras,

@@ -92,7 +92,7 @@ exports.register = async (req, res) => {
 
 exports.pause = async (req, res) => {
   try {
-    const { usuario: bodyUsuario, inicio, discordId } = req.body;
+    const { usuario: bodyUsuario, discordId } = req.body;
     let usuario = bodyUsuario;
 
     if (discordId && !usuario) {
@@ -101,7 +101,8 @@ exports.pause = async (req, res) => {
       usuario = nomeUsuario;
     }
 
-    const dataFormatada = inicio.split("T")[0];
+    const agora = dayjs().tz("America/Sao_Paulo").format();
+    const dataFormatada = agora.split("T")[0];
 
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
     const doc = await registroRef.get();
@@ -111,8 +112,7 @@ exports.pause = async (req, res) => {
     }
 
     let dadosRegistro = doc.data();
-
-    dadosRegistro.discordId = discordId
+    dadosRegistro.discordId = discordId;
 
     if (dadosRegistro.saida) {
       console.log(`⛔ Tentativa de pausa após saída para ${usuario}`);
@@ -121,8 +121,10 @@ exports.pause = async (req, res) => {
 
     if (!dadosRegistro.pausas) dadosRegistro.pausas = [];
 
-    if (dadosRegistro.pausas.length === 0 || dadosRegistro.pausas[dadosRegistro.pausas.length - 1].fim) {
-      dadosRegistro.pausas.push({ inicio });
+    const ultimaPausa = dadosRegistro.pausas[dadosRegistro.pausas.length - 1];
+
+    if (!ultimaPausa || ultimaPausa.fim) {
+      dadosRegistro.pausas.push({ inicio: agora });
       await registroRef.set(dadosRegistro, { merge: true });
 
       res.json({ success: true, message: "Pausa registrada!" });
@@ -141,7 +143,7 @@ exports.pause = async (req, res) => {
 
 exports.resume = async (req, res) => {
   try {
-    const { usuario, fim, discordId } = req.body;
+    const { usuario, discordId } = req.body;
 
     if (discordId && !usuario) {
       const nomeUsuario = await getUsuarioByDiscordId(discordId);
@@ -149,7 +151,8 @@ exports.resume = async (req, res) => {
       usuario = nomeUsuario;
     }
 
-    const dataFormatada = fim.split("T")[0];
+    const agora = dayjs().tz("America/Sao_Paulo").format();
+    const dataFormatada = agora.split("T")[0];
 
     const registroRef = db.collection("registros").doc(`${usuario}_${dataFormatada}`);
     const doc = await registroRef.get();
@@ -170,9 +173,14 @@ exports.resume = async (req, res) => {
       return res.status(400).json({ error: "Nenhuma pausa ativa para finalizar." });
     }
 
-    ultimaPausa.fim = fim;
+    ultimaPausa.fim = agora;
 
-    const { totalPausas } = calcularHorasTrabalhadas(ultimaPausa.inicio, fim, dadosRegistro.pausas)
+    const { totalPausas } = calcularHorasTrabalhadas(
+      `${dataFormatada}T${dadosRegistro.entrada || "00:00"}`,
+      agora,
+      dadosRegistro.pausas
+    );
+
     dadosRegistro.total_pausas = totalPausas;
 
     await registroRef.set(dadosRegistro, { merge: true });

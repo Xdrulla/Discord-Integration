@@ -2,6 +2,7 @@ import { Tag, Button, Tooltip, Space } from "antd"
 import { EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
 import { extrairMinutosDeString } from "../../../utils/timeUtils"
+import PauseInProgress from "../../../helper/inProgressPause"
 
 export const getColumns = ({
   visibleColumns,
@@ -53,11 +54,27 @@ export const getColumns = ({
         extrairMinutosDeString(a.total_pausas) -
         extrairMinutosDeString(b.total_pausas),
       responsive: ["lg"],
-      render: (text) => (
-        <Tooltip title={`Total de pausas: ${text}`}>
-          <Tag className="tag-blue">{text}</Tag>
-        </Tooltip>
-      ),
+      render: (text, record) => {
+        const activePause = record.pausas?.find(p => !p.fim);
+
+        const tooltipText = activePause
+          ? `Pausa iniciada às ${new Date(activePause.inicio).toLocaleTimeString()}`
+          : `Total de pausas registradas`;
+
+        return (
+          <Tooltip title={tooltipText}>
+            <Tag className={activePause ? "tag-warning" : "tag-blue"}>
+              {text}
+              {activePause && (
+                <>
+                  {" "}
+                  <PauseInProgress pausas={record.pausas} />
+                </>
+              )}
+            </Tag>
+          </Tooltip>
+        );
+      },
     },
     {
       title: "Horas Trabalhadas",
