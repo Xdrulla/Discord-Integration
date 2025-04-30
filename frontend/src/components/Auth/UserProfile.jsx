@@ -56,6 +56,8 @@ const UserProfile = () => {
       navigate("/profile");
     } else if (key === "manage_users") {
       navigate("admin/manage-users");
+    } else if (key === "manage_goals") {
+      navigate("/admin/goals");
     } else if (key === "logout") {
       logout();
     }
@@ -65,6 +67,7 @@ const UserProfile = () => {
   const menuItems = [
     { key: "user_profile", label: "Perfil do Usuário", icon: <UserOutlined /> },
     { key: "manage_users", label: "Gerenciar Usuários", icon: <SettingOutlined /> },
+    { key: "manage_goals", label: "Metas Mensais", icon: <SettingOutlined /> },
     { key: "logout", label: "Sair" },
   ];
 

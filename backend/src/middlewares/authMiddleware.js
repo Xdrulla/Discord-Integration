@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const db = require("../config/firebase");
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -11,11 +12,29 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
+
+    let role = decodedToken.role;
+
+    if (!role) {
+      const snapshot = await db.collection("users")
+        .where("email", "==", decodedToken.email)
+        .limit(1)
+        .get();
+
+      if (!snapshot.empty) {
+        const userData = snapshot.docs[0].data();
+        role = userData.role || "leitor";
+      } else {
+        role = "leitor";
+      }
+    }
+
     req.user = {
       uid: decodedToken.uid,
       email: decodedToken.email,
-      role: decodedToken.role || "leitor",
+      role
     };
+
     next();
   } catch (error) {
     console.error("Erro ao verificar token:", error);

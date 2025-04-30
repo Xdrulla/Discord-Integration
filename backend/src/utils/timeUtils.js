@@ -1,3 +1,13 @@
+const dayjs = require("dayjs");
+require("dayjs/locale/pt-br");
+
+const isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
+const isSameOrBefore = require("dayjs/plugin/isSameOrBefore");
+const { feriadosFixos } = require("./enum");
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+
 function calcularHorasTrabalhadas(inicio, fim, pausas) {
   if (!inicio || !fim) {
     console.error("❌ Erro: Início ou fim ausente no cálculo!", { inicio, fim });
@@ -59,4 +69,22 @@ function formatarMinutosParaHoras(minutosTotais) {
   return `${sinal}${horas}h ${minutos}m`;
 };
 
-module.exports = { calcularHorasTrabalhadas, formatarTempo, extrairMinutosDeString, formatarMinutosParaHoras };
+function getTipoDeDia(dataStr) {
+  const data = dayjs(dataStr);
+  const diaSemana = data.day();
+  const mesDia = data.format("MM-DD");
+
+  if (diaSemana === 0) return "domingo";
+  if (feriadosFixos.includes(mesDia)) return "feriado";
+  if (diaSemana === 6) return "sabado";
+  return "util";
+
+}
+
+module.exports = {
+  calcularHorasTrabalhadas,
+  formatarTempo,
+  extrairMinutosDeString,
+  formatarMinutosParaHoras,
+  getTipoDeDia
+};

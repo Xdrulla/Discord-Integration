@@ -10,7 +10,8 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
-import { carregarRegistrosFiltrados } from "../../helper/useFilteredRecord";
+import { carregarRegistrosFiltrados, carregarResumoMensal } from "../../helper/useFilteredRecord";
+import DashboardGeneral from "./DashboardGeneral";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -27,6 +28,22 @@ const Dashboard = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchUser, setSearchUser] = useState("");
   const [dateRange, setDateRange] = useState([null, null]);
+  const [resumo, setResumo] = useState(null);
+  const [resumoLoading, setResumoLoading] = useState(true);
+
+  useEffect(() => {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = hoje.getMonth() + 1;
+    const usuario = role === "leitor"
+      ? discordId
+      : searchUser || discordId;
+
+    if (usuario) {
+      carregarResumoMensal(usuario, ano, mes, setResumo, setResumoLoading);
+    }
+  }, [searchUser, role, discordId]);
+
 
   useEffect(() => {
     carregarRegistrosFiltrados(role, discordId, setData, setFilteredData, setLoading);
@@ -99,8 +116,15 @@ const Dashboard = () => {
           </Tabs.TabPane>
 
           <Tabs.TabPane tab="Estatísticas" key="2">
-            <DashboardStats data={filteredData} />
+            <DashboardStats resumo={resumo} loading={resumoLoading} />
           </Tabs.TabPane>
+
+          {role === "admin" && (
+            <Tabs.TabPane tab="Resumo Geral" key="3">
+              <DashboardGeneral />
+            </Tabs.TabPane>
+          )}
+
         </Tabs>
       </Content>
     </Layout>

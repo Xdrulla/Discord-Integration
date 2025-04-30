@@ -1,11 +1,12 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../config/firebaseConfig";
+import { auth, db } from "../config/firebaseConfig";
 import {
   ajustarFusoHorario,
   extrairMinutosDeString,
   formatarMinutosParaHoras,
   formatarTotalPausas,
 } from "../utils/timeUtils";
+import axios from "axios";
 
 export async function fetchRegistros() {
   const querySnapshot = await getDocs(collection(db, "registros"));
@@ -59,4 +60,14 @@ export async function fetchRegistros() {
       discordId,
     };
   });
+}
+
+export async function fetchResumoMensal(usuario, ano, mes) {
+  const token = await auth.currentUser.getIdToken()
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/registro/${usuario}/${ano}/${mes}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return response.data;
 }

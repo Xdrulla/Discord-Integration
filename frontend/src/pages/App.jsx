@@ -6,19 +6,21 @@ import ManageUsers from "../components/Admin/ManageUsers";
 import UserProfilePage from "../components/Auth/UserProfilePage";
 import ProtectedLayout from "../components/layout/ProtectedLayout";
 import AuthPage from "../components/Auth/Login";
+import GoalsManager from "../components/Auth/GoalsManager";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<AuthPage />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<AuthPage />} />
 
           <Route element={<PrivateRoute><ProtectedLayout /></PrivateRoute>}>
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} />
             <Route path="/admin/manage-users" element={<PrivateRoute roleRequired="admin"><ManageUsers /></PrivateRoute>} />
+            <Route path="/admin/goals" element={<PrivateRoute roleRequired="admin"><GoalsManager /></PrivateRoute>} />
           </Route>
         </Routes>
       </Router>
