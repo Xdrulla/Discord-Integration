@@ -3,6 +3,7 @@ const { register, pause, resume, getRegistro } = require("../controllers/registr
 const { exportarResumoGeralExcel, exportarResumoGeralPDF } = require("../controllers/exportController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const { calcularResumoMensal, calcularTodosResumosMensais } = require("../utils/resumeUtils");
+const { executarEnvio } = require("../scripts/sendMonthlyReport");
 
 const router = express.Router();
 

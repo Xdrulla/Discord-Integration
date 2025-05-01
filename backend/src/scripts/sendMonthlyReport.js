@@ -131,3 +131,5 @@ async function executarEnvio() {
 executarEnvio().catch(err => {
   console.error("❌ Erro ao enviar relatório:", err);
 });
+
+module.exports = { executarEnvio };
