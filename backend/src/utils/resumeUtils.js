@@ -77,11 +77,13 @@ async function calcularTodosResumosMensais(ano, mes) {
     try {
       if (!user.discordId) continue;
       const resumo = await calcularResumoMensal(user.discordId, ano, mes);
-      resumos.push({
-        ...resumo,
-        nome: resumo.usuario,
-        email: user.email
-      });
+      if (resumo.usuario !== user.discordId) {
+        resumos.push({
+          ...resumo,
+          nome: resumo.usuario,
+          email: user.email
+        });
+      }
     } catch (e) {
       console.warn(`⚠️ Erro ao gerar resumo para ${user.email}:`, e.message);
     }

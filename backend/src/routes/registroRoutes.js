@@ -9,6 +9,20 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/pause", pause);
 router.post("/resume", resume);
+router.post("/disparar-relatorio", async (req, res) => {
+  const { secretKey } = req.body;
+  if (secretKey !== process.env.SEND_REPORT_SECRET) {
+    return res.status(403).json({ error: "Chave inválida." });
+  }
+
+  try {
+    await executarEnvio();
+    res.json({ success: true, message: "Relatório enviado com sucesso." });
+  } catch (err) {
+    console.error("❌ Erro ao enviar relatório:", err);
+    res.status(500).json({ error: "Erro ao enviar relatório." });
+  }
+});
 
 router.get("/registro/resumo-geral-exportar/:ano/:mes", authMiddleware, async (req, res) => {
   if (req.user.role !== "admin") {
