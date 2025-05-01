@@ -74,11 +74,16 @@ async function getTipoDeDia(dataStr, discordId = null) {
   const diaSemana = dayjs(dataStr).day();
   const mesDia = dayjs(dataStr).format("MM-DD");
 
+  if (diaSemana === 0) return "domingo";
+  if (diaSemana === 6) return "sabado";
+
   try {
     const doc = await db.collection("datas_especiais").doc(data).get();
     if (doc.exists) {
       const dados = doc.data();
-      if (!dados.usuarios || dados.usuarios.length === 0 || dados.usuarios.includes(discordId)) {
+      const usuarios = dados.usuarios || [];
+
+      if (usuarios.length === 0 || usuarios.includes(discordId)) {
         return "feriado";
       }
     }
@@ -86,9 +91,7 @@ async function getTipoDeDia(dataStr, discordId = null) {
     console.warn("⚠️ Erro ao buscar datas especiais:", err.message);
   }
 
-  if (diaSemana === 0) return "domingo";
   if (feriadosFixos.includes(mesDia)) return "feriado";
-  if (diaSemana === 6) return "sabado";
 
   return "util";
 }
