@@ -1,0 +1,56 @@
+@use "variables" as *;
+
+.manage-holidays-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: $goepik-bg-color;
+
+  .manage-holidays-card {
+    width: 1500px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: #fff;
+    text-align: center;
+
+    .back-button {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      font-weight: bold;
+    }
+
+    .manage-holidays-title {
+      margin-bottom: 24px;
+    }
+
+    .holiday-form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .holiday-input-date {
+        max-width: 160px;
+      }
+
+      .holiday-input-nome {
+        flex: 1;
+        min-width: 200px;
+        max-width: 400px;
+      }
+    }
+
+    .ant-table {
+      margin-top: 16px;
+    }
+  }
+
+  .holiday-select-users {
+    flex: 1;
+    min-width: 250px;
+  }
+}

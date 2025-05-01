@@ -69,16 +69,41 @@ function formatarMinutosParaHoras(minutosTotais) {
   return `${sinal}${horas}h ${minutos}m`;
 };
 
-function getTipoDeDia(dataStr) {
-  const data = dayjs(dataStr);
-  const diaSemana = data.day();
-  const mesDia = data.format("MM-DD");
+async function getTipoDeDia(dataStr, discordId = null) {
+  const data = dayjs(dataStr).format("YYYY-MM-DD");
+  const diaSemana = dayjs(dataStr).day();
+  const mesDia = dayjs(dataStr).format("MM-DD");
+
+  try {
+    const doc = await db.collection("datas_especiais").doc(data).get();
+    if (doc.exists) {
+      const dados = doc.data();
+      if (!dados.usuarios || dados.usuarios.length === 0 || dados.usuarios.includes(discordId)) {
+        return "feriado";
+      }
+    }
+  } catch (err) {
+    console.warn("⚠️ Erro ao buscar datas especiais:", err.message);
+  }
 
   if (diaSemana === 0) return "domingo";
   if (feriadosFixos.includes(mesDia)) return "feriado";
   if (diaSemana === 6) return "sabado";
-  return "util";
 
+  return "util";
+}
+
+async function contarDiasUteisValidos(ano, mes, discordId) {
+  const totalDias = dayjs(`${ano}-${String(mes).padStart(2, "0")}-01`).daysInMonth();
+  let diasUteis = 0;
+
+  for (let dia = 1; dia <= totalDias; dia++) {
+    const dataAtual = `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+    const tipo = await getTipoDeDia(dataAtual, discordId);
+    if (tipo === "util") diasUteis++;
+  }
+
+  return diasUteis;
 }
 
 module.exports = {
@@ -86,5 +111,6 @@ module.exports = {
   formatarTempo,
   extrairMinutosDeString,
   formatarMinutosParaHoras,
-  getTipoDeDia
+  getTipoDeDia,
+  contarDiasUteisValidos
 };

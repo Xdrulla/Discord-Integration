@@ -1,5 +1,5 @@
 const db = require("../config/firebase");
-const { extrairMinutosDeString, getTipoDeDia, formatarMinutosParaHoras } = require("./timeUtils");
+const { extrairMinutosDeString, getTipoDeDia, formatarMinutosParaHoras, contarDiasUteisValidos } = require("./timeUtils");
 
 async function calcularResumoMensal(discordId, ano, mes) {
   const prefixoData = `${ano}-${String(mes).padStart(2, "0")}`;
@@ -17,7 +17,7 @@ async function calcularResumoMensal(discordId, ano, mes) {
 
   for (const reg of registros) {
     const minutos = extrairMinutosDeString(reg.total_horas);
-    const tipo = getTipoDeDia(reg.data);
+    const tipo = await getTipoDeDia(reg.data);
 
     if (tipo === "sabado") extras.sabado += minutos;
     else if (tipo === "domingo" || tipo === "feriado") extras.domingo_feriado += minutos;
@@ -26,7 +26,8 @@ async function calcularResumoMensal(discordId, ano, mes) {
     totalMinutos += minutos;
   }
 
-  let metaMinutos = 160 * 60;
+  const diasUteis = await contarDiasUteisValidos(ano, mes, discordId);
+  let metaMinutos = diasUteis * 8 * 60;
 
   try {
     const userSnapshot = await db.collection("users").where("discordId", "==", discordId).limit(1).get();

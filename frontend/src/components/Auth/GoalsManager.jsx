@@ -4,13 +4,13 @@ import {
   Table,
   InputNumber,
   Button,
-  message,
   Card,
   Typography,
 } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { db } from "../../config/firebaseConfig";
 import { collection, getDocs, doc, setDoc, getDoc, query, where, orderBy, limit } from "firebase/firestore";
+import { showError, showSuccess } from "../common/alert";
 
 const { Title } = Typography;
 const mesAtual = new Date().toISOString().slice(0, 7);
@@ -71,10 +71,10 @@ const GoalsManager = () => {
   const salvarMeta = async (id, minutos) => {
     try {
       await setDoc(doc(db, "users", id, "metas", mesAtual), { metaMinutos: minutos });
-      message.success("Meta atualizada!");
+      showSuccess("Meta atualizada com sucesso!");
     } catch (err) {
       console.error(err);
-      message.error("Erro ao salvar meta.");
+      showError("Erro ao salvar meta.");
     }
   };
 

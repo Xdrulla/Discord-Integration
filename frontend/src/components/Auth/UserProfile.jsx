@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { UserOutlined, SettingOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, GiftOutlined, TeamOutlined, CalendarOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
@@ -54,6 +54,8 @@ const UserProfile = () => {
   const handleMenuClick = ({ key }) => {
     if (key === "user_profile") {
       navigate("/profile");
+    } else if (key === "manage_holidays") {
+      navigate("/admin/manage-holidays");
     } else if (key === "manage_users") {
       navigate("admin/manage-users");
     } else if (key === "manage_goals") {
@@ -66,10 +68,12 @@ const UserProfile = () => {
 
   const menuItems = [
     { key: "user_profile", label: "Perfil do Usuário", icon: <UserOutlined /> },
-    { key: "manage_users", label: "Gerenciar Usuários", icon: <SettingOutlined /> },
-    { key: "manage_goals", label: "Metas Mensais", icon: <SettingOutlined /> },
-    { key: "logout", label: "Sair" },
+    { key: "manage_users", label: "Gerenciar Usuários", icon: <TeamOutlined /> },
+    { key: "manage_goals", label: "Metas Mensais", icon: <CalendarOutlined /> },
+    { key: "manage_holidays", label: "Datas Especiais", icon: <GiftOutlined /> },
+    { key: "logout", label: "Sair", icon: <LogoutOutlined /> },
   ];
+  
 
   return (
     <Dropdown

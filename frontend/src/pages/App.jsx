@@ -7,6 +7,7 @@ import UserProfilePage from "../components/Auth/UserProfilePage";
 import ProtectedLayout from "../components/layout/ProtectedLayout";
 import AuthPage from "../components/Auth/Login";
 import GoalsManager from "../components/Auth/GoalsManager";
+import ManageSpecialDates from "../components/Admin/ManageSpecialDates";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/profile" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} />
             <Route path="/admin/manage-users" element={<PrivateRoute roleRequired="admin"><ManageUsers /></PrivateRoute>} />
             <Route path="/admin/goals" element={<PrivateRoute roleRequired="admin"><GoalsManager /></PrivateRoute>} />
+            <Route path="/admin/manage-holidays" element={<PrivateRoute roleRequired="admin"><ManageSpecialDates /></PrivateRoute>} />
           </Route>
         </Routes>
       </Router>
