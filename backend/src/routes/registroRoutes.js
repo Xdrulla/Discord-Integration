@@ -20,7 +20,7 @@ router.post("/disparar-relatorio", async (req, res) => {
     res.json({ success: true, message: "Relatório enviado com sucesso." });
   } catch (err) {
     console.error("❌ Erro ao enviar relatório:", err);
-    res.status(500).json({ error: "Erro ao enviar relatório." });
+    res.status(500).json({ error: err.message || "Erro ao enviar relatório." });
   }
 });
 
