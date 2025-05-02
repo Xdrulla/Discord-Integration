@@ -54,12 +54,12 @@ const UserProfile = () => {
   const handleMenuClick = ({ key }) => {
     if (key === "user_profile") {
       navigate("/profile");
-    } else if (key === "manage_holidays") {
-      navigate("/admin/manage-holidays");
+    // } else if (key === "manage_holidays") {
+    //   navigate("/admin/manage-holidays");
     } else if (key === "manage_users") {
       navigate("admin/manage-users");
-    // } else if (key === "manage_goals") {
-    //   navigate("/admin/goals");
+    } else if (key === "manage_goals") {
+      navigate("/admin/goals");
     } else if (key === "logout") {
       logout();
     }
