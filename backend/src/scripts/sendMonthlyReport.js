@@ -109,6 +109,10 @@ async function enviarEmailRelatorio(adminEmail, bufferExcel, bufferPDF, ano, mes
 
 async function executarEnvio() {
   const hoje = dayjs().tz("America/Sao_Paulo");
+  if (!(hoje.date() === 30 && hoje.hour() === 23)) {
+    console.log(`[🔒 BLOQUEADO] Tentativa de envio em horário inválido: ${hoje.format()}`);
+    return;
+  }
   const dataReferencia = hoje.subtract(1, 'day');
 
   const ano = dataReferencia.year();
@@ -127,9 +131,5 @@ async function executarEnvio() {
 
   console.log("✅ Relatórios enviados com sucesso!");
 }
-
-executarEnvio().catch(err => {
-  console.error("❌ Erro ao enviar relatório:", err);
-});
 
 module.exports = { executarEnvio };
