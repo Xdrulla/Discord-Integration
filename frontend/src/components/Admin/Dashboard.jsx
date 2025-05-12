@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Layout, Typography, Tabs } from "antd";
+import { Layout, Typography, Tabs, Tooltip, Row, Col } from "antd";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
@@ -12,6 +12,7 @@ import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
 import { carregarRegistrosFiltrados, carregarResumoMensal } from "../../helper/useFilteredRecord";
 import DashboardGeneral from "./DashboardGeneral";
+import AddManualRecordModal from "./AddManualRecordModal";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -30,6 +31,7 @@ const Dashboard = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [resumo, setResumo] = useState(null);
   const [resumoLoading, setResumoLoading] = useState(true);
+  const [manualModalOpen, setManualModalOpen] = useState(false);
 
   useEffect(() => {
     const hoje = new Date();
@@ -96,38 +98,57 @@ const Dashboard = () => {
   }, [role, discordId]);
 
   return (
-    <Layout className="dashboard-container">
-      <Header className="dashboard-header">
-        <div className="header-content">
-          <Title level={2}>Registros de Ponto</Title>
-        </div>
-      </Header>
-      <Content>
-        <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="Registros de Ponto" key="1">
-            {role === "admin" && (
-              <FilterBar
-                searchUser={searchUser}
-                setSearchUser={setSearchUser}
-                setDateRange={setDateRange}
-              />
-            )}
-            <RecordsTable loading={loading} filteredData={filteredData} />
-          </Tabs.TabPane>
+    <>
+      <Layout className="dashboard-container">
+        <Header className="dashboard-header">
+          <div className="header-content">
+            <Title level={2}>Registros de Ponto</Title>
+          </div>
+        </Header>
+        <Content>
+          <Tabs defaultActiveKey="1">
+            <Tabs.TabPane tab="Registros de Ponto" key="1">
+              {role === "admin" && (
+                <FilterBar
+                  searchUser={searchUser}
+                  setSearchUser={setSearchUser}
+                  setDateRange={setDateRange}
+                />
+              )}
+              {["leitor", "admin"].includes(role) && (
+                <Row>
+                  <Col>
+                    <Tooltip title="Inserir registro manual">
+                      <button
+                        className="add-manual-button"
+                        onClick={() => setManualModalOpen(true)}
+                      >
+                        +
+                      </button>
+                    </Tooltip>
+                  </Col>
+                </Row>
 
-          <Tabs.TabPane tab="Estatísticas" key="2">
-            <DashboardStats resumo={resumo} loading={resumoLoading} />
-          </Tabs.TabPane>
+              )}
 
-          {role === "admin" && (
-            <Tabs.TabPane tab="Resumo Geral" key="3">
-              <DashboardGeneral />
+              <RecordsTable loading={loading} filteredData={filteredData} />
             </Tabs.TabPane>
-          )}
 
-        </Tabs>
-      </Content>
-    </Layout>
+            <Tabs.TabPane tab="Estatísticas" key="2">
+              <DashboardStats resumo={resumo} loading={resumoLoading} />
+            </Tabs.TabPane>
+
+            {role === "admin" && (
+              <Tabs.TabPane tab="Resumo Geral" key="3">
+                <DashboardGeneral />
+              </Tabs.TabPane>
+            )}
+
+          </Tabs>
+        </Content>
+      </Layout>
+      <AddManualRecordModal open={manualModalOpen} onClose={() => setManualModalOpen(false)} />
+    </>
   );
 };
 

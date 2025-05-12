@@ -1,5 +1,5 @@
 const express = require("express");
-const { register, pause, resume, getRegistro } = require("../controllers/registroController");
+const { register, pause, resume, getRegistro, addManualRecord } = require("../controllers/registroController");
 const { exportarResumoGeralExcel, exportarResumoGeralPDF } = require("../controllers/exportController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const { calcularResumoMensal, calcularTodosResumosMensais } = require("../utils/resumeUtils");
@@ -10,6 +10,7 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/pause", pause);
 router.post("/resume", resume);
+router.post("/registro/manual", authMiddleware, addManualRecord);
 router.post("/disparar-relatorio", async (req, res) => {
   const { secretKey } = req.body;
   if (secretKey !== process.env.SEND_REPORT_SECRET) {

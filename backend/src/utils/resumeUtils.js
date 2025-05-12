@@ -10,7 +10,11 @@ async function calcularResumoMensal(discordId, ano, mes) {
 
   const registros = snapshot.docs
     .map((doc) => doc.data())
-    .filter((r) => r.data && r.data.startsWith(prefixoData));
+    .filter((r) =>
+      r.data &&
+      r.data.startsWith(prefixoData) &&
+      (r.status === "aprovado" || !r.status)
+    );
 
   let totalMinutos = 0;
   let extras = { util: 0, sabado: 0, domingo_feriado: 0 };

@@ -214,3 +214,47 @@ exports.getRegistro = async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar registro no banco" });
   }
 };
+
+exports.addManualRecord = async (req, res) => {
+  try {
+    const {
+      data,
+      entrada,
+      saida,
+      intervalo,
+      usuario,
+      discordId
+    } = req.body;
+
+    const docId = `${usuario}_${data}`;
+    const registroRef = db.collection("registros").doc(docId);
+
+    const registro = {
+      usuario,
+      data,
+      entrada: entrada.split(" ")[1],
+      saida: saida.split(" ")[1],
+      intervalo,
+      discordId,
+      manual: true,
+      createdAt: new Date().toISOString(),
+      justificativa: {
+        text: "Registro manual solicitado.",
+        status: "pendente",
+        newEntry: entrada,
+        newExit: saida,
+        manualBreak: intervalo,
+      },
+    };
+
+    await registroRef.set(registro, { merge: true });
+
+    const io = req.app.get("io");
+    io.emit("registro-atualizado", { usuario, data: registro });
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("Erro ao salvar registro manual:", err);
+    res.status(500).json({ success: false, error: "Erro ao salvar registro manual." });
+  }
+};
