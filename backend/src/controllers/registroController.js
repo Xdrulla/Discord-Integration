@@ -222,7 +222,7 @@ exports.addManualRecord = async (req, res) => {
       data,
       entrada,
       saida,
-      totalPausas,
+      total_pausas,
       usuario,
       discordId
     } = req.body;
@@ -235,7 +235,7 @@ exports.addManualRecord = async (req, res) => {
       data,
       entrada: entrada.split(" ")[1],
       saida: saida.split(" ")[1],
-      totalPausas,
+      total_pausas,
       discordId,
       manual: true,
       createdAt: new Date().toISOString(),
@@ -244,7 +244,7 @@ exports.addManualRecord = async (req, res) => {
         status: "pendente",
         newEntry: entrada,
         newExit: saida,
-        manualBreak: totalPausas,
+        manualBreak: total_pausas,
       },
     };
 

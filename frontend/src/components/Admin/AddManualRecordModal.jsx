@@ -8,6 +8,7 @@ import {
 } from "antd"
 import { useAuth } from "../../context/useAuth"
 import { addManualRecord } from "../../services/manualRecordService"
+import { showError, showSuccess } from "../common/alert"
 
 const AddManualRecordModal = ({ open, onClose }) => {
   const { user, discordId } = useAuth()
@@ -19,39 +20,39 @@ const AddManualRecordModal = ({ open, onClose }) => {
 
   const handleSubmit = async () => {
     if (!date || !entrada || !saida) {
-      return message.warning("Preencha todos os campos obrigatórios.")
+      return message.warning("Preencha todos os campos obrigatórios.");
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
       const payload = {
         data: date.format("YYYY-MM-DD"),
         entrada: entrada.format("YYYY-MM-DD HH:mm"),
         saida: saida.format("YYYY-MM-DD HH:mm"),
-        totalPausas: intervalo || "0h 0m",
+        total_pausas: intervalo || "0h 0m",
         usuario: user.displayName || user.email.split("@")[0],
         discordId,
-      }
+      };
 
-      const res = await addManualRecord(payload)
+      const res = await addManualRecord(payload);
 
       if (res.success) {
-        message.success("Registro manual enviado com sucesso!")
-        onClose()
-        setDate(null)
-        setEntrada(null)
-        setSaida(null)
-        setIntervalo("")
+        showSuccess("Registro manual enviado com sucesso!");
+        onClose();
+        setDate(null);
+        setEntrada(null);
+        setSaida(null);
+        setIntervalo("");
       } else {
-        message.error(res.error || "Erro ao adicionar registro manual.")
+        showError(res.error || "Erro ao adicionar registro manual.");
       }
     } catch (error) {
-      console.error("Erro ao enviar registro manual:", error)
-      message.error("Erro ao adicionar registro manual.")
+      console.error("Erro ao enviar registro manual:", error);
+      showError("Erro ao adicionar registro manual.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Modal
