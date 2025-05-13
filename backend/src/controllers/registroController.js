@@ -253,7 +253,7 @@ exports.addManualRecord = async (req, res) => {
     const io = req.app.get("io");
     io.emit("registro-atualizado", { usuario, data: registro });
 
-    await enviarEmailNotificacao(justificativa, usuario, data);
+    await enviarEmailNotificacao(registro.justificativa, usuario, data);
 
     return res.json({ success: true });
   } catch (err) {
