@@ -137,7 +137,7 @@ const Dashboard = () => {
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="Estatísticas" key="2">
-              <DashboardStats resumo={resumo} loading={resumoLoading} />
+              <DashboardStats resumo={resumo} loading={resumoLoading} todosRegistros={data} />
             </Tabs.TabPane>
 
             {role === "admin" && (

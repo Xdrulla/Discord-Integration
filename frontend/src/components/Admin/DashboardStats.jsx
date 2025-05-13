@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Card, Row, Col, Statistic, Empty, Spin } from "antd";
 import FilterBar from "./FilterBar";
 import dayjs from "dayjs";
 import { useAuth } from "../../context/useAuth";
 import { carregarResumoMensal } from "../../helper/useFilteredRecord";
+import { debounce } from "lodash";
 
-const DashboardStats = ({ resumo: initialResumo, loading: initialLoading }) => {
+const DashboardStats = ({ resumo: initialResumo, loading: initialLoading, todosRegistros }) => {
   const { role, discordId } = useAuth();
   const [resumo, setResumo] = useState(initialResumo);
   const [loading, setLoading] = useState(initialLoading);
@@ -14,11 +15,24 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading }) => {
   const [searchUser, setSearchUser] = useState("");
   const [dateRange, setDateRange] = useState([dayjs(), dayjs()]);
 
+  const discordIdFromSearch = useMemo(() => {
+    if (!searchUser || !todosRegistros?.length) return null;
+
+    const match = todosRegistros.find((r) =>
+      r.usuario?.toLowerCase().includes(searchUser.toLowerCase())
+    );
+
+    return match?.discordId || null;
+  }, [searchUser, todosRegistros]);
+
   useEffect(() => {
     const fetchResumo = async () => {
       setLoading(true);
       try {
-        const usuario = role === "leitor" ? discordId : searchUser || discordId;
+        const usuario = role === "leitor"
+          ? discordId
+          : discordIdFromSearch || discordId;
+
         const dataBase = dateRange[0] || dayjs();
         const ano = dataBase.year();
         const mes = dataBase.month() + 1;
@@ -30,8 +44,11 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading }) => {
       }
     };
 
-    fetchResumo();
-  }, [searchUser, dateRange, role, discordId]);
+    const debouncedFetch = debounce(fetchResumo, 500);
+    debouncedFetch();
+
+    return () => debouncedFetch.cancel();
+  }, [searchUser, discordIdFromSearch, dateRange, role, discordId]);
 
   if (loading) return <Spin size="large" />;
 
@@ -40,10 +57,10 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading }) => {
   return (
     <div className="stats-container">
       <FilterBar
+        role={role}
         searchUser={searchUser}
         setSearchUser={setSearchUser}
         setDateRange={setDateRange}
-        mode={role}
       />
 
       <Row gutter={16} style={{ marginTop: "20px" }}>
@@ -87,7 +104,8 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading }) => {
 
 DashboardStats.propTypes = {
   resumo: PropTypes.object,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  todosRegistros: PropTypes.array.isRequired,
 };
 
 export default DashboardStats;
