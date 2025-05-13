@@ -70,8 +70,19 @@ const Dashboard = () => {
       });
     }
 
+    if (role === "admin") {
+      filtered.sort((a, b) => {
+        const aIsPendente = a.justificativa?.status === "pendente";
+        const bIsPendente = b.justificativa?.status === "pendente";
+
+        if (aIsPendente && !bIsPendente) return -1;
+        if (!aIsPendente && bIsPendente) return 1;
+        return 0;
+      });
+    }
+
     setFilteredData(filtered);
-  }, [data, searchUser, dateRange]);
+  }, [data, searchUser, dateRange, role]);
 
   useEffect(() => {
     const debouncedFilter = debounce(() => applyFilters(), 500);
