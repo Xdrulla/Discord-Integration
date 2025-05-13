@@ -7,6 +7,7 @@ import { useAuth } from "../../context/useAuth";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { PlusOutlined } from "@ant-design/icons";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
@@ -123,7 +124,7 @@ const Dashboard = () => {
                         className="add-manual-button"
                         onClick={() => setManualModalOpen(true)}
                       >
-                        +
+                        <PlusOutlined />
                       </button>
                     </Tooltip>
                   </Col>
