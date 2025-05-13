@@ -4,7 +4,8 @@ const { calcularHorasTrabalhadas } = require("../utils/timeUtils");
 
 const dayjs = require("dayjs")
 const utc = require("dayjs/plugin/utc")
-const timezone = require("dayjs/plugin/timezone")
+const timezone = require("dayjs/plugin/timezone");
+const { enviarEmailNotificacao } = require("../utils/emailHelper");
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -251,6 +252,8 @@ exports.addManualRecord = async (req, res) => {
 
     const io = req.app.get("io");
     io.emit("registro-atualizado", { usuario, data: registro });
+
+    await enviarEmailNotificacao(justificativa, usuario, data);
 
     return res.json({ success: true });
   } catch (err) {
