@@ -1,5 +1,3 @@
-// Falta implementar;
-
 import PropTypes from "prop-types"
 import { useState } from "react"
 import {
@@ -30,7 +28,7 @@ const AddManualRecordModal = ({ open, onClose }) => {
         data: date.format("YYYY-MM-DD"),
         entrada: entrada.format("YYYY-MM-DD HH:mm"),
         saida: saida.format("YYYY-MM-DD HH:mm"),
-        intervalo: intervalo || "0h 0m",
+        totalPausas: intervalo || "0h 0m",
         usuario: user.displayName || user.email.split("@")[0],
         discordId,
       }
