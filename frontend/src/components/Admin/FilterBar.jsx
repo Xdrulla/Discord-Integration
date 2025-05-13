@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const { RangePicker } = DatePicker;
 
-const FilterBar = ({ searchUser, setSearchUser, setDateRange }) => {
+const FilterBar = ({ role, searchUser, setSearchUser, setDateRange }) => {
   const [localDateRange, setLocalDateRange] = useState([null, null]);
 
   const onDateChange = (dates) => {
@@ -14,13 +14,15 @@ const FilterBar = ({ searchUser, setSearchUser, setDateRange }) => {
 
   return (
     <div className="filter-container">
-      <Space className="filter-elements">
-        <Input
-          placeholder="Filtrar por usuário"
-          value={searchUser}
-          onChange={(e) => setSearchUser(e.target.value)}
-          className="filter-input"
-        />
+      <Space className="filter-elements" wrap>
+        {role === "admin" && (
+          <Input
+            placeholder="Filtrar por usuário"
+            value={searchUser}
+            onChange={(e) => setSearchUser(e.target.value)}
+            className="filter-input"
+          />
+        )}
 
         <RangePicker
           value={localDateRange}
@@ -35,6 +37,7 @@ const FilterBar = ({ searchUser, setSearchUser, setDateRange }) => {
 };
 
 FilterBar.propTypes = {
+  role: PropTypes.string.isRequired,
   searchUser: PropTypes.string.isRequired,
   setSearchUser: PropTypes.func.isRequired,
   setDateRange: PropTypes.func.isRequired,

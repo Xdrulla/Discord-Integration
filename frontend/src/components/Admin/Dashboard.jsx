@@ -111,6 +111,7 @@ const Dashboard = () => {
             <Tabs.TabPane tab="Registros de Ponto" key="1">
               {role === "admin" && (
                 <FilterBar
+                  role={role}
                   searchUser={searchUser}
                   setSearchUser={setSearchUser}
                   setDateRange={setDateRange}
