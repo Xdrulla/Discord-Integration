@@ -13,6 +13,12 @@
 @use "justificativa-modal";
 @use "manage-holidays";
 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 body {
   background-color: #f8f9fa;
   background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
