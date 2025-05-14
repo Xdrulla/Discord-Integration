@@ -12,15 +12,8 @@
   margin: 0 auto;
   border: 1px solid $goepik-border-light;
   overflow-x: auto;
-  overflow: hidden;
   flex-direction: column;
   display: flex;
-}
-
-.table-scroll-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 12px;
 }
 
 .table-header {
