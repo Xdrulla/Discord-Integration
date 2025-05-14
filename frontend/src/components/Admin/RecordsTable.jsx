@@ -220,13 +220,13 @@ const RecordsTable = ({ loading, filteredData }) => {
           columns={columns}
           dataSource={filteredData}
           rowKey="id"
-          scroll={{ y: 'calc(100vh - 400px)' }}
           pagination={{
             ...pagination,
             showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50"],
             showTotal: (total) => `Total de ${total} registros`,
           }}
+          scroll={{ y: 400 }}
           onChange={(paginationConfig) => setPagination(paginationConfig)}
         />
       )}
