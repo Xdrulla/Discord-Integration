@@ -216,18 +216,20 @@ const RecordsTable = ({ loading, filteredData }) => {
       {loading ? (
         <Spin size="large" className="loading-spinner" />
       ) : (
-        <Table
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            ...pagination,
-            showSizeChanger: true,
-            pageSizeOptions: ["10", "20", "50"],
-            showTotal: (total) => `Total de ${total} registros`,
-          }}
-          onChange={(paginationConfig) => setPagination(paginationConfig)}
-        />
+        <div className="table-scroll-wrapper">
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            rowKey="id"
+            pagination={{
+              ...pagination,
+              showSizeChanger: true,
+              pageSizeOptions: ["10", "20", "50"],
+              showTotal: (total) => `Total de ${total} registros`,
+            }}
+            onChange={(paginationConfig) => setPagination(paginationConfig)}
+          />
+        </div>
       )}
 
       <JustificationModal

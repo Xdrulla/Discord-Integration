@@ -8,9 +8,19 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 90vw;
   max-width: 1500px;
+  height: calc(100vh - 220px);
   margin: 0 auto;
   border: 1px solid $goepik-border-light;
   overflow-x: auto;
+  overflow: hidden;
+  flex-direction: column;
+  display: flex;
+}
+
+.table-scroll-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 12px;
 }
 
 .table-header {
