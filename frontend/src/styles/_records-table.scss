@@ -6,13 +6,11 @@
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 90vw;
   max-width: 1500px;
-  height: calc(100vh - 220px);
   margin: 0 auto;
   border: 1px solid $goepik-border-light;
-  display: flex;
-  flex-direction: column;
+  overflow-x: auto;
 }
 
 .table-header {
@@ -23,26 +21,18 @@
 }
 
 .ant-table-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: auto;
+}
+
+.data-bold {
+  font-weight: bold;
+  font-size: 15px;
+  color: $goepik-dark;
 }
 
 .ant-table {
   width: 100%;
-  table-layout: fixed;
-
-  .ant-table-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .ant-table-body {
-    overflow-y: auto;
-    max-height: 400px;
-  }
+  min-width: 1200px;
 
   .ant-table-cell {
     font-size: 14px;
@@ -50,23 +40,17 @@
     text-align: left;
   }
 
-  .ant-table-thead > tr > th {
+  .ant-table-thead>tr>th {
     font-size: 14px;
     font-weight: bold;
     padding: 16px;
     text-transform: uppercase;
   }
 
-  .ant-table-tbody > tr > td {
+  .ant-table-tbody>tr>td {
     font-size: 14px;
     padding: 14px;
   }
-}
-
-.data-bold {
-  font-weight: bold;
-  font-size: 15px;
-  color: $goepik-dark;
 }
 
 .ant-tag {
@@ -85,6 +69,7 @@
   margin-top: 20px;
 }
 
+// Atualização para color.adjust() no lugar de lighten() e darken()
 .tag-success {
   background-color: color.adjust($goepik-done-background, $lightness: 5%);
   color: $goepik-done-color;
@@ -159,6 +144,10 @@
     border: none;
   }
 
+  .ant-table-wrapper {
+    overflow-x: visible;
+  }
+
   .ant-table {
     min-width: unset;
   }
@@ -189,7 +178,7 @@
     text-align: left;
   }
 
-  .ant-table td > * {
+  .ant-table td>* {
     flex: 2;
     text-align: right;
   }
