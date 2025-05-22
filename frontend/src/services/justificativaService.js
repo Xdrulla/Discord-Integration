@@ -26,3 +26,25 @@ export async function deleteJustificativa({ usuario, data }) {
   });
   return response.data;
 }
+
+export async function uploadJustificativaFile(file) {
+  const token = await auth.currentUser.getIdToken();
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/upload-justificativa`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Falha no upload do arquivo");
+  }
+
+  return await response.json();
+}
+

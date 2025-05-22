@@ -4,7 +4,7 @@ import { Table, Spin, Dropdown, Menu, Button } from "antd"
 import { SettingOutlined } from "@ant-design/icons"
 import { useAuth } from "../../context/useAuth"
 import dayjs from "dayjs"
-import { upsertJustificativa } from "../../services/justificativaService"
+import { uploadJustificativaFile, upsertJustificativa } from "../../services/justificativaService"
 import { showLoadingAlert, closeAlert, showError, showSuccess } from "../common/alert"
 import { getColumns } from "./justification/columns"
 import JustificationModal from "./justification/JustificationModal"
@@ -113,16 +113,28 @@ const RecordsTable = ({ loading, filteredData }) => {
     setSaving(true)
     showLoadingAlert("Salvando justificativa...")
 
-    let base64File = null
-    let fileName = justificationFile?.name || null
+    let fileUrl = null
+    let fileName = null
 
     if (justificationFile) {
-      base64File = await new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = reject
-        reader.readAsDataURL(justificationFile)
-      })
+      try {
+        const uploadRes = await uploadJustificativaFile(justificationFile)
+        if (uploadRes.success) {
+          fileUrl = uploadRes.url
+          fileName = uploadRes.filename
+        } else {
+          showError("Erro ao enviar o arquivo.")
+          setSaving(false)
+          closeAlert()
+          return
+        }
+      } catch (error) {
+        console.error("Erro no upload do arquivo:", error)
+        showError("Erro ao enviar o arquivo.")
+        setSaving(false)
+        closeAlert()
+        return
+      }
     }
 
     const justificativaPayload = {
@@ -133,7 +145,7 @@ const RecordsTable = ({ loading, filteredData }) => {
       newExit: newExit ? newExit.format("YYYY-MM-DD HH:mm") : null,
       abonoHoras: abonoHoras || null,
       status: role === "admin" ? status : "pendente",
-      file: base64File,
+      file: fileUrl,
       fileName,
       manualBreak: manualBreak || null,
       observacaoAdmin: role === "admin" ? adminNote : null,

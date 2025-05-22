@@ -75,18 +75,19 @@ exports.upsertJustificativa = async (req, res) => {
     }
 
     const registroAtual = doc.data();
+    const justificativaAntiga = registroAtual.justificativa || {};
 
     const justificativa = {
       text,
       status: justificativaStatus,
-      newEntry: newEntry || null,
-      newExit: newExit || null,
-      abonoHoras: abonoHoras?.trim() || null,
-      manualBreak: manualBreak?.trim() || null,
+      newEntry: newEntry || justificativaAntiga.newEntry || null,
+      newExit: newExit || justificativaAntiga.newExit || null,
+      abonoHoras: abonoHoras?.trim() ?? justificativaAntiga.abonoHoras ?? null,
+      manualBreak: manualBreak?.trim() ?? justificativaAntiga.manualBreak ?? null,
       updatedAt: new Date().toISOString(),
-      file: file || null,
-      fileName: fileName || null,
-      observacaoAdmin: observacaoAdmin?.trim() || null,
+      file: file ?? justificativaAntiga.file ?? null,
+      fileName: fileName ?? justificativaAntiga.fileName ?? null,
+      observacaoAdmin: observacaoAdmin?.trim() ?? justificativaAntiga.observacaoAdmin ?? null,
     };
 
     const atualizacao = { justificativa };
