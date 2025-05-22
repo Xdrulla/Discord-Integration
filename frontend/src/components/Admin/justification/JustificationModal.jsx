@@ -140,7 +140,7 @@ const JustificationModal = ({
           />
 
           <IMaskInput
-            mask="00'h' 00'm'"
+            mask="00h 00m"
             lazy={false}
             unmask={false}
             value={manualBreak}
@@ -151,7 +151,7 @@ const JustificationModal = ({
           />
 
           <IMaskInput
-            mask="00'h' 00'm'"
+            mask="00h 00m"
             lazy={false}
             unmask={false}
             value={abonoHoras}
