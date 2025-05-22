@@ -3,12 +3,12 @@ import { useState } from "react"
 import {
   Modal,
   DatePicker,
-  Input,
   message,
 } from "antd"
 import { useAuth } from "../../context/useAuth"
 import { addManualRecord } from "../../services/manualRecordService"
 import { showError, showSuccess } from "../common/alert"
+import { IMaskInput } from "react-imask"
 
 const AddManualRecordModal = ({ open, onClose }) => {
   const { user, discordId, displayName } = useAuth()
@@ -85,11 +85,14 @@ const AddManualRecordModal = ({ open, onClose }) => {
         style={{ width: "100%", marginBottom: 16 }}
         placeholder="Saída"
       />
-      <Input
-        placeholder="Intervalo (ex: 1h 0m)"
+      <IMaskInput
+        mask="00h 00m"
+        lazy={false}
+        unmask={false}
         value={intervalo}
-        onChange={(e) => setIntervalo(e.target.value)}
-        style={{ width: "100%" }}
+        onAccept={(value) => setIntervalo(value)}
+        placeholder="Intervalo (ex: 01h 15m)"
+        className="ant-input-masked input-margin"
       />
     </Modal>
   )
