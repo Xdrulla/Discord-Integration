@@ -11,7 +11,7 @@ import { addManualRecord } from "../../services/manualRecordService"
 import { showError, showSuccess } from "../common/alert"
 
 const AddManualRecordModal = ({ open, onClose }) => {
-  const { user, discordId } = useAuth()
+  const { user, discordId, displayName } = useAuth()
   const [date, setDate] = useState(null)
   const [entrada, setEntrada] = useState(null)
   const [saida, setSaida] = useState(null)
@@ -30,7 +30,7 @@ const AddManualRecordModal = ({ open, onClose }) => {
         entrada: entrada.format("YYYY-MM-DD HH:mm"),
         saida: saida.format("YYYY-MM-DD HH:mm"),
         total_pausas: intervalo || "0h 0m",
-        usuario: user.displayName || user.email.split("@")[0],
+        usuario: displayName || user.email.split("@")[0],
         discordId,
       };
 

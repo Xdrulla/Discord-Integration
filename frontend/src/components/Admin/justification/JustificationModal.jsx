@@ -11,6 +11,7 @@ import {
 import { UploadOutlined } from "@ant-design/icons"
 import DocumentViewer from "../../common/DocumentViewer"
 import dayjs from "dayjs"
+import { IMaskInput } from 'react-imask'
 
 const { Option } = Select
 
@@ -138,20 +139,26 @@ const JustificationModal = ({
             disabled={isReadOnly}
           />
 
-          <Input
-            placeholder="Intervalo manual (ex: 1h 15m)"
+          <IMaskInput
+            mask="00'h' 00'm'"
+            lazy={false}
+            unmask={false}
             value={manualBreak}
-            onChange={(e) => setManualBreak(e.target.value)}
-            className="input-margin"
+            onAccept={(value) => setManualBreak(value)}
             disabled={isReadOnly}
+            placeholder="Intervalo manual (ex: 01h 15m)"
+            className="ant-input-masked input-margin"
           />
 
-          <Input
-            placeholder="Abono de horas (ex: 2h 0m)"
+          <IMaskInput
+            mask="00'h' 00'm'"
+            lazy={false}
+            unmask={false}
             value={abonoHoras}
-            onChange={(e) => setAbonoHoras(e.target.value)}
-            className="input-margin"
+            onAccept={(value) => setAbonoHoras(value)}
             disabled={isReadOnly && role !== "admin"}
+            placeholder="Abono de horas (ex: 02h 00m)"
+            className="ant-input-masked input-margin"
           />
 
           {role === "admin" && (
