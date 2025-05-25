@@ -10,16 +10,29 @@ export const getColumns = ({
   showJustificationModal,
   handleApproval,
   role,
-  discordId
+  discordId,
+  isMobile,
+  toggleExpanded,
+  expandedRows
 }) => {
   const columns = [
     {
       title: "Usuário",
       dataIndex: "usuario",
       key: "usuario",
-      sorter: (a, b) => a.usuario.localeCompare(b.usuario),
-      responsive: ["xs", "sm", "md", "lg"],
-      render: (text) => <strong className="user-text">{text}</strong>,
+      render: (text, record) => (
+        <div>
+          <span>{text}</span>
+          {isMobile && (
+            <button
+              className="mobile-toggle-button"
+              onClick={() => toggleExpanded(record.id)}
+            >
+              {expandedRows.includes(record.id) ? "Fechar Detalhes" : "Ver Detalhes"}
+            </button>
+          )}
+        </div>
+      ),
     },
     {
       title: "Data",

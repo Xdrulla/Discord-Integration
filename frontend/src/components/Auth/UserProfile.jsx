@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { UserOutlined, LogoutOutlined, GiftOutlined, TeamOutlined, CalendarOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, TeamOutlined, CalendarOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";

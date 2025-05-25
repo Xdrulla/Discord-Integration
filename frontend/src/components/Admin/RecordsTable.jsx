@@ -37,6 +37,8 @@ const RecordsTable = ({ loading, filteredData }) => {
   const [isReadOnly, setIsReadOnly] = useState(false)
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 })
   const [saving, setSaving] = useState(false)
+  const [expandedRows, setExpandedRows] = useState([]);
+  const isMobile = window.innerWidth <= 576;
 
   const isOwnJustification = currentRecord?.discordId && currentRecord.discordId === discordId
 
@@ -177,6 +179,12 @@ const RecordsTable = ({ loading, filteredData }) => {
     }
   }
 
+  const toggleExpanded = (id) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
+    );
+  };
+
   const columns = getColumns({
     visibleColumns,
     justifications,
@@ -195,6 +203,9 @@ const RecordsTable = ({ loading, filteredData }) => {
       }),
     role,
     discordId,
+    isMobile,
+    expandedRows,
+    toggleExpanded,
   })
 
   return (
@@ -240,6 +251,33 @@ const RecordsTable = ({ loading, filteredData }) => {
           }}
           scroll={{ y: 400 }}
           onChange={(paginationConfig) => setPagination(paginationConfig)}
+          expandable={{
+            expandedRowRender: (record) => (
+              isMobile ? (
+                <div>
+                  <button
+                    className="mobile-toggle-button"
+                    onClick={() => toggleExpanded(record.id)}
+                  >
+                    {expandedRows.includes(record.id) ? "Fechar Detalhes" : "Ver Detalhes"}
+                  </button>
+
+                  {expandedRows.includes(record.id) && (
+                    <div className="mobile-expandable-row">
+                      <p><strong>Entrada:</strong> {record.entrada}</p>
+                      <p><strong>Saída:</strong> {record.saida}</p>
+                      <p><strong>Intervalo:</strong> {record.total_pausas}</p>
+                      <p><strong>Horas Trabalhadas:</strong> {record.total_horas}</p>
+                      <p><strong>Justificativa:</strong> {justifications[record.id]?.text}</p>
+                    </div>
+                  )}
+                </div>
+              ) : null
+            ),
+            rowExpandable: () => isMobile,
+            expandedRowKeys: expandedRows,
+            onExpand: (expanded, record) => toggleExpanded(record.id),
+          }}
         />
       )}
 
