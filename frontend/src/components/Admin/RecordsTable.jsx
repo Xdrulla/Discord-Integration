@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react"
 import { Table, Spin, Dropdown, Menu, Button } from "antd"
-import { SettingOutlined } from "@ant-design/icons"
+import { CheckCircleOutlined, CloseCircleOutlined, EditOutlined, SettingOutlined } from "@ant-design/icons"
 import { useAuth } from "../../context/useAuth"
 import dayjs from "dayjs"
 import { uploadJustificativaFile, upsertJustificativa } from "../../services/justificativaService"
@@ -9,6 +9,7 @@ import { showLoadingAlert, closeAlert, showError, showSuccess } from "../common/
 import { getColumns } from "./justification/columns"
 import JustificationModal from "./justification/JustificationModal"
 import { confirmDeleteHelper, handleApprovalHelper } from "./justification/justificationHelpers"
+import PauseInProgress from "../common/inProgressPause"
 
 const RecordsTable = ({ loading, filteredData }) => {
   const { role, discordId } = useAuth()
@@ -254,9 +255,75 @@ const RecordsTable = ({ loading, filteredData }) => {
                   <p><strong>Data:</strong> {record.data}</p>
                   <p><strong>Entrada:</strong> {record.entrada}</p>
                   <p><strong>Saída:</strong> {record.saida}</p>
-                  <p><strong>Intervalo:</strong> {record.total_pausas}</p>
+                  <p>
+                    <strong>Intervalo:</strong> {record.total_pausas}
+                    {record.pausas?.find(p => !p.fim) && (
+                      <>
+                        {" "}
+                        <PauseInProgress pausas={record.pausas} />
+                      </>
+                    )}
+                  </p>
                   <p><strong>Horas Trabalhadas:</strong> {record.total_horas}</p>
-                  <p><strong>Justificativa:</strong> {justifications[record.id]?.text || "-"}</p>
+                  <div className="record-justification-actions">
+                    <p><strong>Justificativa:</strong> {justifications[record.id]?.text || "-"}</p>
+
+                    <div className="record-justification-buttons">
+                      <Button
+                        icon={<EditOutlined />}
+                        onClick={() => showJustificationModal(record)}
+                        size="small"
+                      >
+                        {(() => {
+                          const justification = justifications[record.id]
+                          const isOwnRecord = record.discordId === discordId
+                          if (role === "admin" && !isOwnRecord) return "Visualizar"
+                          return justification ? "Editar" : "Adicionar"
+                        })()}
+                      </Button>
+
+                      {role === "admin" && justifications[record.id]?.status === "pendente" && (
+                        <>
+                          <Button
+                            type="primary"
+                            icon={<CheckCircleOutlined />}
+                            size="small"
+                            onClick={() => handleApprovalHelper({
+                              recordId: record.id,
+                              justifications,
+                              abonoHoras,
+                              adminNote,
+                              role,
+                              setJustifications,
+                              setSaving,
+                              setIsModalVisible,
+                              newStatus: "aprovado"
+                            })}
+                          >
+                            Aprovar
+                          </Button>
+                          <Button
+                            type="danger"
+                            icon={<CloseCircleOutlined />}
+                            size="small"
+                            onClick={() => handleApprovalHelper({
+                              recordId: record.id,
+                              justifications,
+                              abonoHoras,
+                              adminNote,
+                              role,
+                              setJustifications,
+                              setSaving,
+                              setIsModalVisible,
+                              newStatus: "reprovado"
+                            })}
+                          >
+                            Reprovar
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
