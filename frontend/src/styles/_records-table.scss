@@ -23,7 +23,7 @@
   }
 
   @media (max-width: 576px) {
-    padding: 15px;
+    padding: 12px;
     width: 100vw;
     border-radius: 0;
     box-shadow: none;
@@ -59,7 +59,7 @@
 
 .ant-table {
   width: 100%;
-  min-width: 1200px;
+  min-width: unset;
 
   .ant-table-cell {
     font-size: 14px;
@@ -84,36 +84,36 @@
       display: none;
     }
 
-    tbody tr {
+    .ant-table-tbody>tr {
       display: block;
       margin-bottom: 16px;
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-      padding: 10px;
+      padding: 12px;
     }
 
-    td {
+    .ant-table-cell {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px;
+      padding: 10px;
       font-size: 14px;
       border-bottom: 1px solid #f0f0f0;
       position: relative;
-    }
 
-    td::before {
-      content: attr(data-label);
-      font-weight: 600;
-      color: #666;
-      flex: 1;
-      text-align: left;
-    }
+      &::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #666;
+        flex: 1;
+        text-align: left;
+      }
 
-    td>* {
-      flex: 2;
-      text-align: right;
+      >* {
+        flex: 2;
+        text-align: right;
+      }
     }
   }
 }
@@ -140,7 +140,6 @@
   margin-top: 20px;
 }
 
-// Atualização para color.adjust() no lugar de lighten() e darken()
 .tag-success {
   background-color: color.adjust($goepik-done-background, $lightness: 5%);
   color: $goepik-done-color;
@@ -195,22 +194,79 @@
 @media (max-width: 576px) {
   .mobile-expandable-row {
     padding: 12px;
-    background: #fafafa;
-    border-top: 1px solid #e8e8e8;
-    display: none;
-  }
+    background: #f9f9f9;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+    text-align: left;
 
-  .mobile-expanded .mobile-expandable-row {
-    display: block;
+    p {
+      margin: 6px 0;
+
+      strong {
+        color: #333;
+      }
+    }
   }
 
   .mobile-toggle-button {
     background: none;
     border: none;
     color: $goepik-primary;
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 10px;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .ant-table-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ant-pagination {
+    justify-content: center !important;
+  }
+}
+
+.records-mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.record-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  margin-bottom: 8px;
+
+  button {
+    background: none;
+    border: none;
+    color: $goepik-primary;
+    font-weight: 600;
     cursor: pointer;
     padding: 0;
+  }
+}
+
+.record-details {
+  p {
+    margin: 6px 0;
+    font-size: 14px;
+
+    strong {
+      color: #444;
+    }
   }
 }

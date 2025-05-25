@@ -238,6 +238,30 @@ const RecordsTable = ({ loading, filteredData }) => {
 
       {loading ? (
         <Spin size="large" className="loading-spinner" />
+      ) : isMobile ? (
+        <div className="records-mobile-list">
+          {filteredData.map((record) => (
+            <div key={record.id} className="record-card">
+              <div className="record-header">
+                <strong>{record.usuario}</strong>
+                <button onClick={() => toggleExpanded(record.id)}>
+                  {expandedRows.includes(record.id) ? "Fechar" : "Ver Detalhes"}
+                </button>
+              </div>
+
+              {expandedRows.includes(record.id) && (
+                <div className="record-details">
+                  <p><strong>Data:</strong> {record.data}</p>
+                  <p><strong>Entrada:</strong> {record.entrada}</p>
+                  <p><strong>Saída:</strong> {record.saida}</p>
+                  <p><strong>Intervalo:</strong> {record.total_pausas}</p>
+                  <p><strong>Horas Trabalhadas:</strong> {record.total_horas}</p>
+                  <p><strong>Justificativa:</strong> {justifications[record.id]?.text || "-"}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       ) : (
         <Table
           columns={columns}
@@ -251,33 +275,6 @@ const RecordsTable = ({ loading, filteredData }) => {
           }}
           scroll={{ y: 400 }}
           onChange={(paginationConfig) => setPagination(paginationConfig)}
-          expandable={{
-            expandedRowRender: (record) => (
-              isMobile ? (
-                <div>
-                  <button
-                    className="mobile-toggle-button"
-                    onClick={() => toggleExpanded(record.id)}
-                  >
-                    {expandedRows.includes(record.id) ? "Fechar Detalhes" : "Ver Detalhes"}
-                  </button>
-
-                  {expandedRows.includes(record.id) && (
-                    <div className="mobile-expandable-row">
-                      <p><strong>Entrada:</strong> {record.entrada}</p>
-                      <p><strong>Saída:</strong> {record.saida}</p>
-                      <p><strong>Intervalo:</strong> {record.total_pausas}</p>
-                      <p><strong>Horas Trabalhadas:</strong> {record.total_horas}</p>
-                      <p><strong>Justificativa:</strong> {justifications[record.id]?.text}</p>
-                    </div>
-                  )}
-                </div>
-              ) : null
-            ),
-            rowExpandable: () => isMobile,
-            expandedRowKeys: expandedRows,
-            onExpand: (expanded, record) => toggleExpanded(record.id),
-          }}
         />
       )}
 
