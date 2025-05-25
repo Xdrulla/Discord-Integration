@@ -6,16 +6,20 @@ import AddManualRecordModal from './AddManualRecordModal';
 
 const { RangePicker } = DatePicker;
 
-const FilterBar = ({ role, searchUser, setSearchUser, setDateRange }) => {
+const FilterBar = ({ role, searchUser, setSearchUser, setDateRange, currentTab }) => {
   const [manualModalOpen, setManualModalOpen] = useState(false);
 
   const handleUserSearch = e => setSearchUser(e.target.value);
   const handleDateChange = dates => setDateRange(dates || [null, null]);
 
+  const showSearch = role === 'admin';
+  const showManual = role === 'admin' || role === 'leitor';
+  const showAddManual = role === 'admin' || role === 'leitor';
+
   return (
     <div className="filter-container" role="region" aria-label="Filter controls">
       <Space className="filter-elements" wrap align="center">
-        {role === 'admin' && (
+        {showSearch && currentTab !== '2' && (
           <Input
             className="filter-input"
             placeholder="Pesquisar usuário"
@@ -26,25 +30,32 @@ const FilterBar = ({ role, searchUser, setSearchUser, setDateRange }) => {
             aria-label="Pesquisar por usuário"
           />
         )}
-        <RangePicker
-          className="date-picker"
-          value={null}
-          onChange={handleDateChange}
-          allowClear
-          format="DD/MM/YYYY"
-          aria-label="Selecionar intervalo de datas"
-        />
-        <Tooltip title="Adicionar registro manual">
-          <button
-            type="button"
-            className="add-manual-button"
-            onClick={() => setManualModalOpen(true)}
-            aria-label="Adicionar registro manual"
-          >
-            <PlusOutlined />
-          </button>
-        </Tooltip>
+
+        {showManual && (
+          <RangePicker
+            className="date-picker"
+            value={null}
+            onChange={handleDateChange}
+            allowClear
+            format="DD/MM/YYYY"
+            aria-label="Selecionar intervalo de datas"
+          />
+        )}
+
+        {showAddManual && currentTab === '1' && (
+          <Tooltip title="Adicionar registro manual">
+            <button
+              type="button"
+              className="add-manual-button"
+              onClick={() => setManualModalOpen(true)}
+              aria-label="Adicionar registro manual"
+            >
+              <PlusOutlined />
+            </button>
+          </Tooltip>
+        )}
       </Space>
+
       <AddManualRecordModal
         open={manualModalOpen}
         onClose={() => setManualModalOpen(false)}
@@ -54,10 +65,11 @@ const FilterBar = ({ role, searchUser, setSearchUser, setDateRange }) => {
 };
 
 FilterBar.propTypes = {
-  role: PropTypes.oneOf(['admin', 'user']).isRequired,
+  role: PropTypes.oneOf(['admin', 'leitor']).isRequired,
   searchUser: PropTypes.string.isRequired,
   setSearchUser: PropTypes.func.isRequired,
   setDateRange: PropTypes.func.isRequired,
+  currentTab: PropTypes.string,
 };
 
 export default FilterBar;

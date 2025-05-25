@@ -61,6 +61,7 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading, todosR
         searchUser={searchUser}
         setSearchUser={setSearchUser}
         setDateRange={setDateRange}
+        currentTab="2"
       />
 
       <Row gutter={16} style={{ marginTop: "20px" }}>

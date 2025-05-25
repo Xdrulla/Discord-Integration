@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Layout, Tabs} from "antd";
+import { Layout, Tabs } from "antd";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
@@ -111,14 +111,13 @@ const Dashboard = () => {
         <Content>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="Registros de Ponto" key="1">
-              {role === "admin" && (
-                <FilterBar
-                  role={role}
-                  searchUser={searchUser}
-                  setSearchUser={setSearchUser}
-                  setDateRange={setDateRange}
-                />
-              )}
+              <FilterBar
+                role={role}
+                searchUser={searchUser}
+                setSearchUser={setSearchUser}
+                setDateRange={setDateRange}
+                currentTab="1"
+              />
 
               <RecordsTable loading={loading} filteredData={filteredData} />
             </Tabs.TabPane>
