@@ -34,18 +34,16 @@ const FilterBar = ({ role, searchUser, setSearchUser, setDateRange }) => {
           format="DD/MM/YYYY"
           aria-label="Selecionar intervalo de datas"
         />
-        {role === 'admin' && (
-          <Tooltip title="Adicionar registro manual">
-            <button
-              type="button"
-              className="add-manual-button"
-              onClick={() => setManualModalOpen(true)}
-              aria-label="Adicionar registro manual"
-            >
-              <PlusOutlined />
-            </button>
-          </Tooltip>
-        )}
+        <Tooltip title="Adicionar registro manual">
+          <button
+            type="button"
+            className="add-manual-button"
+            onClick={() => setManualModalOpen(true)}
+            aria-label="Adicionar registro manual"
+          >
+            <PlusOutlined />
+          </button>
+        </Tooltip>
       </Space>
       <AddManualRecordModal
         open={manualModalOpen}
