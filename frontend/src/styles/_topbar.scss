@@ -14,10 +14,18 @@
     display: flex;
     align-items: center;
     gap: 24px;
+
+    @media (max-width: 576px) {
+      gap: 12px;
+    }
   }
 
   &__logo {
     height: 60px;
+
+    @media (max-width: 576px) {
+      height: 45px;
+    }
   }
 
   &__nav {
@@ -33,11 +41,20 @@
         color: #1677ff;
       }
     }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   &__right {
     display: flex;
     align-items: center;
+  }
+
+  @media (max-width: 576px) {
+    padding: 0 16px;
+    height: 65px;
   }
 }
 
@@ -63,5 +80,11 @@
       color: #1677ff;
       border-bottom: 2px solid #1677ff;
     }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
   }
 }

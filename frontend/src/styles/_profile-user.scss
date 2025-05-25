@@ -12,6 +12,11 @@
     gap: 5px;
     align-items: flex-start;
   }
+
+  @media (max-width: 576px) {
+    gap: 4px;
+    padding: 6px;
+  }
 }
 
 .user-greeting {
@@ -22,6 +27,10 @@
   @media (max-width: 768px) {
     font-size: 15px;
   }
+
+  @media (max-width: 576px) {
+    font-size: 14px;
+  }
 }
 
 .user-avatar {
@@ -30,4 +39,14 @@
   width: 40px;
   height: 40px;
   font-size: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 576px) {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
 }

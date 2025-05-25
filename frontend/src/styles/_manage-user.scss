@@ -6,6 +6,13 @@
   align-items: center;
   height: 100vh;
   background: $goepik-bg-color;
+  padding: 20px;
+
+  @media (max-width: 576px) {
+    align-items: flex-start;
+    height: auto;
+    padding: 10px;
+  }
 }
 
 .manage-users-card {
@@ -15,6 +22,16 @@
   border-radius: 12px;
   background: #fff;
   text-align: center;
+
+  @media (max-width: 1200px) {
+    width: 100%;
+  }
+
+  @media (max-width: 576px) {
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: none;
+  }
 }
 
 .back-button {
@@ -23,12 +40,27 @@
   top: 15px;
   color: $goepik-primary;
   font-weight: bold;
+
+  @media (max-width: 576px) {
+    font-size: 14px;
+    top: 10px;
+    left: 10px;
+  }
 }
 
 .manage-users-title {
   margin-bottom: 20px;
+
+  @media (max-width: 576px) {
+    font-size: 18px;
+  }
 }
 
 .manage-users-table {
   margin-top: 15px;
+  overflow-x: auto;
+
+  @media (max-width: 576px) {
+    margin-top: 10px;
+  }
 }

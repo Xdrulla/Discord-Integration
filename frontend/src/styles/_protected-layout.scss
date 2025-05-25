@@ -1,17 +1,29 @@
 .protected-layout {
   display: flex;
+  flex-direction: row;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 
   .content-container {
     flex: 1;
     position: relative;
-    padding: 20px;
-    // margin-left: 250px;
     padding: 80px 24px 24px;
+
+    @media (max-width: 576px) {
+      padding: 72px 16px 16px;
+    }
   }
 
   .user-profile-container {
     position: absolute;
     right: 20px;
     top: 10px;
+
+    @media (max-width: 576px) {
+      right: 10px;
+      top: 8px;
+    }
   }
 }
