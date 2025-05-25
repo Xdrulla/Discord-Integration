@@ -1,28 +1,75 @@
+@use "variables" as *;
+
 .stats-container {
   width: 100%;
   max-width: 1400px;
   background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 20px auto;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
 
   @media (max-width: 576px) {
-    padding: 15px;
+    padding: 15px 12px;
     border-radius: 8px;
+    box-shadow: none;
+    margin: 10px;
+  }
+
+  .ant-row {
+    margin-bottom: 20px;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ant-col {
+      @media (max-width: 576px) {
+        width: 100% !important;
+        max-width: 100%;
+      }
+    }
+
+    .ant-card {
+      border-radius: 10px;
+
+      .ant-statistic-title {
+        font-size: 14px;
+        color: $goepik-dark;
+      }
+
+      .ant-statistic-content {
+        font-size: 20px;
+
+        @media (max-width: 576px) {
+          font-size: 18px;
+        }
+      }
+    }
   }
 }
 
 .export-buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 24px;
   flex-wrap: wrap;
 
   @media (max-width: 576px) {
     flex-direction: column;
-    gap: 12px;
+    align-items: stretch;
     width: 100%;
+
+    button {
+      width: 100%;
+    }
   }
 }

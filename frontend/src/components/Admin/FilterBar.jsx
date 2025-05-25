@@ -19,7 +19,7 @@ const FilterBar = ({ role, searchUser, setSearchUser, setDateRange, currentTab }
   return (
     <div className="filter-container" role="region" aria-label="Filter controls">
       <Space className="filter-elements" wrap align="center">
-        {showSearch && currentTab !== '2' && (
+        {showSearch && (
           <Input
             className="filter-input"
             placeholder="Pesquisar usuário"

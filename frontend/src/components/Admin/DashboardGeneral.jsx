@@ -74,9 +74,10 @@ const DashboardGeneral = () => {
   ];
 
   return (
-    <div>
-      <Title level={3}>Resumo Geral de Ponto</Title>
-      <Row gutter={16} style={{ marginBottom: 16 }}>
+    <div className="dashboard-general-container">
+      <Title level={3} className="title">Resumo Geral de Ponto</Title>
+
+      <Row gutter={16} className="filters-row">
         <Col>
           <Select value={mes} options={meses} onChange={setMes} style={{ width: 150 }} />
         </Col>
