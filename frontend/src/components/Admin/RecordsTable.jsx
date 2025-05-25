@@ -209,6 +209,13 @@ const RecordsTable = ({ loading, filteredData }) => {
     toggleExpanded,
   })
 
+  const paginatedData = isMobile
+    ? filteredData.slice(
+      (pagination.current - 1) * pagination.pageSize,
+      pagination.current * pagination.pageSize
+    )
+    : filteredData;
+
   return (
     <div className="table-container">
       <div className="table-header">
@@ -240,95 +247,121 @@ const RecordsTable = ({ loading, filteredData }) => {
       {loading ? (
         <Spin size="large" className="loading-spinner" />
       ) : isMobile ? (
-        <div className="records-mobile-list">
-          {filteredData.map((record) => (
-            <div key={record.id} className="record-card">
-              <div className="record-header">
-                <strong>{record.usuario}</strong>
-                <button onClick={() => toggleExpanded(record.id)}>
-                  {expandedRows.includes(record.id) ? "Fechar" : "Ver Detalhes"}
-                </button>
-              </div>
+        <>
+          <div className="records-mobile-list">
+            {paginatedData.map((record) => (
+              <div key={record.id} className="record-card">
+                <div className="record-header">
+                  <strong>{record.usuario}</strong>
+                  <button onClick={() => toggleExpanded(record.id)}>
+                    {expandedRows.includes(record.id) ? "Fechar" : "Ver Detalhes"}
+                  </button>
+                </div>
 
-              {expandedRows.includes(record.id) && (
-                <div className="record-details">
-                  <p><strong>Data:</strong> {record.data}</p>
-                  <p><strong>Entrada:</strong> {record.entrada}</p>
-                  <p><strong>Saída:</strong> {record.saida}</p>
-                  <p>
-                    <strong>Intervalo:</strong> {record.total_pausas}
-                    {record.pausas?.find(p => !p.fim) && (
-                      <>
-                        {" "}
-                        <PauseInProgress pausas={record.pausas} />
-                      </>
-                    )}
-                  </p>
-                  <p><strong>Horas Trabalhadas:</strong> {record.total_horas}</p>
-                  <div className="record-justification-actions">
-                    <p><strong>Justificativa:</strong> {justifications[record.id]?.text || "-"}</p>
-
-                    <div className="record-justification-buttons">
-                      <Button
-                        icon={<EditOutlined />}
-                        onClick={() => showJustificationModal(record)}
-                        size="small"
-                      >
-                        {(() => {
-                          const justification = justifications[record.id]
-                          const isOwnRecord = record.discordId === discordId
-                          if (role === "admin" && !isOwnRecord) return "Visualizar"
-                          return justification ? "Editar" : "Adicionar"
-                        })()}
-                      </Button>
-
-                      {role === "admin" && justifications[record.id]?.status === "pendente" && (
+                {expandedRows.includes(record.id) && (
+                  <div className="record-details">
+                    <p><strong>Data:</strong> {record.data}</p>
+                    <p><strong>Entrada:</strong> {record.entrada}</p>
+                    <p><strong>Saída:</strong> {record.saida}</p>
+                    <p>
+                      <strong>Intervalo:</strong> {record.total_pausas}
+                      {record.pausas?.find(p => !p.fim) && (
                         <>
-                          <Button
-                            type="primary"
-                            icon={<CheckCircleOutlined />}
-                            size="small"
-                            onClick={() => handleApprovalHelper({
-                              recordId: record.id,
-                              justifications,
-                              abonoHoras,
-                              adminNote,
-                              role,
-                              setJustifications,
-                              setSaving,
-                              setIsModalVisible,
-                              newStatus: "aprovado"
-                            })}
-                          >
-                            Aprovar
-                          </Button>
-                          <Button
-                            type="danger"
-                            icon={<CloseCircleOutlined />}
-                            size="small"
-                            onClick={() => handleApprovalHelper({
-                              recordId: record.id,
-                              justifications,
-                              abonoHoras,
-                              adminNote,
-                              role,
-                              setJustifications,
-                              setSaving,
-                              setIsModalVisible,
-                              newStatus: "reprovado"
-                            })}
-                          >
-                            Reprovar
-                          </Button>
+                          {" "}
+                          <PauseInProgress pausas={record.pausas} />
                         </>
                       )}
+                    </p>
+                    <p><strong>Horas Trabalhadas:</strong> {record.total_horas}</p>
+                    <div className="record-justification-actions">
+                      <p><strong>Justificativa:</strong> {justifications[record.id]?.text || "-"}</p>
+
+                      <div className="record-justification-buttons">
+                        <Button
+                          icon={<EditOutlined />}
+                          onClick={() => showJustificationModal(record)}
+                          size="small"
+                        >
+                          {(() => {
+                            const justification = justifications[record.id]
+                            const isOwnRecord = record.discordId === discordId
+                            if (role === "admin" && !isOwnRecord) return "Visualizar"
+                            return justification ? "Editar" : "Adicionar"
+                          })()}
+                        </Button>
+
+                        {role === "admin" && justifications[record.id]?.status === "pendente" && (
+                          <>
+                            <Button
+                              type="primary"
+                              icon={<CheckCircleOutlined />}
+                              size="small"
+                              onClick={() => handleApprovalHelper({
+                                recordId: record.id,
+                                justifications,
+                                abonoHoras,
+                                adminNote,
+                                role,
+                                setJustifications,
+                                setSaving,
+                                setIsModalVisible,
+                                newStatus: "aprovado"
+                              })}
+                            >
+                              Aprovar
+                            </Button>
+                            <Button
+                              type="danger"
+                              icon={<CloseCircleOutlined />}
+                              size="small"
+                              onClick={() => handleApprovalHelper({
+                                recordId: record.id,
+                                justifications,
+                                abonoHoras,
+                                adminNote,
+                                role,
+                                setJustifications,
+                                setSaving,
+                                setIsModalVisible,
+                                newStatus: "reprovado"
+                              })}
+                            >
+                              Reprovar
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="mobile-pagination">
+            <Button
+              disabled={pagination.current === 1}
+              onClick={() =>
+                setPagination((prev) => ({ ...prev, current: prev.current - 1 }))
+              }
+            >
+              Anterior
+            </Button>
+
+            <span style={{ margin: "0 8px" }}>
+              Página {pagination.current}
+            </span>
+
+            <Button
+              disabled={pagination.current * pagination.pageSize >= filteredData.length}
+              onClick={() =>
+                setPagination((prev) => ({ ...prev, current: prev.current + 1 }))
+              }
+            >
+              Próxima
+            </Button>
+          </div>
+        </>
       ) : (
         <Table
           columns={columns}
