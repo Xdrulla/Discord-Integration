@@ -1,0 +1,67 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 0 24px;
+  height: 75px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+  position: fixed;
+  width: 100%;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &__logo {
+    height: 60px;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 16px;
+
+    a {
+      color: #444;
+      font-weight: 500;
+      text-decoration: none;
+
+      &:hover {
+        color: #1677ff;
+      }
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.topbar__nav {
+  display: flex;
+  gap: 16px;
+
+  button {
+    background: none;
+    border: none;
+    font-weight: 500;
+    font-size: 15px;
+    color: #555;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      color: #1677ff;
+    }
+
+    &.active {
+      color: #1677ff;
+      border-bottom: 2px solid #1677ff;
+    }
+  }
+}

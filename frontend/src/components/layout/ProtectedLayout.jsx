@@ -1,17 +1,12 @@
 import { Outlet } from "react-router-dom";
-import SidebarMenu from "../layout/SidebarMenu"
-import UserProfile from "../Auth/UserProfile";
+import Topbar from "../common/Topbar";
 
 const ProtectedLayout = () => {
   return (
     <div className="protected-layout">
-      <SidebarMenu />
+      <Topbar />
 
       <div className="content-container">
-        <div className="user-profile-container">
-          <UserProfile />
-        </div>
-
         <Outlet />
       </div>
     </div>

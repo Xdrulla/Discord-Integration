@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Layout, Typography, Tabs, Tooltip, Row, Col } from "antd";
+import { Layout, Tabs} from "antd";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
@@ -7,19 +7,16 @@ import { useAuth } from "../../context/useAuth";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { PlusOutlined } from "@ant-design/icons";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
 import { carregarRegistrosFiltrados, carregarResumoMensal } from "../../helper/useFilteredRecord";
 import DashboardGeneral from "./DashboardGeneral";
-import AddManualRecordModal from "./AddManualRecordModal";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-const { Header, Content } = Layout;
-const { Title } = Typography;
+const { Content } = Layout;
 const socket = io(import.meta.env.VITE_API_URL);
 
 const Dashboard = () => {
@@ -32,7 +29,6 @@ const Dashboard = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [resumo, setResumo] = useState(null);
   const [resumoLoading, setResumoLoading] = useState(true);
-  const [manualModalOpen, setManualModalOpen] = useState(false);
 
   useEffect(() => {
     const hoje = new Date();
@@ -112,11 +108,6 @@ const Dashboard = () => {
   return (
     <>
       <Layout className="dashboard-container">
-        <Header className="dashboard-header">
-          <div className="header-content">
-            <Title level={2}>Registros de Ponto</Title>
-          </div>
-        </Header>
         <Content>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="Registros de Ponto" key="1">
@@ -127,21 +118,6 @@ const Dashboard = () => {
                   setSearchUser={setSearchUser}
                   setDateRange={setDateRange}
                 />
-              )}
-              {["leitor", "admin"].includes(role) && (
-                <Row>
-                  <Col>
-                    <Tooltip title="Inserir registro manual">
-                      <button
-                        className="add-manual-button"
-                        onClick={() => setManualModalOpen(true)}
-                      >
-                        <PlusOutlined />
-                      </button>
-                    </Tooltip>
-                  </Col>
-                </Row>
-
               )}
 
               <RecordsTable loading={loading} filteredData={filteredData} />
@@ -160,7 +136,6 @@ const Dashboard = () => {
           </Tabs>
         </Content>
       </Layout>
-      <AddManualRecordModal open={manualModalOpen} onClose={() => setManualModalOpen(false)} />
     </>
   );
 };

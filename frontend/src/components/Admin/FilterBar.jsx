@@ -1,43 +1,62 @@
-import PropTypes from "prop-types";
-import { Input, DatePicker, Space } from "antd";
-import { useState } from "react";
+import PropTypes from 'prop-types';
+import { Input, DatePicker, Space, Tooltip } from 'antd';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import AddManualRecordModal from './AddManualRecordModal';
 
 const { RangePicker } = DatePicker;
 
 const FilterBar = ({ role, searchUser, setSearchUser, setDateRange }) => {
-  const [localDateRange, setLocalDateRange] = useState([null, null]);
+  const [manualModalOpen, setManualModalOpen] = useState(false);
 
-  const onDateChange = (dates) => {
-    setLocalDateRange(dates || [null, null]);
-    setDateRange(dates || [null, null]);
-  };
+  const handleUserSearch = e => setSearchUser(e.target.value);
+  const handleDateChange = dates => setDateRange(dates || [null, null]);
 
   return (
-    <div className="filter-container">
-      <Space className="filter-elements" wrap>
-        {role === "admin" && (
+    <div className="filter-container" role="region" aria-label="Filter controls">
+      <Space className="filter-elements" wrap align="center">
+        {role === 'admin' && (
           <Input
-            placeholder="Filtrar por usuário"
-            value={searchUser}
-            onChange={(e) => setSearchUser(e.target.value)}
             className="filter-input"
+            placeholder="Pesquisar usuário"
+            prefix={<SearchOutlined />}
+            value={searchUser}
+            onChange={handleUserSearch}
+            allowClear
+            aria-label="Pesquisar por usuário"
           />
         )}
-
         <RangePicker
-          value={localDateRange}
-          onChange={onDateChange}
+          className="date-picker"
+          value={null}
+          onChange={handleDateChange}
           allowClear
           format="DD/MM/YYYY"
-          className="date-picker"
+          aria-label="Selecionar intervalo de datas"
         />
+        {role === 'admin' && (
+          <Tooltip title="Adicionar registro manual">
+            <button
+              type="button"
+              className="add-manual-button"
+              onClick={() => setManualModalOpen(true)}
+              aria-label="Adicionar registro manual"
+            >
+              <PlusOutlined />
+            </button>
+          </Tooltip>
+        )}
       </Space>
+      <AddManualRecordModal
+        open={manualModalOpen}
+        onClose={() => setManualModalOpen(false)}
+      />
     </div>
   );
 };
 
 FilterBar.propTypes = {
-  role: PropTypes.string.isRequired,
+  role: PropTypes.oneOf(['admin', 'user']).isRequired,
   searchUser: PropTypes.string.isRequired,
   setSearchUser: PropTypes.func.isRequired,
   setDateRange: PropTypes.func.isRequired,
