@@ -1,0 +1,17 @@
+.pagination-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  height: 60px;
+  z-index: 10;
+}
+
+body.dark .pagination-footer {
+  background-color: var(--sidebar-bg);
+  box-shadow: none;
+}

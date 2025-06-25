@@ -12,6 +12,8 @@
   border: 1px solid $goepik-border-light;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1400px) {
     width: 95vw;
@@ -46,6 +48,7 @@
 
 .ant-table-wrapper {
   overflow-x: auto;
+  flex: 1;
 
   @media (max-width: 576px) {
     overflow-x: visible;
@@ -69,14 +72,14 @@
     text-align: left;
   }
 
-  .ant-table-thead>tr>th {
+  .ant-table-thead > tr > th {
     font-size: 14px;
     font-weight: bold;
     padding: 16px;
     text-transform: uppercase;
   }
 
-  .ant-table-tbody>tr>td {
+  .ant-table-tbody > tr > td {
     font-size: 14px;
     padding: 14px;
   }
@@ -86,7 +89,7 @@
       display: none;
     }
 
-    .ant-table-tbody>tr {
+    .ant-table-tbody > tr {
       display: block;
       margin-bottom: 16px;
       background-color: #fff;
@@ -112,7 +115,7 @@
         text-align: left;
       }
 
-      >* {
+      > * {
         flex: 2;
         text-align: right;
       }
@@ -165,7 +168,10 @@
 }
 
 .tag-blue {
-  background-color: color.adjust($goepik-in-progress-background, $lightness: 5%);
+  background-color: color.adjust(
+    $goepik-in-progress-background,
+    $lightness: 5%
+  );
   color: $goepik-in-progress-color;
   border: 1px solid color.adjust($goepik-in-progress-color, $lightness: -10%);
 
@@ -273,18 +279,6 @@
   }
 }
 
-.mobile-pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  gap: 10px;
-
-  button {
-    padding: 4px 12px;
-    font-size: 14px;
-  }
-}
 
 @media (max-width: 576px) {
   .record-justification-actions {
@@ -311,8 +305,8 @@ body.dark .table-container {
   border-color: var(--border-color);
 }
 
-body.dark .ant-table-thead>tr>th,
-body.dark .ant-table-tbody>tr>td {
+body.dark .ant-table-thead > tr > th,
+body.dark .ant-table-tbody > tr > td {
   background-color: var(--card-bg);
   color: var(--text-color);
   border-color: var(--border-color);
@@ -322,3 +316,4 @@ body.dark .record-card {
   background-color: var(--card-bg);
   color: var(--text-color);
 }
+
