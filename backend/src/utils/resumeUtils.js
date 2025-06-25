@@ -50,6 +50,23 @@ async function calcularResumoMensal(discordId, ano, mes) {
 
   const saldo = totalMinutos - metaMinutos;
 
+  let pendentes = 0;
+  let aprovadas = 0;
+
+  for (const reg of registros) {
+    const minutos = extrairMinutosDeString(reg.total_horas);
+    const tipo = await getTipoDeDia(reg.data);
+
+    if (tipo === "sabado") extras.sabado += minutos;
+    else if (tipo === "domingo" || tipo === "feriado") extras.domingo_feriado += minutos;
+    else extras.util += minutos;
+
+    totalMinutos += minutos;
+
+    if (reg.justificativa?.status === "pendente") pendentes++;
+    if (reg.justificativa?.status === "aprovada") aprovadas++;
+  }
+
   return {
     usuario: registros[0]?.usuario || discordId,
     total_horas: formatarMinutosParaHoras(totalMinutos),
@@ -60,6 +77,8 @@ async function calcularResumoMensal(discordId, ano, mes) {
       domingo_feriado: formatarMinutosParaHoras(extras.domingo_feriado),
       dia_util: formatarMinutosParaHoras(extras.util),
     },
+    pendentes,
+    aprovadas,
   };
 }
 

@@ -112,3 +112,19 @@
     }
   }
 }
+
+body.dark .filter-container {
+  background-color: var(--card-bg);
+  box-shadow: none;
+}
+
+body.dark .filter-input,
+body.dark .date-picker {
+  background-color: #2a2a2a;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+
+  &::placeholder {
+    color: #aaa;
+  }
+}

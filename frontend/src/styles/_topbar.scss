@@ -88,3 +88,27 @@
     gap: 10px;
   }
 }
+
+body.dark .topbar {
+  background-color: var(--sidebar-bg);
+  box-shadow: none;
+
+  &__nav a,
+  &__nav button,
+  &__right button {
+    color: var(--text-color) !important;
+
+    &:hover {
+      color: #4da6ff !important;
+    }
+  }
+
+  &__nav .active {
+    border-bottom: 2px solid #4da6ff;
+    color: #4da6ff !important;
+  }
+
+  &__logo {
+    filter: brightness(0) invert(1);
+  }
+}

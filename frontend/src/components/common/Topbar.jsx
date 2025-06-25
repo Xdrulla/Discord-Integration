@@ -1,14 +1,13 @@
-
 import goepikLogo from '../../images/goepik-logo-big.png';
-
 import UserProfile from '../Auth/UserProfile';
 import { Layout } from 'antd';
-import PropTypes from 'prop-types';
+import { BulbOutlined, BulbFilled } from "@ant-design/icons";
+import useDarkMode from '../../hooks/useDarkMode';
 
 const { Header } = Layout;
 
 const Topbar = () => {
-
+  const [darkMode, setDarkMode] = useDarkMode();
 
   return (
     <Header className="topbar">
@@ -17,15 +16,17 @@ const Topbar = () => {
       </div>
 
       <div className="topbar__right">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="theme-toggle"
+          title="Alternar Tema"
+        >
+          {darkMode ? <BulbFilled /> : <BulbOutlined />}
+        </button>
         <UserProfile />
       </div>
     </Header>
   );
-};
-
-Topbar.propTypes = {
-  activeTab: PropTypes.string.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
 };
 
 export default Topbar;

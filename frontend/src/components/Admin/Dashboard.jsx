@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Layout, Tabs } from "antd";
+import { Tabs } from "antd";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
@@ -12,11 +12,11 @@ import { io } from "socket.io-client";
 import { notifyRealtimeUpdate } from "../common/alert";
 import { carregarRegistrosFiltrados, carregarResumoMensal } from "../../helper/useFilteredRecord";
 import DashboardGeneral from "./DashboardGeneral";
+import DashboardOverview from "./DashboardOverview";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-const { Content } = Layout;
 const socket = io(import.meta.env.VITE_API_URL);
 
 const Dashboard = () => {
@@ -107,8 +107,11 @@ const Dashboard = () => {
 
   return (
     <>
-      <Layout className="dashboard-container">
-        <Content>
+      <div className="dashboard-content">
+
+        <div className="dashboard-content">
+          <DashboardOverview resumo={resumo} />
+
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="Registros de Ponto" key="1">
               <FilterBar
@@ -133,8 +136,8 @@ const Dashboard = () => {
             )}
 
           </Tabs>
-        </Content>
-      </Layout>
+        </div>
+      </div>
     </>
   );
 };

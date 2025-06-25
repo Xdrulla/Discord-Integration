@@ -13,11 +13,15 @@
 @use "justificativa-modal";
 @use "manage-holidays";
 @use "topbar";
+@use "dashboard-overview";
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   @media (max-width: 576px) {
@@ -35,4 +39,91 @@ body {
   @media (max-width: 576px) {
     background-size: 10px 10px;
   }
+}
+
+.dashboard-wrapper {
+  background: #f5f6fa;
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-content {
+  min-height: 100vh;
+  background-color: #ffffff;
+  border-radius: 2rem;
+  padding: 2rem;
+  margin: 1rem auto;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+
+  @media (max-width: 576px) {
+    display: flex;
+    padding: 10px;
+  }
+}
+
+body.dark {
+  --background-color: #121212;
+  --sidebar-bg: #1e1e1e;
+  --text-color: #f0f0f0;
+  --hover-bg: #2c2c2c;
+  --card-bg: #1a1a1a;
+  --border-color: #333;
+
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.dark .sidebar {
+  background-color: var(--sidebar-bg);
+  border-color: var(--border-color);
+}
+
+.dark .sidebar-menu li a,
+.dark .sidebar-menu li button {
+  color: var(--text-color);
+
+  &:hover {
+    background-color: var(--hover-bg);
+  }
+}
+
+.dark .sidebar-menu li.active a {
+  background-color: #333;
+  color: #4da6ff;
+}
+
+.dark .dashboard-content,
+.dark .overview-card,
+.dark .table-container {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  box-shadow: none;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 16px;
+  color: #555;
+
+  &:hover {
+    color: #1677ff;
+  }
+
+  .anticon {
+    vertical-align: middle;
+  }
+}
+
+body.dark .theme-toggle {
+  color: #f0f0f0;
 }

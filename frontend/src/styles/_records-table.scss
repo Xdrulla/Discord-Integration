@@ -6,11 +6,12 @@
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 90vw;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   border: 1px solid $goepik-border-light;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   @media (max-width: 1400px) {
     width: 95vw;
@@ -60,6 +61,7 @@
 .ant-table {
   width: 100%;
   min-width: unset;
+  table-layout: auto;
 
   .ant-table-cell {
     font-size: 14px;
@@ -300,4 +302,23 @@
       }
     }
   }
+}
+
+body.dark .table-container {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  box-shadow: none;
+  border-color: var(--border-color);
+}
+
+body.dark .ant-table-thead>tr>th,
+body.dark .ant-table-tbody>tr>td {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+body.dark .record-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
 }
