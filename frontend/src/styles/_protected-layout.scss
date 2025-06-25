@@ -9,10 +9,10 @@
   .content-container {
     flex: 1;
     position: relative;
-    padding: 80px 24px 24px;
+    padding: 80px 24px 80px;
 
     @media (max-width: 576px) {
-      padding: 72px 16px 16px;
+      padding: 72px 16px 72px;
     }
   }
 
