@@ -4,6 +4,12 @@ const manager = new NlpManager({ languages: ['pt'] })
 
 manager.addDocument('pt', 'bom dia', 'entrada')
 manager.addDocument('pt', 'bom dia pessoal', 'entrada')
+manager.addDocument('pt', 'bom dia galera', 'entrada')
+manager.addDocument('pt', 'bom dia a todos', 'entrada')
+manager.addDocument('pt', 'bom dia a todos pessoal', 'entrada')
+manager.addDocument('pt', 'bom dia a todos galera', 'entrada')
+manager.addDocument('pt', 'boa tarde', 'entrada')
+manager.addDocument('pt', 'boa tarde pessoal', 'entrada')
 manager.addDocument('pt', 'e aí, bom dia', 'entrada')
 manager.addDocument('pt', 'cheguei, bom dia', 'entrada')
 
