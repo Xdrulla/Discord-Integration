@@ -10,6 +10,11 @@
     flex: 1;
     position: relative;
     padding: 80px 24px 80px;
+    height: calc(100vh - 135px);
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     @media (max-width: 576px) {
       padding: 72px 16px 72px;

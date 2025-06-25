@@ -56,7 +56,7 @@ const RecordsTable = ({ loading, filteredData }) => {
   const { pagination, setPagination } = usePagination();
   const [saving, setSaving] = useState(false);
   const [expandedRows, setExpandedRows] = useState([]);
-  const [tableHeight, setTableHeight] = useState(window.innerHeight - 300);
+  const [tableHeight, setTableHeight] = useState(0);
   const isMobile = window.innerWidth <= 576;
 
   const isOwnJustification =
@@ -89,7 +89,13 @@ const RecordsTable = ({ loading, filteredData }) => {
   }, [filteredData, visibleColumns]);
 
   useEffect(() => {
-    const updateHeight = () => setTableHeight(window.innerHeight - 300);
+    const updateHeight = () => {
+      const footerHeight = 60;
+      const container = document.querySelector(".table-container");
+      const offsetTop = container ? container.getBoundingClientRect().top : 0;
+      const available = window.innerHeight - offsetTop - footerHeight - 20;
+      setTableHeight(available);
+    };
     updateHeight();
     window.addEventListener("resize", updateHeight);
     return () => window.removeEventListener("resize", updateHeight);
