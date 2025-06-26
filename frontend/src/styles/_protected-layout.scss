@@ -11,7 +11,7 @@
     position: relative;
     padding: 80px 24px 80px;
 
-    @media (max-width: 576px) {
+    @media (max-width: 425px) {
       padding: 72px 16px 72px;
     }
   }
@@ -21,7 +21,7 @@
     right: 20px;
     top: 10px;
 
-    @media (max-width: 576px) {
+    @media (max-width: 425px) {
       right: 10px;
       top: 8px;
     }

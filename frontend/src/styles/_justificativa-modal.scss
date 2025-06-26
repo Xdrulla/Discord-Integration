@@ -39,7 +39,7 @@
       word-break: break-all;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 425px) {
       img {
         max-height: 250px;
       }
@@ -76,7 +76,7 @@
     cursor: not-allowed;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     font-size: 15px;
     padding: 6px 12px;
   }

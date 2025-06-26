@@ -9,7 +9,7 @@
   align-items: center;
   width: 100%;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     padding: 10px;
   }
 }
@@ -25,7 +25,7 @@
   color: $goepik-btn-primary-color;
   font-weight: 600;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     padding: 15px;
     font-size: 18px;
     border-radius: 8px;
@@ -36,7 +36,7 @@
   color: #fff !important;
   font-weight: 600;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     font-size: 20px;
   }
 }
@@ -89,7 +89,7 @@
     max-width: 95%;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     padding: 15px;
     border-radius: 8px;
     box-shadow: none;
@@ -101,7 +101,7 @@
 .table-container .ant-table {
   width: 100%;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     min-width: unset;
   }
 }
@@ -112,7 +112,7 @@
   gap: 15px;
   margin-bottom: 15px;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
@@ -123,7 +123,7 @@
 .date-picker {
   width: 250px;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     width: 100%;
   }
 }
@@ -149,7 +149,7 @@
     background-color: #f0f0f0;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     width: 100%;
     font-size: 18px;
   }

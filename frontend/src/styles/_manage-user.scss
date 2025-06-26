@@ -30,7 +30,7 @@
     box-shadow: none;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     padding: 12px;
   }
 }
@@ -77,7 +77,7 @@
     margin-top: 12px;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     margin-top: 10px;
   }
 
@@ -108,7 +108,7 @@
       }
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 425px) {
       th,
       td {
         font-size: 13px;
@@ -122,7 +122,7 @@
   width: 100%;
   overflow-x: auto;
 
-  @media (max-width: 576px) {
+  @media (max-width: 425px) {
     font-size: 13px;
     min-width: 100%;
 
