@@ -8,8 +8,11 @@ import ProtectedLayout from "../components/layout/ProtectedLayout";
 import AuthPage from "../components/Auth/Login";
 import GoalsManager from "../components/Auth/GoalsManager";
 import ManageSpecialDates from "../components/Admin/ManageSpecialDates";
+import useDarkMode from "../hooks/useDarkMode";
 
 function App() {
+  // Apply the saved theme on initial load so every route respects the chosen mode
+  useDarkMode();
   return (
     <AuthProvider>
       <Router>

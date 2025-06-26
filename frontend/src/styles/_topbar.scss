@@ -6,6 +6,7 @@
   padding: 0 24px;
   height: 75px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
   z-index: 10;
   position: fixed;
   width: 100%;
@@ -71,6 +72,7 @@
     cursor: pointer;
     padding: 4px 12px;
     border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
 
     &:hover {
       color: #1677ff;
@@ -92,6 +94,7 @@
 body.dark .topbar {
   background-color: var(--sidebar-bg);
   box-shadow: none;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 
   &__nav a,
   &__nav button,

@@ -15,6 +15,7 @@
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 
   @media (max-width: 1400px) {
     width: 95vw;
@@ -78,11 +79,13 @@
     font-weight: bold;
     padding: 16px;
     text-transform: uppercase;
+    border-bottom: 1px solid $goepik-border-light;
   }
 
   .ant-table-tbody > tr > td {
     font-size: 14px;
     padding: 14px;
+    border-bottom: 1px solid $goepik-border-light;
   }
 
   @media (max-width: 768px) {
@@ -304,6 +307,7 @@ body.dark .table-container {
   color: var(--text-color);
   box-shadow: none;
   border-color: var(--border-color);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 body.dark .ant-table-thead > tr > th,
@@ -311,6 +315,7 @@ body.dark .ant-table-tbody > tr > td {
   background-color: var(--card-bg);
   color: var(--text-color);
   border-color: var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 body.dark .record-card {
