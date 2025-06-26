@@ -400,7 +400,7 @@ const RecordsTable = ({ loading, filteredData }) => {
             dataSource={paginatedData}
             rowKey="id"
             pagination={false}
-            scroll={{ y: tableHeight }}
+            // scroll={{ y: tableHeight }}
           />
         </>
       )}

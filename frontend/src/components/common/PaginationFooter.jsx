@@ -4,9 +4,7 @@ import usePagination from "../../context/usePagination";
 const PaginationFooter = () => {
   const { pagination, setPagination } = usePagination();
 
-  if (!pagination || pagination.total <= pagination.pageSize) {
-    return null;
-  }
+  if (!pagination) return null;
 
   return (
     <div className="pagination-footer">

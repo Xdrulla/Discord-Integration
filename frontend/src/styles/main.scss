@@ -21,8 +21,7 @@ body,
 #root {
   height: 100%;
   margin: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   @media (max-width: 576px) {
@@ -51,11 +50,11 @@ body {
 }
 
 .dashboard-content {
-  min-height: 100vh;
+  min-height: auto !important;
   background-color: #ffffff;
   border-radius: 2rem;
-  padding: 2rem;
-  margin: 1rem auto;
+  padding: 1rem 1.5rem 2rem !important;
+  margin: 1rem auto !important;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -67,6 +66,14 @@ body {
     display: flex;
     padding: 10px;
   }
+}
+
+.dashboard-content table th,
+.dashboard-content table td {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  line-height: 1.4 !important;
+  font-size: 13px !important;
 }
 
 body.dark {
