@@ -27,36 +27,54 @@ exports.chat = async (req, res) => {
 			}
 		}
 
-		const meses = {
-			janeiro: 1,
-			fevereiro: 2,
-			marco: 3,
-			'março': 3,
-			abril: 4,
-			maio: 5,
-			junho: 6,
-			julho: 7,
-			agosto: 8,
-			setembro: 9,
-			outubro: 10,
-			novembro: 11,
-			dezembro: 12,
-		};
+		let extra = {};
+		try {
+			const analise = await openai.chat.completions.create({
+				model: 'gpt-3.5-turbo',
+				messages: [
+					{
+						role: 'system',
+						content: `Você é um extrator de intenção. Dado o input do usuário, retorne **somente** um JSON com a estrutura:
+{ "intencao": "resumo_mensal" | "registro_hoje" | "outra", "mes": "junho", "ano": 2025? }.
+Inclua o campo "ano" apenas se ele for mencionado pelo usuário.
+Use "outra" se a pergunta não for sobre isso.`
+					},
+					{ role: 'user', content: question }
+				],
+			});
 
-		const texto = question.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-		const mesMatch = texto.match(/janeiro|fevereiro|marco|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/);
+			extra = JSON.parse(analise.choices[0].message.content);
+		} catch (e) {
+			console.warn('⚠️ Não foi possível interpretar a intenção:', e.message);
+		}
 
-		if (texto.includes('horas trabalhadas') && mesMatch && discordId) {
-			const mesNome = mesMatch[0];
-			const mes = meses[mesNome];
-			const anoMatch = texto.match(/\b(\d{4})\b/);
-			const ano = anoMatch ? parseInt(anoMatch[1]) : new Date().getFullYear();
+		if (extra.intencao === 'resumo_mensal' && extra.mes && discordId) {
+			const meses = {
+				janeiro: 1, fevereiro: 2, marco: 3, março: 3, abril: 4,
+				maio: 5, junho: 6, julho: 7, agosto: 8, setembro: 9,
+				outubro: 10, novembro: 11, dezembro: 12,
+			};
 
-			try {
-				const resumo = await calcularResumoMensal(discordId, ano, mes);
-				context += ` Resumo de ${mesNome}/${ano} para ${usuario}: total de horas ${resumo.total_horas}, saldo ${resumo.saldo}.`;
-			} catch (e) {
-				console.error('Erro ao calcular resumo mensal:', e.message);
+			const mes = meses[extra.mes.toLowerCase()];
+			let ano = new Date().getFullYear();
+
+			const anoMatch = question.match(/\b(20\d{2})\b/);
+			if (anoMatch) {
+				ano = parseInt(anoMatch[1]);
+			}
+
+			if (mes) {
+				try {
+					const resumo = await calcularResumoMensal(discordId, ano, mes);
+					if (resumo?.total_horas) {
+						context += ` O usuário ${usuario} trabalhou ${resumo.total_horas} no mês de ${extra.mes}/${ano}. `;
+						context += ` O saldo de horas foi ${resumo.saldo}, com meta de ${resumo.meta}. `;
+					} else {
+						context += ` Nenhum dado encontrado para ${usuario} no mês de ${extra.mes}/${ano}.`;
+					}
+				} catch (e) {
+					console.error('Erro ao calcular resumo mensal:', e.message);
+				}
 			}
 		}
 

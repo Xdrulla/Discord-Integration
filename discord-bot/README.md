@@ -9,6 +9,7 @@ Este bot integra-se com um backend para registrar automaticamente entradas, saí
 - Usa **NLP (node-nlp)** para classificar mensagens.
 - Monitora mudanças de status (`online`, `idle`, `offline`, `dnd`) para iniciar ou encerrar **pausas automaticamente**.
 - Faz chamadas HTTP ao backend para registrar os eventos.
+- Permite conversar em **DM** com o bot para tirar dúvidas.
 
 ---
 
@@ -59,6 +60,7 @@ GatewayIntentBits.GuildMessages
 GatewayIntentBits.MessageContent
 GatewayIntentBits.GuildPresences
 GatewayIntentBits.GuildMembers
+GatewayIntentBits.DirectMessages
 ```
 
 Certifique-se que o bot tem os intents ativados nas configurações do portal do Discord Developer.
@@ -88,6 +90,7 @@ Certifique-se que o bot tem os intents ativados nas configurações do portal do
 - O bot **ignora mensagens de outros bots**.
 - As presenças são validadas para evitar erro em caso de desconexão do Discord.
 - O bot também loga a hora de mudança de status e se o usuário já marcou saída.
+- Mensagens diretas são respondidas usando a IA do backend.
 
 ---
 

@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { Client, GatewayIntentBits } = require('discord.js')
+const { Client, GatewayIntentBits, Partials, ChannelType } = require('discord.js')
 const axios = require('axios')
 const { NlpManager } = require('node-nlp')
 
@@ -50,7 +50,9 @@ const client = new Client({
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildPresences,
 		GatewayIntentBits.GuildMembers,
-	]
+		GatewayIntentBits.DirectMessages,
+	],
+	partials: [Partials.Channel]
 })
 
 client.once('ready', () => {
@@ -66,6 +68,21 @@ client.on('messageCreate', async (message) => {
 	if (message.author.bot) return
 
 	const content = message.content.trim()
+	if (message.channel.type === ChannelType.DM) {
+		const pergunta = content
+		if (!pergunta) return
+		try {
+			const resp = await axios.post(`${process.env.API_URL}/ai/chat`, {
+				question: pergunta,
+				usuario: message.author.username,
+				discordId: message.author.id
+			})
+			await message.reply(resp.data.answer)
+		} catch (err) {
+			await message.reply('Erro ao consultar a IA.')
+		}
+		return
+	}
 	const mensagemProcessada = removerAcentos(content)
 	const classificacao = await classificarMensagem(mensagemProcessada)
 	const nomeUsuario = message.member ? message.member.displayName : message.author.username

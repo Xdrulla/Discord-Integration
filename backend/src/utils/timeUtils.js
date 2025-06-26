@@ -88,7 +88,6 @@ async function getTipoDeDia(dataStr, discordId = null) {
       }
     }
   } catch (err) {
-    console.warn("⚠️ Erro ao buscar datas especiais:", err.message);
   }
 
   if (feriadosFixos.includes(mesDia)) return "feriado";
