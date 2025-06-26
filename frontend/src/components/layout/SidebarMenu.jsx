@@ -13,7 +13,8 @@ import {
 import { useAuth } from "../../context/useAuth";
 
 const SidebarMenu = () => {
-  const [collapsed, setCollapsed] = useState(true);
+  const isMobile = window.innerWidth <= 576;
+  const [collapsed, setCollapsed] = useState(isMobile ? false : true);
   const { logout, role } = useAuth();
   const location = useLocation();
 
