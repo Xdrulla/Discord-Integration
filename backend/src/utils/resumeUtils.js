@@ -18,6 +18,8 @@ async function calcularResumoMensal(discordId, ano, mes) {
 
   let totalMinutos = 0;
   let extras = { util: 0, sabado: 0, domingo_feriado: 0 };
+  let pendentes = 0;
+  let aprovadas = 0;
 
   for (const reg of registros) {
     const minutos = extrairMinutosDeString(reg.total_horas);
@@ -28,6 +30,8 @@ async function calcularResumoMensal(discordId, ano, mes) {
     else extras.util += minutos;
 
     totalMinutos += minutos;
+    if (reg.justificativa?.status === "pendente") pendentes++;
+    if (reg.justificativa?.status === "aprovado") aprovadas++;
   }
 
   const diasUteis = await contarDiasUteisValidos(ano, mes, discordId);
@@ -49,23 +53,6 @@ async function calcularResumoMensal(discordId, ano, mes) {
   }
 
   const saldo = totalMinutos - metaMinutos;
-
-  let pendentes = 0;
-  let aprovadas = 0;
-
-  for (const reg of registros) {
-    const minutos = extrairMinutosDeString(reg.total_horas);
-    const tipo = await getTipoDeDia(reg.data);
-
-    if (tipo === "sabado") extras.sabado += minutos;
-    else if (tipo === "domingo" || tipo === "feriado") extras.domingo_feriado += minutos;
-    else extras.util += minutos;
-
-    totalMinutos += minutos;
-
-    if (reg.justificativa?.status === "pendente") pendentes++;
-    if (reg.justificativa?.status === "aprovado") aprovadas++;
-  }
 
   return {
     usuario: registros[0]?.usuario || discordId,
