@@ -21,6 +21,8 @@ discord-integration/
 - Detecta mensagens como "bom dia" ou "fui" e registra entrada/saída automaticamente
 - Utiliza **NLP** com `node-nlp` para classificação das mensagens
 - Detecta **mudança de status (online/idle/offline)** para registrar início/fim de pausa automaticamente
+- Comando `!registro` para consultar o ponto do dia
+- Comando `!pergunta` integrado ao ChatGPT para dúvidas rápidas
 
 ### Backend:
 - API em **Express** com integração Firebase Firestore
@@ -139,6 +141,7 @@ Busca registro atual do dia para um usuário.
 ### `backend/.env`
 ```
 PORT=...
+OPENAI_API_KEY=...
 FIREBASE_CREDENTIALS=...
 FIREBASE_PROJECT_ID=...
 FIREBASE_PRIVATE_KEY_ID=...
@@ -155,6 +158,7 @@ EMAIL_SENHA=...
 ```
 DISCORD_BOT_TOKEN=...
 API_URL=http://localhost:5000
+PORT=4000
 ```
 
 ### `frontend/.env`

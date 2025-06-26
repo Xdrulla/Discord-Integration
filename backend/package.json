@@ -19,6 +19,7 @@
     "node-nlp": "^5.0.0-alpha.5",
     "nodemailer": "^6.10.0",
     "pdfkit": "^0.17.0",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "openai": "^4.38.2"
   }
 }

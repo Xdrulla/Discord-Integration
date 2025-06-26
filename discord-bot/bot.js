@@ -65,10 +65,39 @@ const classificarMensagem = async (mensagem) => {
 client.on('messageCreate', async (message) => {
 	if (message.author.bot) return
 
-	const mensagemProcessada = removerAcentos(message.content)
+	const content = message.content.trim()
+	const mensagemProcessada = removerAcentos(content)
 	const classificacao = await classificarMensagem(mensagemProcessada)
-	const nomeUsuario = message.member ? message.member.displayName : message.author.username;
+	const nomeUsuario = message.member ? message.member.displayName : message.author.username
 	const discordId = message.author.id
+
+	if (content.startsWith('!registro')) {
+		try {
+			const resp = await axios.get(`${process.env.API_URL}/registro/${nomeUsuario}`)
+			const reg = resp.data
+			const msg = `Entrada: ${reg.entrada || 'não marcada'}\nSaída: ${reg.saida || 'não marcada'}\nTotal: ${reg.total_horas || 'n/a'}`
+			await message.reply({ content: msg, ephemeral: false })
+		} catch (err) {
+			await message.reply('Registro não encontrado.')
+		}
+		return
+	}
+
+	if (content.startsWith('!pergunta')) {
+		const pergunta = content.replace('!pergunta', '').trim()
+		if (!pergunta) return
+		try {
+			const resp = await axios.post(`${process.env.API_URL}/ai/chat`, {
+				question: pergunta,
+				usuario: nomeUsuario,
+				discordId
+			})
+			await message.reply(resp.data.answer)
+		} catch (err) {
+			await message.reply('Erro ao consultar a IA.')
+		}
+		return
+	}
 
 	if (classificacao === 'entrada') {
 		await axios.post(`${process.env.API_URL}/register`, {
