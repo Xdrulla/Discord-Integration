@@ -3,11 +3,10 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "fire
 import { auth, db } from "../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Card, Typography, message, Tabs, Form } from "antd";
-import { LockOutlined, MailOutlined, BulbOutlined, BulbFilled } from "@ant-design/icons";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { setDoc, doc } from "firebase/firestore";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
-import useDarkMode from "../../hooks/useDarkMode";
 
 const { Title, Text } = Typography;
 
@@ -16,7 +15,6 @@ const AuthPage = () => {
   const [activeTab, setActiveTab] = useState("login");
   const navigate = useNavigate();
   const { user, loading: authLoading } = useContext(AuthContext);
-  const [darkMode, setDarkMode] = useDarkMode();
 
   if (authLoading) {
     return <div>Carregando...</div>;
@@ -52,13 +50,6 @@ const AuthPage = () => {
   return (
     <div className="auth-container">
       <Card className="auth-card">
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="theme-toggle"
-          title="Alternar Tema"
-        >
-          {darkMode ? <BulbFilled /> : <BulbOutlined />}
-        </button>
         <Title level={2} className="auth-title">Bem-vindo</Title>
         <Text type="secondary">Acesse sua conta ou cadastre-se para continuar</Text>
 
