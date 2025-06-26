@@ -28,7 +28,7 @@ import {
 import PauseInProgress from "../common/inProgressPause";
 import usePagination from "../../context/usePagination";
 
-const RecordsTable = ({ loading, filteredData }) => {
+const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
   const { role, discordId } = useAuth();
   const [visibleColumns, setVisibleColumns] = useState([
     "usuario",
@@ -80,6 +80,14 @@ const RecordsTable = ({ loading, filteredData }) => {
     { key: "status", label: "Status" },
     { key: "justificativa", label: "Justificativa" },
   ];
+
+  useEffect(() => {
+    if (!initialRecordId || !filteredData.length) return;
+    const record = filteredData.find((r) => r.id === initialRecordId);
+    if (record) {
+      showJustificationModal(record);
+    }
+  }, [initialRecordId, filteredData]);
 
   useEffect(() => {
     const hasAnyJustification = filteredData.some((reg) => reg.justificativa);
@@ -400,7 +408,7 @@ const RecordsTable = ({ loading, filteredData }) => {
             dataSource={paginatedData}
             rowKey="id"
             pagination={false}
-            // scroll={{ y: tableHeight }}
+          // scroll={{ y: tableHeight }}
           />
         </>
       )}
@@ -462,6 +470,7 @@ const RecordsTable = ({ loading, filteredData }) => {
 RecordsTable.propTypes = {
   loading: PropTypes.bool.isRequired,
   filteredData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  initialRecordId: PropTypes.string,
 };
 
 export default RecordsTable;

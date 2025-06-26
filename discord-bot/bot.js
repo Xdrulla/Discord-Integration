@@ -3,6 +3,14 @@ const { Client, GatewayIntentBits, Partials, ChannelType } = require('discord.js
 const axios = require('axios')
 const { NlpManager } = require('node-nlp')
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
+
+const parseMinutes = (horasStr) => {
+	const match = /(-?\d+)h\s*(\d+)m/.exec(horasStr || '')
+	if (!match) return 0
+	return parseInt(match[1]) * 60 + parseInt(match[2])
+}
+
 const removerAcentos = (texto) => {
 	return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
 }
@@ -132,6 +140,17 @@ client.on('messageCreate', async (message) => {
 			discordId
 		})
 		console.log(`✅ Saída registrada para ${nomeUsuario}`)
+
+		try {
+			const { data: reg } = await axios.get(`${process.env.API_URL}/registro/${nomeUsuario}`)
+			const minutos = parseMinutes(reg.total_horas)
+			if (minutos && minutos !== 480) {
+				const diff = minutos > 480 ? 'mais' : 'menos'
+				const link = `${FRONTEND_URL}/dashboard?registro=${encodeURIComponent(reg.usuario + '_' + reg.data)}`
+				await message.author.send(`Você trabalhou ${diff} que 8h hoje (${reg.total_horas}). Justifique se necessário: ${link}`)
+			}
+		} catch (e) {
+		}
 	}
 })
 

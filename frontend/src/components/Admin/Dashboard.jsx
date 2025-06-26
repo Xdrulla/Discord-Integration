@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Tabs } from "antd";
+import { useLocation } from "react-router-dom";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
@@ -21,6 +22,7 @@ const socket = io(import.meta.env.VITE_API_URL);
 
 const Dashboard = () => {
   const { role, discordId } = useAuth();
+  const location = useLocation();
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -29,6 +31,13 @@ const Dashboard = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [resumo, setResumo] = useState(null);
   const [resumoLoading, setResumoLoading] = useState(true);
+  const [initialRecordId, setInitialRecordId] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const reg = params.get('registro');
+    if (reg) setInitialRecordId(reg);
+  }, [location.search]);
 
   useEffect(() => {
     const hoje = new Date();
@@ -122,7 +131,11 @@ const Dashboard = () => {
                 currentTab="1"
               />
 
-              <RecordsTable loading={loading} filteredData={filteredData} />
+              <RecordsTable
+                loading={loading}
+                filteredData={filteredData}
+                initialRecordId={initialRecordId}
+              />
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="Estatísticas" key="2">
