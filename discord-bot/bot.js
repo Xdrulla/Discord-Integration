@@ -6,9 +6,11 @@ const { NlpManager } = require('node-nlp')
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 
 const parseMinutes = (horasStr) => {
-	const match = /(-?\d+)h\s*(\d+)m/.exec(horasStr || '')
+	const match = /(-?\d+)h\s*(\d+(?:\.\d+)?)m/.exec(horasStr || '')
 	if (!match) return 0
-	return parseInt(match[1]) * 60 + parseInt(match[2])
+	const horas = parseInt(match[1])
+	const minutos = parseFloat(match[2])
+	return horas * 60 + minutos
 }
 
 const removerAcentos = (texto) => {
