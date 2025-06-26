@@ -110,7 +110,6 @@ async function enviarEmailRelatorio(adminEmail, bufferExcel, bufferPDF, ano, mes
 async function executarEnvio() {
   const hoje = dayjs().tz("America/Sao_Paulo");
   if (!(hoje.date() === 30 && hoje.hour() === 23)) {
-    console.log(`[🔒 BLOQUEADO] Tentativa de envio em horário inválido: ${hoje.format()}`);
     return;
   }
   const dataReferencia = hoje.subtract(1, 'day');
@@ -118,7 +117,6 @@ async function executarEnvio() {
   const ano = dataReferencia.year();
   const mes = dataReferencia.month() + 1;
 
-  console.log(`🔁 Gerando relatório de ${mes}/${ano}...`);
   const bufferExcel = await gerarArquivoExcel(ano, mes);
   const bufferPDF = await gerarArquivoPDF(ano, mes);
 
@@ -126,10 +124,8 @@ async function executarEnvio() {
 
   for (const admin of admins) {
     await enviarEmailRelatorio(admin.email, bufferExcel, bufferPDF, ano, mes);
-    console.log(`📨 Relatório enviado para ${admin.email}`);
   }
 
-  console.log("✅ Relatórios enviados com sucesso!");
 }
 
 module.exports = { executarEnvio };

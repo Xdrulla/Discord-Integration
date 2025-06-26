@@ -63,7 +63,6 @@ const UserProfilePage = () => {
       const userRef = doc(db, "users", user.uid);
       await setDoc(userRef, { discordId }, { merge: true });
       const updatedSnap = await getDoc(userRef);
-      console.log("📦 Dados atualizados:", updatedSnap.data());
       successDiscordIdUpdate();
     } catch (error) {
       console.error("Erro ao atualizar Discord ID:", error);

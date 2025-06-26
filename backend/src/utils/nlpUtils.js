@@ -33,7 +33,6 @@ manager.addDocument('pt', 'bye bye', 'saida');
 (async () => {
   await manager.train()
   manager.save()
-  console.log("✅ Modelo de NLP treinado e salvo!")
 })()
 
 const classificarMensagem = async (mensagem) => {

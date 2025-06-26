@@ -65,7 +65,6 @@ async function ajustarHorarios() {
   });
 
   await batch.commit();
-  console.log(`✅ ${totalCorrigidos} registros corrigidos com sucesso!`);
 }
 
 ajustarHorarios().catch(console.error);

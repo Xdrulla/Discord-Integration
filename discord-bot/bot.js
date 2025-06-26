@@ -50,7 +50,6 @@ manager.addDocument('pt', 'bye bye', 'saida');
 (async () => {
 	await manager.train()
 	manager.save()
-	console.log("✅ Modelo de NLP treinado e salvo!")
 })()
 
 const client = new Client({
@@ -132,7 +131,6 @@ client.on('messageCreate', async (message) => {
 			mensagem: message.content,
 			discordId
 		})
-		console.log(`✅ Entrada registrada para ${nomeUsuario}`)
 	}
 
 	if (classificacao === 'saida') {
@@ -141,7 +139,6 @@ client.on('messageCreate', async (message) => {
 			mensagem: message.content,
 			discordId
 		})
-		console.log(`✅ Saída registrada para ${nomeUsuario}`)
 
 		try {
 			const { data: reg } = await axios.get(`${process.env.API_URL}/registro/${nomeUsuario}`)
@@ -166,7 +163,6 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 		const statusAntigo = oldPresence.status
 		const statusAtual = newPresence.status
 
-		console.log(`📡 ${usuario} mudou de status: ${statusAntigo} → ${statusAtual}`)
 		let registro = {}
 
 		try {
@@ -174,14 +170,12 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 			registro = response.data
 
 			if (registro.saida) {
-				console.log(`⛔ ${usuario} já marcou saída às ${registro.saida}, não registrando pausa.`)
 				return
 			}
 		} catch (error) {
 			if (error.response && error.response.status === 404) {
-				console.log(`🔎 Nenhum registro encontrado para ${usuario}, seguindo normalmente.`)
 			} else {
-				console.error("❌ Erro ao buscar registro:", error)
+				console.error("❌ Erro ao buscar registro:")
 			}
 		}
 
@@ -196,7 +190,6 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 				inicio: new Date().toISOString(),
 				discordId
 			})
-			console.log(`⏸️ Pausa iniciada para ${usuario}`)
 		}
 
 		if (pausaAtiva && (
@@ -210,10 +203,9 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
 				fim: new Date().toISOString(),
 				discordId
 			})
-			console.log(`▶️ Pausa finalizada para ${usuario}`)
 		}
 	} catch (error) {
-		console.error("❌ Erro inesperado na atualização de presença:", error)
+		console.error("❌ Erro inesperado na atualização de presença:")
 	}
 })
 
