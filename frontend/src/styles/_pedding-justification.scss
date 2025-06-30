@@ -1,0 +1,14 @@
+.pending-justifications-modal {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .pending-card {
+    margin-bottom: 16px;
+  }
+  
+  .pending-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }

@@ -10,10 +10,17 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import debounce from "lodash.debounce";
 import { io } from "socket.io-client";
-import { notifyRealtimeUpdate } from "../common/alert";
+import {
+  notifyRealtimeUpdate,
+  showLoadingAlert,
+  closeAlert,
+  showError,
+  showSuccess,
+} from "../common/alert";
 import { carregarRegistrosFiltrados, carregarResumoMensal } from "../../helper/useFilteredRecord";
 import DashboardGeneral from "./DashboardGeneral";
 import DashboardOverview from "./DashboardOverview";
+import PendingJustificationsModal from "./justification/PendingJustificationsModal";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -32,6 +39,54 @@ const Dashboard = () => {
   const [resumo, setResumo] = useState(null);
   const [resumoLoading, setResumoLoading] = useState(true);
   const [initialRecordId, setInitialRecordId] = useState(null);
+  const [pendingModalVisible, setPendingModalVisible] = useState(false);
+  const [pendingJustifications, setPendingJustifications] = useState([]);
+
+  const handlePendingStatus = async (recordId, status) => {
+    const record = data.find((r) => r.id === recordId);
+    if (!record || !record.justificativa) return;
+
+    const payload = {
+      usuario: record.usuario,
+      data: record.data,
+      text: record.justificativa.text || "",
+      newEntry: record.justificativa.newEntry || null,
+      newExit: record.justificativa.newExit || null,
+      abonoHoras: record.justificativa.abonoHoras || null,
+      manualBreak: record.justificativa.manualBreak || null,
+      status,
+      observacaoAdmin: null,
+    };
+
+    showLoadingAlert("Atualizando status da justificativa...");
+
+    try {
+      const res = await upsertJustificativa(payload);
+      if (res.success) {
+        showSuccess(`Justificativa ${status} com sucesso!`);
+        setData((prev) => {
+          const updated = prev.map((r) =>
+            r.id === recordId
+              ? { ...r, justificativa: { ...r.justificativa, status } }
+              : r
+          );
+          return updated;
+        });
+        setPendingJustifications((prev) => {
+          const updated = prev.filter((j) => j.id !== recordId);
+          if (updated.length === 0) setPendingModalVisible(false);
+          return updated;
+        });
+      } else {
+        showError(res.error || "Erro ao atualizar justificativa.");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar justificativa:", error);
+      showError("Erro ao atualizar justificativa.");
+    } finally {
+      closeAlert();
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -56,6 +111,16 @@ const Dashboard = () => {
   useEffect(() => {
     carregarRegistrosFiltrados(role, discordId, setData, setFilteredData, setLoading);
   }, [role, discordId]);
+
+  useEffect(() => {
+    if (role === "admin" && data.length) {
+      const pendentes = data.filter(
+        (r) => r.justificativa?.status === "pendente"
+      );
+      setPendingJustifications(pendentes);
+      if (pendentes.length > 0) setPendingModalVisible(true);
+    }
+  }, [data, role]);
 
   const applyFilters = useCallback(() => {
     let filtered = [...data];
@@ -100,6 +165,10 @@ const Dashboard = () => {
   }, [dateRange, applyFilters]);
 
   useEffect(() => {
+    applyFilters();
+  }, [data, applyFilters]);
+
+  useEffect(() => {
     const atualizarRegistros = async () => {
       await carregarRegistrosFiltrados(role, discordId, setData, setFilteredData, setLoading);
     };
@@ -116,6 +185,15 @@ const Dashboard = () => {
 
   return (
     <>
+      {role === "admin" && (
+        <PendingJustificationsModal
+          visible={pendingModalVisible}
+          onClose={() => setPendingModalVisible(false)}
+          justifications={pendingJustifications}
+          onApprove={(id) => handlePendingStatus(id, "aprovado")}
+          onReject={(id) => handlePendingStatus(id, "reprovado")}
+        />
+      )}
       <div className="dashboard-content">
 
         <div className="dashboard-content">
