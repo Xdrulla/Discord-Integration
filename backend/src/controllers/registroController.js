@@ -6,6 +6,7 @@ const dayjs = require("dayjs")
 const utc = require("dayjs/plugin/utc")
 const timezone = require("dayjs/plugin/timezone");
 const { enviarEmailNotificacao } = require("../utils/emailHelper");
+const { vetorizarRegistro } = require("../utils/embeddingUtil");
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -80,6 +81,7 @@ exports.register = async (req, res) => {
       }
     }
     await registroRef.set(dadosRegistro, { merge: true });
+    await vetorizarRegistro(`${usuario}_${dataFormatada}`, dadosRegistro);
     res.json({ success: true, message: "Registro atualizado!" });
 
     const io = req.app.get("io");
@@ -126,6 +128,7 @@ exports.pause = async (req, res) => {
     if (!ultimaPausa || ultimaPausa.fim) {
       dadosRegistro.pausas.push({ inicio: agora });
       await registroRef.set(dadosRegistro, { merge: true });
+      await vetorizarRegistro(`${usuario}_${dataFormatada}`, dadosRegistro);
 
       res.json({ success: true, message: "Pausa registrada!" });
     } else {
@@ -184,6 +187,7 @@ exports.resume = async (req, res) => {
     dadosRegistro.total_pausas = totalPausas;
 
     await registroRef.set(dadosRegistro, { merge: true });
+    await vetorizarRegistro(`${usuario}_${dataFormatada}`, dadosRegistro);
 
     const io = req.app.get("io");
     io.emit("registro-atualizado", { usuario, data: dadosRegistro });
@@ -248,6 +252,7 @@ exports.addManualRecord = async (req, res) => {
     };
 
     await registroRef.set(registro, { merge: true });
+    await vetorizarRegistro(`${usuario}_${dataFormatada}`, dadosRegistro);
 
     const io = req.app.get("io");
     io.emit("registro-atualizado", { usuario, data: registro });

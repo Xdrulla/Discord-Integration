@@ -2,6 +2,7 @@ const db = require("../config/firebase");
 const nodemailer = require("nodemailer");
 const { calcularHorasTrabalhadas, extrairMinutosDeString, formatarMinutosParaHoras } = require("../utils/timeUtils");
 const { enviarEmailNotificacao, enviarEmailConfirmacaoLeitor } = require("../utils/emailHelper");
+const { vetorizarRegistro } = require("../utils/embeddingUtil");
 
 /**
  * Esse endpoint espera um body com:
@@ -135,6 +136,9 @@ exports.upsertJustificativa = async (req, res) => {
     if (["aprovado", "reprovado"].includes(justificativaStatus)) await enviarEmailConfirmacaoLeitor(justificativa, usuario, data, justificativaStatus);
 
     await registroRef.set(atualizacao, { merge: true });
+    const docAtualizado = await registroRef.get();
+    const dadosRegistro = docAtualizado.data();
+    await vetorizarRegistro(`${usuario}_${data}`, dadosRegistro);
 
     const io = req.app.get("io");
     io.emit("registro-atualizado", { usuario, data });
