@@ -21,6 +21,7 @@ import { carregarRegistrosFiltrados, carregarResumoMensal } from "../../helper/u
 import DashboardGeneral from "./DashboardGeneral";
 import DashboardOverview from "./DashboardOverview";
 import PendingJustificationsModal from "./justification/PendingJustificationsModal";
+import { upsertJustificativa } from "../../services/justificativaService";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
