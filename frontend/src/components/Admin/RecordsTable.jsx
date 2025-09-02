@@ -53,7 +53,7 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
   const [newEntry, setNewEntry] = useState(null);
   const [newExit, setNewExit] = useState(null);
   const [isReadOnly, setIsReadOnly] = useState(false);
-  const { pagination, setPagination } = usePagination();
+  const { pagination, setPagination, setShowPagination } = usePagination();
   const [saving, setSaving] = useState(false);
   const [expandedRows, setExpandedRows] = useState([]);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 300);
@@ -128,7 +128,12 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
       const current = prev.current > maxPage ? maxPage : prev.current;
       return { ...prev, total, current };
     });
-  }, [filteredData, setPagination]);
+    // Ativar paginação para esta tela
+    setShowPagination(true);
+    
+    // Cleanup: desativar paginação quando o componente for desmontado
+    return () => setShowPagination(false);
+  }, [filteredData, setPagination, setShowPagination]);
 
   const showJustificationModal = (record) => {
     setCurrentRecord(record);

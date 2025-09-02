@@ -187,7 +187,7 @@
   
   body.dark & {
     background-color: rgba($goepik-success, 0.15);
-    color: lighten($goepik-success, 10%);
+    color: color.adjust($goepik-success, $lightness: 10%);
     border-color: rgba($goepik-success, 0.4);
   }
 }
@@ -204,7 +204,7 @@
   
   body.dark & {
     background-color: rgba($goepik-error, 0.15);
-    color: lighten($goepik-error, 10%);
+    color: color.adjust($goepik-error, $lightness: 10%);
     border-color: rgba($goepik-error, 0.4);
   }
 }
@@ -221,7 +221,7 @@
   
   body.dark & {
     background-color: rgba($goepik-blue, 0.15);
-    color: lighten($goepik-blue, 10%);
+    color: color.adjust($goepik-blue, $lightness: 10%);
     border-color: rgba($goepik-blue, 0.4);
   }
 }
@@ -238,7 +238,7 @@
   
   body.dark & {
     background-color: rgba($goepik-purple, 0.15);
-    color: lighten($goepik-purple, 15%);
+    color: color.adjust($goepik-purple, $lightness: 15%);
     border-color: rgba($goepik-purple, 0.4);
   }
 }
@@ -255,7 +255,7 @@
   
   body.dark & {
     background-color: rgba($goepik-warning, 0.15);
-    color: lighten($goepik-warning, 10%);
+    color: color.adjust($goepik-warning, $lightness: 10%);
     border-color: rgba($goepik-warning, 0.4);
   }
 }
@@ -329,6 +329,8 @@
   padding: spacing(lg);
   border: 1px solid var(--border-primary, #f0f0f0);
   transition: all duration(normal) easing(ease-out);
+  cursor: pointer;
+  min-height: auto;
   
   @media (max-width: breakpoint(small-mobile)) { // 425px
     padding: spacing(md); // 12px reduced padding
@@ -338,8 +340,6 @@
   
   // Add accessibility
   @extend .accessible-button !optional;
-  cursor: pointer;
-  min-height: auto;
   
   // Enhanced animations
   @extend .hover-lift !optional;
@@ -517,8 +517,8 @@
         border-color: color(success);
 
         &:hover {
-          background: darken(color(success), 10%);
-          border-color: darken(color(success), 10%);
+          background: color.adjust(color(success), $lightness: -10%);
+          border-color: color.adjust(color(success), $lightness: -10%);
         }
       }
 
@@ -527,8 +527,8 @@
         border-color: color(error);
 
         &:hover {
-          background: darken(color(error), 10%);
-          border-color: darken(color(error), 10%);
+          background: color.adjust(color(error), $lightness: -10%);
+          border-color: color.adjust(color(error), $lightness: -10%);
         }
       }
     }

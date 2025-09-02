@@ -1,4 +1,6 @@
 // === DESIGN TOKENS ===
+@use "sass:map";
+@use "sass:color";
 
 // Breakpoints
 $breakpoints: (
@@ -50,23 +52,23 @@ $shadows: (
 
 // === HELPER FUNCTIONS ===
 @function breakpoint($key) {
-  @return map-get($breakpoints, $key);
+  @return map.get($breakpoints, $key);
 }
 
 @function spacing($key) {
-  @return map-get($spacing, $key);
+  @return map.get($spacing, $key);
 }
 
 @function z-index($key) {
-  @return map-get($z-index, $key);
+  @return map.get($z-index, $key);
 }
 
 @function radius($key) {
-  @return map-get($radius, $key);
+  @return map.get($radius, $key);
 }
 
 @function shadow($key) {
-  @return map-get($shadows, $key);
+  @return map.get($shadows, $key);
 }
 
 // Color function helpers
@@ -136,7 +138,7 @@ $goepik-overdue-background: $goepik-error-bg;
 $goepik-pendent-background: $goepik-warning-bg;
 $goepik-in-progress-background: $goepik-info-bg;
 $goepik-done-background: $goepik-success-bg;
-$goepik-external-background: lighten($goepik-purple, 45%);
+$goepik-external-background: color.adjust($goepik-purple, $lightness: 45%);
 $goepik-overdue-color: $goepik-error;
 $goepik-done-color: $goepik-success;
 $goepik-pendent-color: $goepik-warning;

@@ -141,23 +141,23 @@ const JustificationModal = ({
 
           <IMaskInput
             mask="00h 00m"
-            lazy={false}
+            lazy={true}
             unmask={false}
             value={manualBreak}
             onAccept={(value) => setManualBreak(value)}
             disabled={isReadOnly}
-            placeholder="Intervalo manual (ex: 01h 15m)"
+            placeholder="Intervalo manual - ex: 01h 30m (opcional)"
             className="ant-input-masked input-margin"
           />
 
           <IMaskInput
             mask="00h 00m"
-            lazy={false}
+            lazy={true}
             unmask={false}
             value={abonoHoras}
             onAccept={(value) => setAbonoHoras(value)}
             disabled={isReadOnly && role !== "admin"}
-            placeholder="Abono de horas (ex: 02h 00m)"
+            placeholder="Abono de horas - ex: 02h 00m (opcional)"
             className="ant-input-masked input-margin"
           />
 

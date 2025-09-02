@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: $goepik-bg-color;
+  background: var(--bg-primary);
   padding: 20px;
 
   @media (max-width: 425px) {
@@ -125,5 +125,118 @@
 
   @media (max-width: 425px) {
     font-size: 14px;
+  }
+}
+
+// Dark mode support
+body.dark {
+  .profile-container {
+    background: var(--bg-primary);
+  }
+  
+  .profile-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-lg);
+    
+    .ant-card-body {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+  }
+  
+  .back-button {
+    color: $goepik-primary;
+    
+    &:hover {
+      color: $goepik-primary-hover;
+      background-color: var(--hover-bg);
+    }
+  }
+  
+  .profile-avatar {
+    background-color: var(--bg-tertiary);
+    
+    .ant-avatar-icon {
+      color: var(--text-secondary);
+    }
+  }
+  
+  .profile-title {
+    color: var(--text-primary);
+  }
+  
+  .profile-info span {
+    color: var(--text-secondary);
+    
+    strong {
+      color: var(--text-primary);
+    }
+  }
+  
+  .profile-section {
+    .ant-form-item-label > label {
+      color: var(--text-primary);
+    }
+    
+    .ant-input,
+    .ant-input:hover,
+    .ant-input:focus {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+      
+      &::placeholder {
+        color: var(--text-tertiary);
+      }
+    }
+    
+    .ant-input:focus {
+      border-color: $goepik-primary;
+      box-shadow: 0 0 0 2px var(--focus-ring);
+    }
+  }
+  
+  .profile-button {
+    background-color: $goepik-primary;
+    border-color: $goepik-primary;
+    color: white;
+    
+    &:hover {
+      background-color: $goepik-primary-hover;
+      border-color: $goepik-primary-hover;
+    }
+    
+    &:active {
+      background-color: $goepik-primary-dark;
+      border-color: $goepik-primary-dark;
+    }
+  }
+  
+  .modal-description {
+    color: var(--text-secondary);
+  }
+  
+  .password-input {
+    .ant-input,
+    .ant-input-affix-wrapper {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+      
+      &::placeholder {
+        color: var(--text-tertiary);
+      }
+      
+      &:hover {
+        border-color: var(--border-secondary);
+      }
+      
+      &:focus,
+      &:focus-within {
+        border-color: $goepik-primary;
+        box-shadow: 0 0 0 2px var(--focus-ring);
+      }
+    }
   }
 }

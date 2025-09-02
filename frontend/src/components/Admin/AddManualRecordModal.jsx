@@ -87,11 +87,11 @@ const AddManualRecordModal = ({ open, onClose }) => {
       />
       <IMaskInput
         mask="00h 00m"
-        lazy={false}
+        lazy={true}
         unmask={false}
         value={intervalo}
         onAccept={(value) => setIntervalo(value)}
-        placeholder="Intervalo (ex: 01h 15m)"
+        placeholder="Pausas/Intervalo - ex: 01h 30m (opcional)"
         className="ant-input-masked input-margin"
       />
     </Modal>

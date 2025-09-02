@@ -136,17 +136,48 @@ body.dark .filter-container {
   flex-shrink: 0; // Não permite encolher
   width: 40px !important;
   height: 40px !important;
-  min-width: 40px;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  border-radius: 50% !important; // Força formato circular
+  padding: 0 !important; // Remove padding que pode distorcer
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  // Aplicar cores do design system Goepik
+  &.ant-btn-primary {
+    background-color: $goepik-primary !important;
+    border-color: $goepik-primary !important;
+    color: white !important;
+    
+    &:hover,
+    &:focus {
+      background-color: $goepik-primary-hover !important;
+      border-color: $goepik-primary-hover !important;
+      color: white !important;
+    }
+    
+    &:active {
+      background-color: $goepik-primary-dark !important;
+      border-color: $goepik-primary-dark !important;
+      color: white !important;
+    }
+  }
   
   @media (max-width: breakpoint(small-mobile)) { // 425px
     width: 36px !important;
     height: 36px !important;
-    min-width: 36px;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
     flex-shrink: 0; // Garante que não estique
+    flex-grow: 0; // Garante que não cresça
   }
   
   .anticon {
     font-size: 16px;
+    line-height: 1 !important; // Remove line-height que pode distorcer
     
     @media (max-width: breakpoint(small-mobile)) { // 425px
       font-size: 14px;
@@ -162,5 +193,25 @@ body.dark .date-picker {
 
   &::placeholder {
     color: #aaa;
+  }
+}
+
+// Suporte para dark mode no botão de adicionar registro manual
+body.dark .filter-container .ant-btn-circle.ant-btn-primary {
+  background-color: $goepik-primary !important;
+  border-color: $goepik-primary !important;
+  color: white !important;
+  
+  &:hover,
+  &:focus {
+    background-color: $goepik-primary-hover !important;
+    border-color: $goepik-primary-hover !important;
+    color: white !important;
+  }
+  
+  &:active {
+    background-color: $goepik-primary-dark !important;
+    border-color: $goepik-primary-dark !important;
+    color: white !important;
   }
 }

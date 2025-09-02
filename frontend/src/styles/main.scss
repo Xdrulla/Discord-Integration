@@ -98,9 +98,31 @@ body.dark {
 .dark .dashboard-tabs,
 .dark .overview-card,
 .dark .table-container {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-  box-shadow: none;
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: none !important;
+}
+
+// Fix específico para mobile dark mode
+body.dark {
+  @media (max-width: 425px) {
+    .dashboard-tabs {
+      background: var(--card-bg, #1a1a1a) !important;
+      background-color: var(--card-bg, #1a1a1a) !important;
+      border: 1px solid var(--border-color, #333) !important;
+      
+      .ant-tabs-nav,
+      .ant-tabs-content-holder {
+        background: transparent !important;
+        background-color: transparent !important;
+      }
+      
+      .ant-tabs-content {
+        background: transparent !important;
+        background-color: transparent !important;
+      }
+    }
+  }
 }
 
 .theme-toggle {

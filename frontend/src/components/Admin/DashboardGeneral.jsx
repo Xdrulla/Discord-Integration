@@ -63,14 +63,54 @@ const DashboardGeneral = () => {
   }, [carregarResumo]);
 
   const columns = [
-    { title: "Nome", dataIndex: "nome", key: "nome" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Total", dataIndex: "total_horas", key: "total" },
-    { title: "Saldo", dataIndex: "saldo", key: "saldo" },
-    { title: "Meta", dataIndex: "meta", key: "meta" },
-    { title: "Dia Útil", dataIndex: ["extras", "dia_util"], key: "util" },
-    { title: "Sábado", dataIndex: ["extras", "sabado"], key: "sabado" },
-    { title: "Domingo/Feriado", dataIndex: ["extras", "domingo_feriado"], key: "domingo" }
+    { 
+      title: "Nome", 
+      dataIndex: "nome", 
+      key: "nome",
+      onCell: () => ({ 'data-label': 'Nome' })
+    },
+    { 
+      title: "Email", 
+      dataIndex: "email", 
+      key: "email",
+      onCell: () => ({ 'data-label': 'Email' })
+    },
+    { 
+      title: "Total", 
+      dataIndex: "total_horas", 
+      key: "total",
+      onCell: () => ({ 'data-label': 'Total de Horas' })
+    },
+    { 
+      title: "Saldo", 
+      dataIndex: "saldo", 
+      key: "saldo",
+      onCell: () => ({ 'data-label': 'Banco de Horas' })
+    },
+    { 
+      title: "Meta", 
+      dataIndex: "meta", 
+      key: "meta",
+      onCell: () => ({ 'data-label': 'Meta do Mês' })
+    },
+    { 
+      title: "Dia Útil", 
+      dataIndex: ["extras", "dia_util"], 
+      key: "util",
+      onCell: () => ({ 'data-label': 'Horas Dia Útil' })
+    },
+    { 
+      title: "Sábado", 
+      dataIndex: ["extras", "sabado"], 
+      key: "sabado",
+      onCell: () => ({ 'data-label': 'Horas Sábado' })
+    },
+    { 
+      title: "Domingo/Feriado", 
+      dataIndex: ["extras", "domingo_feriado"], 
+      key: "domingo",
+      onCell: () => ({ 'data-label': 'Dom./Feriados' })
+    }
   ];
 
   return (

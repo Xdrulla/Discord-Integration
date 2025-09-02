@@ -2,11 +2,13 @@
 
 .dashboard-general-container {
   padding: 30px;
-  background: #fff;
+  background: var(--bg-secondary, #fff);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: shadow(lg);
   max-width: 1400px;
   margin: 20px auto;
+  color: var(--text-primary, #333);
+  border: 1px solid var(--border-primary, transparent);
 
   @media (max-width: 768px) {
     padding: 20px;
@@ -22,12 +24,26 @@
   .title {
     font-size: 24px;
     font-weight: 600;
-    color: $goepik-dark;
+    color: var(--text-primary, $goepik-dark) !important; // Use CSS custom property
     margin-bottom: 20px;
 
     @media (max-width: 425px) {
       font-size: 20px;
       text-align: center;
+    }
+  }
+  
+  // Estilos específicos para o componente Title do Ant Design
+  .ant-typography {
+    &.title {
+      color: var(--text-primary, $goepik-dark) !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      &.title {
+        color: var(--text-primary, $goepik-dark) !important;
+        margin-bottom: 20px !important;
+      }
     }
   }
 
@@ -60,15 +76,315 @@
 
   .ant-table-wrapper {
     overflow-x: auto;
+    flex: 1;
 
-    @media (max-width: 425px) {
-      .ant-table {
-        font-size: 12px;
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      overflow-x: visible;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .ant-table {
+      width: 100%;
+      min-width: unset;
+      table-layout: auto;
 
-        .ant-table-thead > tr > th,
-        .ant-table-tbody > tr > td {
+      .ant-table-cell {
+        font-size: 14px;
+        padding: 14px;
+        text-align: left;
+      }
+
+      .ant-table-thead > tr > th {
+        font-size: 14px;
+        font-weight: bold;
+        padding: 16px;
+        text-transform: uppercase;
+      }
+
+      .ant-table-tbody > tr > td {
+        font-size: 14px;
+        padding: 14px;
+      }
+
+      // Aplicar o mesmo padrão da tela de Registro de ponto
+      @media (max-width: 768px) {
+        thead {
+          display: none;
+        }
+
+        .ant-table-tbody > tr {
+          display: block;
+          margin-bottom: 16px;
+          background-color: var(--bg-secondary, #fff);
+          border-radius: 10px;
+          box-shadow: shadow(sm);
+          padding: 12px;
+          border: 1px solid var(--border-primary, transparent);
+        }
+
+        .ant-table-cell {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+          font-size: 14px;
+          border-bottom: 1px solid var(--border-primary, #f0f0f0);
+          position: relative;
+
+          &::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-secondary, #666);
+            flex: 1;
+            text-align: left;
+          }
+
+          > * {
+            flex: 2;
+            text-align: right;
+          }
+          
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+
+      @media (max-width: breakpoint(small-mobile)) { // 425px
+        .ant-table-tbody > tr {
+          margin-bottom: 12px;
+          padding: spacing(sm); // 8px
+          border-radius: radius(md); // 6px
+        }
+
+        .ant-table-cell {
           padding: 8px;
-          white-space: nowrap;
+          font-size: 13px;
+
+          &::before {
+            font-size: 12px;
+            min-width: 100px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// === DARK MODE SUPPORT ===
+body.dark {
+  // Definir variável CSS global para título
+  --title-color: #f0f0f0;
+  --ant-typography-title-color: #f0f0f0;
+  
+  .dashboard-general-container {
+    background: var(--card-bg, #1a1a1a) !important;
+    border-color: var(--border-color, #333) !important;
+    color: var(--text-color, #f0f0f0) !important;
+    box-shadow: none !important; // Remove shadow in dark mode
+    
+    // Fix específico para mobile onde pode ter override
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      background: var(--card-bg, #1a1a1a) !important;
+      background-color: var(--card-bg, #1a1a1a) !important;
+      border: 1px solid var(--border-color, #333) !important;
+      box-shadow: none !important;
+    }
+    
+    .title {
+      color: var(--text-color, #f0f0f0) !important; // Bright text for dark mode
+    }
+    
+    // Estilos mais específicos para Title do Ant Design no dark mode
+    .ant-typography {
+      &.title {
+        color: var(--text-color, #f0f0f0) !important;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        &.title {
+          color: var(--text-color, #f0f0f0) !important;
+        }
+      }
+      
+      // Capturar qualquer variação do Title
+      &.ant-typography-h1.title,
+      &.ant-typography-h2.title,
+      &.ant-typography-h3.title,
+      &.ant-typography-h4.title,
+      &.ant-typography-h5.title,
+      &.ant-typography-h6.title {
+        color: var(--text-color, #f0f0f0) !important;
+      }
+    }
+    
+    // Fallback super específico para componente Title
+    h1.title,
+    h2.title,
+    h3.title,
+    h4.title,
+    h5.title,
+    h6.title {
+      color: var(--text-color, #f0f0f0) !important;
+    }
+    
+    // Máxima especificidade para sobrescrever CSS-in-JS do Ant Design
+    .dashboard-general-container {
+      h3.ant-typography.title {
+        color: var(--text-color, #f0f0f0) !important;
+      }
+      
+      .ant-typography.title {
+        color: var(--text-color, #f0f0f0) !important;
+      }
+    }
+    
+    // Seletor ultra-específico para o elemento exato
+    body.dark .dashboard-general-container h3.ant-typography.title[class*="css-"] {
+      color: var(--text-color, #f0f0f0) !important;
+    }
+    
+    // Último recurso - forçar com múltipla especificidade
+    body.dark .dashboard-general-container .dashboard-general-container h3.title,
+    body.dark .dashboard-general-container h3.ant-typography.title {
+      color: var(--text-color, #f0f0f0) !important;
+    }
+    
+    .filters-row {
+      .ant-select {
+        .ant-select-selector {
+          background-color: var(--bg-tertiary, #2a2a2a) !important;
+          border-color: var(--border-color, #333) !important;
+          color: var(--text-color, #f0f0f0) !important;
+        }
+        
+        .ant-select-selection-search-input {
+          color: var(--text-color, #f0f0f0) !important;
+        }
+        
+        .ant-select-selection-item {
+          color: var(--text-color, #f0f0f0) !important;
+        }
+        
+        &:hover .ant-select-selector {
+          border-color: $goepik-primary !important;
+        }
+        
+        &.ant-select-focused .ant-select-selector {
+          border-color: $goepik-primary !important;
+          box-shadow: 0 0 0 2px rgba($goepik-primary, 0.2) !important;
+        }
+      }
+      
+      .ant-btn {
+        background-color: var(--bg-tertiary, #2a2a2a) !important;
+        border-color: var(--border-color, #333) !important;
+        color: var(--text-color, #f0f0f0) !important;
+        
+        &:hover,
+        &:focus {
+          background-color: var(--hover-bg, #3a3a3a) !important;
+          border-color: $goepik-primary !important;
+          color: $goepik-primary !important;
+        }
+        
+        &:active {
+          background-color: var(--active-bg, #4a4a4a) !important;
+        }
+        
+        .anticon {
+          color: inherit !important;
+        }
+      }
+    }
+    
+    .ant-table-wrapper {
+      .ant-table {
+        background: transparent !important;
+        color: var(--text-color, #f0f0f0) !important;
+        
+        .ant-table-thead {
+          > tr > th {
+            background: var(--bg-tertiary, #2a2a2a) !important;
+            border-color: var(--border-color, #333) !important;
+            color: var(--text-color, #f0f0f0) !important;
+          }
+        }
+        
+        .ant-table-tbody {
+          background: transparent !important;
+          
+          > tr {
+            background: var(--card-bg, #1a1a1a) !important;
+            border-color: var(--border-color, #333) !important;
+            
+            // Fix específico para mobile onde os cards podem ter fundo branco
+            @media (max-width: breakpoint(small-mobile)) { // 425px
+              background: var(--card-bg, #1a1a1a) !important;
+              background-color: var(--card-bg, #1a1a1a) !important;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+            }
+            
+            > td {
+              background: transparent !important;
+              border-color: var(--border-color, #333) !important;
+              color: var(--text-color, #f0f0f0) !important;
+              
+              &::before {
+                color: var(--text-secondary, #aaa) !important;
+              }
+            }
+            
+            &:hover > td {
+              background: var(--hover-bg, rgba($goepik-primary, 0.1)) !important;
+            }
+          }
+        }
+      }
+      
+      .ant-spin {
+        color: var(--text-color, #f0f0f0);
+        
+        .ant-spin-dot {
+          i {
+            background-color: $goepik-primary;
+          }
+        }
+      }
+    }
+    
+    // Fix geral para garantir que nenhum elemento tenha fundo branco no mobile dark mode
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      // Override específico para container principal
+      &.dashboard-general-container {
+        background: var(--card-bg, #1a1a1a) !important;
+        background-color: var(--card-bg, #1a1a1a) !important;
+        border: 1px solid var(--border-color, #333) !important;
+      }
+      
+      .ant-table-wrapper,
+      .ant-table,
+      .ant-table-container,
+      .ant-table-content {
+        background: transparent !important;
+        background-color: transparent !important;
+      }
+      
+      // Garantir que os cards da tabela sejam escuros
+      .ant-table-tbody > tr {
+        background: var(--card-bg, #1a1a1a) !important;
+        background-color: var(--card-bg, #1a1a1a) !important;
+      }
+      
+      // Fix para qualquer seletor/filtro que possa estar causando o problema
+      .filters-row {
+        background: transparent !important;
+        background-color: transparent !important;
+        
+        * {
+          background: transparent !important;
+          background-color: transparent !important;
         }
       }
     }

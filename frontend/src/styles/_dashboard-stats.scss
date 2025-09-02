@@ -3,11 +3,13 @@
 .stats-container {
   width: 100%;
   max-width: 1400px;
-  background: #fff;
+  background: var(--bg-secondary, #fff);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: shadow(lg);
   margin: 20px auto;
+  color: var(--text-primary, #333);
+  border: 1px solid var(--border-primary, transparent);
 
   @media (max-width: 768px) {
     padding: 20px;
@@ -39,14 +41,26 @@
 
     .ant-card {
       border-radius: 10px;
+      background: var(--bg-secondary, #fff) !important;
+      border-color: var(--border-primary, #f0f0f0) !important;
+      box-shadow: shadow(sm);
+      
+      .ant-card-body {
+        color: var(--text-primary, #333);
+      }
 
       .ant-statistic-title {
         font-size: 14px;
-        color: $goepik-dark;
+        color: var(--text-secondary, $goepik-dark) !important;
       }
 
       .ant-statistic-content {
         font-size: 20px;
+        color: var(--text-primary, #333) !important;
+        
+        .ant-statistic-content-value {
+          color: var(--text-primary, #333) !important;
+        }
 
         @media (max-width: 425px) {
           font-size: 18px;
@@ -70,6 +84,56 @@
 
     button {
       width: 100%;
+    }
+  }
+}
+
+// === DARK MODE SUPPORT ===
+body.dark {
+  .stats-container {
+    background: var(--card-bg, #1a1a1a);
+    border-color: var(--border-color, #333);
+    color: var(--text-color, #f0f0f0);
+    box-shadow: none; // Remove shadow in dark mode
+    
+    .ant-card {
+      background: var(--card-bg, #1a1a1a) !important;
+      border-color: var(--border-color, #333) !important;
+      
+      .ant-card-body {
+        background: transparent !important;
+        color: var(--text-color, #f0f0f0) !important;
+      }
+      
+      .ant-statistic-title {
+        color: var(--text-secondary, #aaa) !important;
+      }
+      
+      .ant-statistic-content {
+        color: var(--text-color, #f0f0f0) !important;
+        
+        .ant-statistic-content-value {
+          color: var(--text-color, #f0f0f0) !important;
+        }
+      }
+    }
+    
+    .ant-spin {
+      color: var(--text-color, #f0f0f0);
+      
+      .ant-spin-dot {
+        i {
+          background-color: $goepik-primary;
+        }
+      }
+    }
+    
+    .ant-empty {
+      color: var(--text-secondary, #aaa);
+      
+      .ant-empty-description {
+        color: var(--text-secondary, #aaa);
+      }
     }
   }
 }

@@ -125,6 +125,34 @@ body.dark {
     background-color: transparent;
   }
   
+  .dashboard-tabs {
+    background: var(--card-bg, #1a1a1a) !important;
+    border-color: var(--border-color, #333) !important;
+    box-shadow: none !important;
+    
+    .ant-tabs-nav {
+      background: var(--bg-tertiary, #2a2a2a) !important;
+    }
+    
+    .ant-tabs-content-holder {
+      background: transparent !important;
+    }
+    
+    // Fix específico para mobile
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      background: var(--card-bg, #1a1a1a) !important;
+      background-color: var(--card-bg, #1a1a1a) !important;
+      border: 1px solid var(--border-color, #333) !important;
+      box-shadow: none !important;
+      
+      .ant-tabs-nav,
+      .ant-tabs-content-holder {
+        background: transparent !important;
+        background-color: transparent !important;
+      }
+    }
+  }
+  
   .overview-card {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-primary);
@@ -261,6 +289,42 @@ body.dark {
   .ant-modal-footer {
     background-color: var(--bg-secondary);
     border-color: var(--border-primary);
+    
+    // Botões no dark mode mantêm cores do design system
+    .ant-btn-primary {
+      background-color: $goepik-primary !important;
+      border-color: $goepik-primary !important;
+      color: white !important;
+      
+      &:hover,
+      &:focus {
+        background-color: $goepik-primary-hover !important;
+        border-color: $goepik-primary-hover !important;
+        color: white !important;
+      }
+      
+      &:active {
+        background-color: $goepik-primary-dark !important;
+        border-color: $goepik-primary-dark !important;
+      }
+    }
+    
+    .ant-btn-default {
+      background-color: var(--bg-tertiary, #2a2a2a) !important;
+      border-color: var(--border-color, #333) !important;
+      color: var(--text-color, #f0f0f0) !important;
+      
+      &:hover,
+      &:focus {
+        background-color: var(--hover-bg, #3a3a3a) !important;
+        border-color: $goepik-primary !important;
+        color: $goepik-primary !important;
+      }
+      
+      &:active {
+        background-color: var(--active-bg, #4a4a4a) !important;
+      }
+    }
   }
   
   .ant-modal-body {
@@ -304,6 +368,46 @@ body.dark {
   .ant-modal .ant-modal-body strong,
   .ant-modal .ant-modal-body b {
     color: var(--text-primary) !important;
+  }
+  
+  // Fix específico para títulos do Ant Design Typography em dark mode
+  .ant-typography {
+    color: var(--text-color, #f0f0f0) !important;
+    
+    &.title {
+      color: var(--text-color, #f0f0f0) !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--text-color, #f0f0f0) !important;
+      
+      &.title {
+        color: var(--text-color, #f0f0f0) !important;
+      }
+    }
+  }
+  
+  // Seletor ultra-específico para componentes Typography do Ant Design
+  h1.ant-typography,
+  h2.ant-typography,
+  h3.ant-typography,
+  h4.ant-typography,
+  h5.ant-typography,
+  h6.ant-typography {
+    color: var(--text-color, #f0f0f0) !important;
+    
+    &.title {
+      color: var(--text-color, #f0f0f0) !important;
+    }
+  }
+  
+  // Capturar qualquer elemento com classes CSS-in-JS do Ant Design
+  [class*="ant-typography"][class*="css-"] {
+    color: var(--text-color, #f0f0f0) !important;
+    
+    &.title {
+      color: var(--text-color, #f0f0f0) !important;
+    }
   }
   
   // Topbar

@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "sass:color";
 
 .justificativa-modal {
   p {
@@ -102,5 +103,115 @@
   @media (max-width: 425px) {
     font-size: 15px;
     padding: 6px 12px;
+  }
+}
+
+// === ESTILOS PARA MODAIS E BOTÕES ===
+
+// Customização dos botões do modal para seguir design system
+.ant-modal {
+  // Footer do modal (área dos botões)
+  .ant-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing(md); // 12px
+    padding: spacing(lg) spacing(xl); // 16px 20px
+    border-top: 1px solid var(--border-primary, #f0f0f0);
+    
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      padding: spacing(md); // 12px
+      gap: spacing(sm); // 8px
+      justify-content: center; // Centralizar em mobile
+      flex-wrap: wrap;
+    }
+    
+    // Remover estilos padrão dos botões
+    .ant-btn {
+      margin: 0 !important;
+      min-width: 80px;
+      height: 36px;
+      border-radius: radius(md); // 6px
+      font-weight: 500;
+      font-size: 14px;
+      
+      @media (max-width: breakpoint(small-mobile)) { // 425px
+        flex: 1;
+        max-width: 140px;
+        min-width: 100px;
+        height: 38px;
+        font-size: 15px; // Melhor para mobile
+      }
+    }
+    
+    // Botão primário (Salvar) - cores do design system
+    .ant-btn-primary {
+      background-color: $goepik-primary !important;
+      border-color: $goepik-primary !important;
+      color: white !important;
+      
+      &:hover,
+      &:focus {
+        background-color: $goepik-primary-hover !important;
+        border-color: $goepik-primary-hover !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba($goepik-primary, 0.3) !important;
+      }
+      
+      &:active {
+        background-color: $goepik-primary-dark !important;
+        border-color: $goepik-primary-dark !important;
+      }
+      
+      &[disabled],
+      &.ant-btn-loading {
+        background-color: color.adjust($goepik-primary, $lightness: 20%) !important;
+        border-color: color.adjust($goepik-primary, $lightness: 20%) !important;
+        color: white !important;
+        opacity: 0.7;
+      }
+    }
+    
+    // Botão secundário (Cancelar) - estilo neutro
+    .ant-btn-default {
+      background-color: var(--bg-secondary, #fff) !important;
+      border-color: var(--border-primary, #d9d9d9) !important;
+      color: var(--text-secondary, #666) !important;
+      
+      &:hover,
+      &:focus {
+        background-color: var(--hover-bg, #f5f5f5) !important;
+        border-color: $goepik-primary !important;
+        color: $goepik-primary !important;
+      }
+      
+      &:active {
+        background-color: var(--active-bg, #e8e8e8) !important;
+        border-color: $goepik-primary-dark !important;
+        color: $goepik-primary-dark !important;
+      }
+    }
+  }
+  
+  // Responsividade melhorada para mobile
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    .ant-modal-content {
+      margin: spacing(sm); // 8px
+      border-radius: radius(lg); // 8px
+    }
+    
+    .ant-modal-header {
+      padding: spacing(lg) spacing(md); // 16px 12px
+      
+      .ant-modal-title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
+    
+    .ant-modal-body {
+      padding: spacing(md); // 12px
+      max-height: 70vh;
+      overflow-y: auto;
+    }
   }
 }

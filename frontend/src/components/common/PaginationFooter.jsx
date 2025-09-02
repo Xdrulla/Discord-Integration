@@ -2,9 +2,10 @@ import { Pagination } from "antd";
 import usePagination from "../../context/usePagination";
 
 const PaginationFooter = () => {
-  const { pagination, setPagination } = usePagination();
+  const { pagination, setPagination, showPagination } = usePagination();
 
-  if (!pagination) return null;
+  // Só mostra a paginação se showPagination for true E se houver dados
+  if (!pagination || !showPagination || pagination.total === 0) return null;
 
   return (
     <div className="pagination-footer">

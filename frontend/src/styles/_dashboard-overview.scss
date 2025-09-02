@@ -112,6 +112,7 @@
   margin: 0;
   font-size: 1.8rem;
   font-weight: 600;
+  color: var(--text-primary, #333); // Ensure proper contrast
   
   @media (max-width: breakpoint(small-mobile)) { // 425px
     font-size: 1.4rem; // Smaller heading for mobile
@@ -127,5 +128,42 @@
   @media (max-width: breakpoint(small-mobile)) { // 425px
     font-size: 0.85rem; // Slightly smaller text
     text-align: center; // Center align description
+  }
+}
+
+// === DARK MODE SUPPORT ===
+body.dark {
+  .overview-card {
+    background: var(--card-bg, #1a1a1a);
+    border-color: var(--border-color, #333);
+    box-shadow: none; // Remove shadow in dark mode
+    
+    &:hover {
+      box-shadow: 0 4px 12px rgba($goepik-primary, 0.15);
+      border-color: rgba($goepik-primary, 0.3);
+    }
+    
+    &:focus-visible {
+      box-shadow: 0 0 0 4px rgba($goepik-primary, 0.15);
+    }
+  }
+  
+  .overview-text {
+    h3 {
+      color: var(--text-color, #f0f0f0);
+    }
+    
+    p {
+      color: var(--text-secondary, #aaa);
+    }
+  }
+  
+  // Manter cores dos ícones inalteradas no dark mode - elas já são vibrantes
+  .overview-icon {
+    // Os ícones mantêm suas cores originais que funcionam bem em dark mode
+    &.blue { background-color: $goepik-blue; }
+    &.orange { background-color: $goepik-orange; }
+    &.green { background-color: $goepik-green; }
+    &.purple { background-color: $goepik-purple; }
   }
 }

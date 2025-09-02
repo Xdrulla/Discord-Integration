@@ -18,7 +18,9 @@ const mesAtual = new Date().toISOString().slice(0, 7);
 const GoalsManager = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedRows, setExpandedRows] = useState([]);
   const navigate = useNavigate();
+  const isMobile = window.innerWidth <= 576;
 
   const carregarUsuarios = async () => {
     setLoading(true);
@@ -78,6 +80,12 @@ const GoalsManager = () => {
     }
   };
 
+  const toggleExpanded = (userId) => {
+    setExpandedRows((prev) =>
+      prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+    );
+  };
+
   const columns = [
     { title: "Nome", dataIndex: "nome", key: "nome" },
     { title: "Email", dataIndex: "email", key: "email" },
@@ -109,24 +117,79 @@ const GoalsManager = () => {
   return (
     <div className="manage-users-container">
       <Card className="manage-users-card">
-        <Button
-          type="link"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => navigate("/dashboard")}
-          className="back-button"
-        >
-          Voltar ao Dashboard
-        </Button>
+        <div className="manage-users-header">
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={() => navigate("/dashboard")}
+            className="back-button"
+          >
+            Voltar ao Dashboard
+          </Button>
 
-        <Title level={3} className="manage-users-title">Gerenciar Metas Mensais</Title>
+          <Title level={3} className="manage-users-title">Gerenciar Metas Mensais</Title>
+        </div>
 
-        <Table
-          dataSource={usuarios}
-          columns={columns}
-          rowKey="id"
-          className="manage-users-table"
-          loading={loading}
-        />
+        <div className="manage-users-content">
+          {isMobile ? (
+            <div className="goals-mobile-list">
+              {usuarios.map((usuario) => (
+                <div key={usuario.id} className="goal-card">
+                  <div className="goal-header">
+                    <strong>{usuario.nome}</strong>
+                    <button onClick={() => toggleExpanded(usuario.id)}>
+                      {expandedRows.includes(usuario.id) ? "Fechar" : "Ver Detalhes"}
+                    </button>
+                  </div>
+
+                  {expandedRows.includes(usuario.id) && (
+                    <div className="goal-details">
+                      <div className="goal-email-section">
+                        <strong>Email:</strong>
+                        <span>{usuario.email}</span>
+                      </div>
+
+                      <div className="goal-meta-section">
+                        <strong>Meta (horas):</strong>
+                        <div className="goal-input-container">
+                          <InputNumber
+                            min={0}
+                            value={Math.round(usuario.metaMinutos / 60)}
+                            onChange={(val) => {
+                              const atualizados = usuarios.map((u) =>
+                                u.id === usuario.id ? { ...u, metaMinutos: val * 60 } : u
+                              );
+                              setUsuarios(atualizados);
+                            }}
+                            className="mobile-goal-input"
+                          />
+                          <Button 
+                            onClick={() => salvarMeta(usuario.id, usuario.metaMinutos)}
+                            type="primary"
+                            className="mobile-save-button"
+                          >
+                            Salvar
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Table
+              dataSource={usuarios}
+              columns={columns}
+              rowKey="id"
+              className="manage-users-table"
+              loading={loading}
+              scroll={{ x: 800 }}
+              size="middle"
+              pagination={false}
+            />
+          )}
+        </div>
       </Card>
     </div>
   );
