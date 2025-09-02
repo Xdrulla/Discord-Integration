@@ -7,16 +7,13 @@ import { Outlet } from "react-router-dom";
 const ProtectedLayout = () => {
   return (
     <PaginationProvider>
-      <div className="protected-layout" style={{ display: "flex" }}>
+      <div className="protected-layout">
         <SidebarMenu />
-
-        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          <Topbar />
-          <div className="content-container">
-            <Outlet />
-          </div>
-          <PaginationFooter />
+        <Topbar />
+        <div className="content-container">
+          <Outlet />
         </div>
+        <PaginationFooter />
       </div>
     </PaginationProvider>
   );

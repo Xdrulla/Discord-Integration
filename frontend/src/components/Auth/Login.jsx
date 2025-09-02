@@ -62,7 +62,7 @@ const AuthPage = () => {
               <Form.Item name="password" rules={[{ required: true, message: "Digite sua senha" }]}>
                 <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
               </Form.Item>
-              <Button className="button-primary" type="primary" htmlType="submit" loading={loading} block>Entrar</Button>
+              <Button type="primary" htmlType="submit" loading={loading} block>Entrar</Button>
             </Form>
           </Tabs.TabPane>
 
@@ -77,7 +77,7 @@ const AuthPage = () => {
               <Form.Item name="discordId" rules={[{ required: true, message: "Digite seu ID do Discord" }]}>
                 <Input placeholder="ID do Discord" />
               </Form.Item>
-              <Button className="button-primary" type="primary" htmlType="submit" loading={loading} block>Cadastrar</Button>
+              <Button type="primary" htmlType="submit" loading={loading} block>Cadastrar</Button>
             </Form>
           </Tabs.TabPane>
         </Tabs>

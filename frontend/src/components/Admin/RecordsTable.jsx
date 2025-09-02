@@ -306,25 +306,28 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
                 {expandedRows.includes(record.id) && (
                   <div className="record-details">
                     <p>
-                      <strong>Data:</strong> {record.data}
+                      <strong>Data:</strong> <span>{record.data}</span>
                     </p>
                     <p>
-                      <strong>Entrada:</strong> {record.entrada}
+                      <strong>Entrada:</strong> <span>{record.entrada}</span>
                     </p>
                     <p>
-                      <strong>Saída:</strong> {record.saida}
+                      <strong>Saída:</strong> <span>{record.saida}</span>
                     </p>
                     <p>
-                      <strong>Intervalo:</strong> {record.total_pausas}
-                      {record.pausas?.find((p) => !p.fim) && (
-                        <>
-                          {" "}
-                          <PauseInProgress pausas={record.pausas} />
-                        </>
-                      )}
+                      <strong>Intervalo:</strong> 
+                      <span>
+                        {record.total_pausas}
+                        {record.pausas?.find((p) => !p.fim) && (
+                          <>
+                            {" "}
+                            <PauseInProgress pausas={record.pausas} />
+                          </>
+                        )}
+                      </span>
                     </p>
                     <p>
-                      <strong>Horas Trabalhadas:</strong> {record.total_horas}
+                      <strong>Horas:</strong> <span>{record.total_horas}</span>
                     </p>
                     <div className="record-justification-actions">
                       <p>

@@ -1,8 +1,22 @@
+@use "variables" as *;
+
 .dashboard-overview {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem !important;
-  margin-bottom: 1rem !important;
+  gap: spacing(lg);
+  margin-bottom: spacing(xl);
+  
+  // Add staggered animation
+  @extend .stagger-children !optional;
+  
+  @media (max-width: breakpoint(tablet)) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing(md);
+  }
+  
+  @media (max-width: breakpoint(mobile)) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .dashboard-overview * {
@@ -12,16 +26,33 @@
 .overview-card {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: var(--bg-secondary, #fff);
   border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  gap: 1rem;
-  transition: all 0.3s ease;
-
+  padding: spacing(xl);
+  box-shadow: shadow(sm);
+  gap: spacing(lg);
+  transition: all duration(normal) easing(ease-out);
+  border: 1px solid var(--border-primary, transparent);
+  
+  // Add accessibility
+  @extend .accessible-button !optional;
+  cursor: default;
+  min-height: auto;
+  
+  // Enhanced hover effect
+  @extend .hover-lift !optional;
+  @extend .hover-glow !optional;
+  
   &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: shadow(lg);
+    border-color: var(--border-secondary, rgba($goepik-primary, 0.2));
+  }
+  
+  // Focus state for accessibility
+  &:focus-visible {
+    outline: 2px solid $goepik-primary;
+    outline-offset: 2px;
+    box-shadow: shadow(lg), 0 0 0 4px rgba($goepik-primary, 0.15);
   }
 }
 
@@ -32,19 +63,19 @@
   color: white;
 
   &.blue {
-    background-color: #3C91E6;
+    background-color: $goepik-blue; // #3C91E6
   }
 
   &.orange {
-    background-color: #FD7238;
+    background-color: $goepik-orange; // #FD7238
   }
 
   &.green {
-    background-color: #2ecc71;
+    background-color: $goepik-green; // #2ecc71
   }
 
   &.purple {
-    background-color: #8e44ad;
+    background-color: $goepik-purple; // #8e44ad
   }
 }
 

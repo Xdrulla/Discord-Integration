@@ -1,0 +1,320 @@
+@use "variables" as *;
+
+// === SKELETON LOADING SYSTEM ===
+
+.skeleton-base {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: radius(sm);
+  
+  body.dark & {
+    background: linear-gradient(
+      90deg,
+      #2a2a2a 25%,
+      #3a3a3a 50%,
+      #2a2a2a 75%
+    );
+  }
+}
+
+// Overview cards skeleton
+.skeleton-overview-card {
+  @extend .skeleton-base;
+  
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  gap: 1rem;
+  height: 90px;
+  
+  body.dark & {
+    background: var(--bg-secondary);
+  }
+  
+  .skeleton-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: currentColor;
+    opacity: 0.1;
+    flex-shrink: 0;
+  }
+  
+  .skeleton-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing(sm);
+    
+    .skeleton-title {
+      @extend .skeleton-base;
+      height: 24px;
+      width: 60px;
+    }
+    
+    .skeleton-subtitle {
+      @extend .skeleton-base;
+      height: 16px;
+      width: 120px;
+    }
+  }
+}
+
+// Table skeleton
+.skeleton-table {
+  .skeleton-header {
+    display: flex;
+    gap: spacing(md);
+    margin-bottom: spacing(lg);
+    padding: 0 spacing(md);
+    
+    .skeleton-search {
+      @extend .skeleton-base;
+      height: 40px;
+      width: 300px;
+    }
+    
+    .skeleton-button {
+      @extend .skeleton-base;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+    }
+  }
+  
+  .skeleton-table-container {
+    @extend .skeleton-base;
+    height: 400px;
+    background: #fff;
+    border-radius: 10px;
+    padding: spacing(lg);
+    
+    body.dark & {
+      background: var(--bg-secondary);
+    }
+    
+    .skeleton-row {
+      display: flex;
+      gap: spacing(md);
+      margin-bottom: spacing(md);
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .skeleton-cell {
+        @extend .skeleton-base;
+        height: 20px;
+        flex: 1;
+        
+        &:first-child {
+          width: 100px;
+          flex: none;
+        }
+        
+        &:last-child {
+          width: 80px;
+          flex: none;
+        }
+      }
+    }
+  }
+}
+
+// Mobile cards skeleton
+.skeleton-mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(lg);
+  padding: 0 spacing(xs);
+  
+  .skeleton-mobile-card {
+    @extend .skeleton-base;
+    background: #fff;
+    border-radius: radius(lg);
+    padding: spacing(lg);
+    height: 160px;
+    
+    body.dark & {
+      background: var(--bg-secondary);
+    }
+    
+    .skeleton-mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: spacing(md);
+      padding-bottom: spacing(sm);
+      border-bottom: 1px solid #f5f5f5;
+      
+      body.dark & {
+        border-color: var(--border-primary);
+      }
+      
+      .skeleton-mobile-title {
+        @extend .skeleton-base;
+        height: 18px;
+        width: 140px;
+      }
+      
+      .skeleton-mobile-button {
+        @extend .skeleton-base;
+        height: 24px;
+        width: 60px;
+        border-radius: radius(sm);
+      }
+    }
+    
+    .skeleton-mobile-details {
+      display: flex;
+      flex-direction: column;
+      gap: spacing(sm);
+      
+      .skeleton-mobile-row {
+        display: flex;
+        justify-content: space-between;
+        
+        .skeleton-mobile-label {
+          @extend .skeleton-base;
+          height: 14px;
+          width: 80px;
+        }
+        
+        .skeleton-mobile-value {
+          @extend .skeleton-base;
+          height: 14px;
+          width: 100px;
+        }
+      }
+    }
+  }
+}
+
+// Form skeleton
+.skeleton-form {
+  .skeleton-form-group {
+    margin-bottom: spacing(lg);
+    
+    .skeleton-label {
+      @extend .skeleton-base;
+      height: 16px;
+      width: 80px;
+      margin-bottom: spacing(sm);
+    }
+    
+    .skeleton-input {
+      @extend .skeleton-base;
+      height: 40px;
+      width: 100%;
+    }
+  }
+  
+  .skeleton-form-actions {
+    display: flex;
+    gap: spacing(md);
+    margin-top: spacing(xl);
+    
+    .skeleton-form-button {
+      @extend .skeleton-base;
+      height: 40px;
+      width: 100px;
+      border-radius: radius(md);
+    }
+  }
+}
+
+// Dashboard skeleton
+.skeleton-dashboard {
+  .skeleton-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: spacing(lg);
+    margin-bottom: spacing(xl);
+    
+    @media (max-width: breakpoint(tablet)) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: spacing(md);
+    }
+    
+    @media (max-width: breakpoint(mobile)) {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .skeleton-tabs {
+    .skeleton-tab-bar {
+      display: flex;
+      gap: spacing(lg);
+      border-bottom: 1px solid var(--border-primary);
+      margin-bottom: spacing(lg);
+      
+      .skeleton-tab {
+        @extend .skeleton-base;
+        height: 20px;
+        width: 80px;
+        margin-bottom: spacing(md);
+      }
+    }
+    
+    .skeleton-tab-content {
+      @extend .skeleton-table !optional;
+    }
+  }
+}
+
+// Sidebar skeleton
+.skeleton-sidebar {
+  .skeleton-logo {
+    @extend .skeleton-base;
+    height: 40px;
+    margin: spacing(lg) 0 spacing(xl) 0;
+  }
+  
+  .skeleton-menu {
+    .skeleton-menu-item {
+      display: flex;
+      align-items: center;
+      gap: spacing(md);
+      padding: spacing(md);
+      margin-bottom: spacing(sm);
+      
+      .skeleton-menu-icon {
+        @extend .skeleton-base;
+        width: 20px;
+        height: 20px;
+        border-radius: radius(sm);
+        flex-shrink: 0;
+      }
+      
+      .skeleton-menu-text {
+        @extend .skeleton-base;
+        height: 16px;
+        width: 100px;
+        flex: 1;
+      }
+    }
+  }
+}
+
+// Keyframes are already defined in animations.scss
+// @keyframes loading is imported from there
+
+// Accessibility - respect reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-base {
+    animation: none;
+    background: #f0f0f0;
+    
+    body.dark & {
+      background: #2a2a2a;
+    }
+  }
+}

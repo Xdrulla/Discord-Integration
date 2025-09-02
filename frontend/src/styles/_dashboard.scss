@@ -1,5 +1,51 @@
 @use "variables" as *;
 
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(xxl); // 24px
+  width: 100%;
+  max-width: breakpoint(wide); // 1200px
+  margin: 0 auto;
+  padding: 0 spacing(xxl); // 24px
+
+  @media (max-width: breakpoint(tablet)) { // 768px
+    gap: spacing(lg); // 16px
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+.dashboard-tabs {
+  background: #fff;
+  border-radius: radius(xl); // 12px
+  box-shadow: shadow(md); // 0 2px 8px rgba(0, 0, 0, 0.06)
+  overflow: hidden;
+
+  .ant-tabs-nav {
+    margin: 0;
+    padding: 0 spacing(xxl); // 24px
+    background: #fafafa;
+
+    @media (max-width: breakpoint(tablet)) { // 768px
+      padding: 0 spacing(lg); // 16px
+    }
+  }
+
+  .ant-tabs-content-holder {
+    padding: spacing(xxl); // 24px
+
+    @media (max-width: breakpoint(tablet)) { // 768px
+      padding: spacing(lg); // 16px
+    }
+  }
+
+  @media (max-width: breakpoint(tablet)) { // 768px
+    border-radius: radius(lg); // 8px
+    box-shadow: shadow(sm); // 0 1px 2px rgba(0, 0, 0, 0.05)
+  }
+}
+
 .dashboard-container {
   min-height: 100vh;
   padding: 20px;
@@ -128,32 +174,7 @@
   }
 }
 
-.add-manual-button {
-  background-color: #f0f0f0;
-  color: #333;
-  font-size: 20px;
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  margin: 12px 0;
-  transition: none;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
-
-  @media (max-width: 425px) {
-    width: 100%;
-    font-size: 18px;
-  }
-}
+// Removido: .add-manual-button substituído por Button do Ant Design
 
 body.dark .dashboard-header {
   background: linear-gradient(135deg, #333, #222);

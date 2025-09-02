@@ -1,0 +1,342 @@
+@use "variables" as *;
+
+// === DARK MODE SYSTEM ===
+
+// Dark mode color variables
+:root {
+  // Light mode (default)
+  --bg-primary: #{$goepik-background};
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #{$goepik-dark};
+  --text-secondary: #{$goepik-medium};
+  --text-tertiary: #{$goepik-light};
+  --border-primary: #{$goepik-border};
+  --border-secondary: #e8e8e8;
+  --shadow-sm: #{shadow(sm)};
+  --shadow-md: #{shadow(md)};
+  --shadow-lg: #{shadow(lg)};
+  
+  // Interactive states
+  --hover-bg: rgba(67, 205, 178, 0.04);
+  --active-bg: rgba(67, 205, 178, 0.08);
+  --focus-ring: rgba(67, 205, 178, 0.15);
+}
+
+// Dark mode variables
+body.dark {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #808080;
+  --border-primary: #333333;
+  --border-secondary: #404040;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+  
+  // Interactive states
+  --hover-bg: rgba(67, 205, 178, 0.08);
+  --active-bg: rgba(67, 205, 178, 0.12);
+  --focus-ring: rgba(67, 205, 178, 0.25);
+  
+  // Background texture
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  color: var(--text-primary);
+}
+
+// Base element dark mode styles
+body.dark {
+  // Global text and background
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  
+  // Links
+  a {
+    color: $goepik-primary;
+    
+    &:hover {
+      color: $goepik-primary-hover;
+    }
+  }
+  
+  // Form elements
+  input, textarea, select {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+    
+    &::placeholder {
+      color: var(--text-tertiary);
+    }
+    
+    &:focus {
+      border-color: $goepik-primary;
+      box-shadow: 0 0 0 2px var(--focus-ring);
+    }
+  }
+  
+  // Buttons (enhance existing styles)
+  button:not(.ant-btn) {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+    
+    &:hover:not(:disabled) {
+      background-color: var(--hover-bg);
+    }
+    
+    &:active:not(:disabled) {
+      background-color: var(--active-bg);
+    }
+  }
+}
+
+// Component-specific dark mode styles
+body.dark {
+  // Sidebar enhancements
+  .sidebar {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  // Dashboard components
+  .dashboard-wrapper {
+    background-color: transparent;
+  }
+  
+  .overview-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-sm);
+    
+    &:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-secondary);
+    }
+    
+    .overview-text h3 {
+      color: var(--text-primary);
+    }
+    
+    .overview-text p {
+      color: var(--text-secondary);
+    }
+  }
+  
+  // Table components
+  .table-container {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .ant-table {
+    background-color: var(--bg-secondary);
+    
+    .ant-table-thead > tr > th {
+      background-color: var(--bg-tertiary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+    }
+    
+    .ant-table-tbody > tr > td {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+    }
+    
+    .ant-table-tbody > tr:hover > td {
+      background-color: var(--hover-bg);
+    }
+  }
+  
+  // Mobile record cards
+  .record-card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-sm);
+    
+    &:hover {
+      box-shadow: var(--shadow-md);
+    }
+    
+    .record-header {
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+    }
+    
+    .record-details p {
+      border-color: var(--border-primary);
+      
+      strong {
+        color: var(--text-secondary);
+      }
+      
+      span {
+        color: var(--text-primary);
+      }
+    }
+  }
+  
+  // Forms and modals
+  .ant-modal-content {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  .ant-modal-header {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    
+    .ant-modal-title {
+      color: var(--text-primary);
+    }
+  }
+  
+  .ant-modal-footer {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+  }
+  
+  // Topbar
+  .topbar {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .profile-user .user-info .user-name {
+    color: var(--text-primary);
+  }
+  
+  .profile-user .user-info .user-role {
+    color: var(--text-secondary);
+  }
+  
+  // Pagination
+  .ant-pagination {
+    .ant-pagination-item {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      
+      a {
+        color: var(--text-primary);
+      }
+      
+      &:hover {
+        background-color: var(--hover-bg);
+        border-color: $goepik-primary;
+      }
+    }
+    
+    .ant-pagination-item-active {
+      background-color: $goepik-primary;
+      border-color: $goepik-primary;
+      
+      a {
+        color: white;
+      }
+    }
+    
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      
+      .ant-pagination-item-link {
+        background-color: transparent;
+        color: var(--text-primary);
+      }
+      
+      &:hover .ant-pagination-item-link {
+        background-color: var(--hover-bg);
+        color: $goepik-primary;
+      }
+    }
+  }
+  
+  // Tabs
+  .ant-tabs {
+    .ant-tabs-nav {
+      &::before {
+        border-color: var(--border-primary);
+      }
+    }
+    
+    .ant-tabs-tab {
+      color: var(--text-secondary);
+      
+      &:hover {
+        color: $goepik-primary;
+      }
+    }
+    
+    .ant-tabs-tab-active {
+      color: $goepik-primary;
+    }
+    
+    .ant-tabs-ink-bar {
+      background-color: $goepik-primary;
+    }
+  }
+}
+
+// Dark mode toggle animation
+.theme-toggle {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: spacing(lg);
+  color: var(--text-secondary);
+  transition: all duration(normal) easing(ease-out);
+  border-radius: radius(md);
+  padding: spacing(sm);
+  
+  &:hover {
+    color: $goepik-primary;
+    background-color: var(--hover-bg);
+  }
+  
+  &:focus-visible {
+    outline: 2px solid $goepik-primary;
+    outline-offset: 2px;
+  }
+  
+  .anticon {
+    vertical-align: middle;
+    transition: transform duration(normal) easing(bounce);
+  }
+  
+  &:hover .anticon {
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  body.dark {
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --border-primary: #555555;
+    --bg-secondary: #000000;
+  }
+}
+
+// Smooth theme transition
+* {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: duration(normal);
+  transition-timing-function: easing(ease-out);
+}
+
+// Disable transitions during theme change to prevent flash
+body.theme-changing * {
+  transition: none !important;
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   BarChartOutlined,
@@ -13,12 +13,27 @@ import {
 import { useAuth } from "../../context/useAuth";
 
 const SidebarMenu = () => {
-  const isMobile = window.innerWidth <= 576;
-  const [collapsed, setCollapsed] = useState(isMobile ? false : true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [collapsed, setCollapsed] = useState(!isMobile);
   const { logout, role } = useAuth();
   const location = useLocation();
 
-  const toggleCollapse = () => setCollapsed(!collapsed);
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      setCollapsed(!mobile);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const toggleCollapse = () => {
+    if (!isMobile) {
+      setCollapsed(!collapsed);
+    }
+  };
 
   const menuItems = [
     { key: "/dashboard", label: "Dashboard", icon: <BarChartOutlined /> },
@@ -44,7 +59,7 @@ const SidebarMenu = () => {
           <li key={item.key} className={location.pathname === item.key ? "active" : ""}>
             <Link to={item.key}>
               <span className="icon">{item.icon}</span>
-              {!collapsed && <span className="label">{item.label}</span>}
+              {(!collapsed || isMobile) && <span className="label">{item.label}</span>}
             </Link>
           </li>
         ))}
@@ -52,7 +67,7 @@ const SidebarMenu = () => {
         <li>
           <button className="logout-btn" onClick={logout}>
             <span className="icon"><LogoutOutlined /></span>
-            {!collapsed && <span className="label">Sair</span>}
+            {(!collapsed || isMobile) && <span className="label">Sair</span>}
           </button>
         </li>
       </ul>

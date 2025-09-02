@@ -2,19 +2,31 @@
 @use "sass:color";
 
 .table-container {
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: var(--bg-secondary, #fff);
+  padding: spacing(xl);
+  border-radius: radius(lg);
+  box-shadow: shadow(sm);
   width: 100%;
   max-width: 100%;
   max-height: 400px !important;
   margin: 0 auto;
-  border: 1px solid $goepik-border-light;
+  border: 1px solid var(--border-primary, $goepik-border-light);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
+  transition: all duration(normal) easing(ease-out);
+  
+  // Add accessibility
+  @extend .accessible-table !optional;
+  
+  // Enhanced animation
+  @extend .animate-fade-in !optional;
+  
+  &:hover {
+    box-shadow: shadow(md);
+    border-color: var(--border-secondary, rgba($goepik-primary, 0.1));
+  }
 
   @media (max-width: 1400px) {
     width: 95vw;
@@ -242,14 +254,55 @@
 .records-mobile-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: spacing(lg); // 16px
+  padding: 0 spacing(xs); // 4px
 }
 
 .record-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  padding: 16px;
+  background: var(--bg-secondary, #fff);
+  border-radius: radius(lg);
+  box-shadow: shadow(md);
+  padding: spacing(lg);
+  border: 1px solid var(--border-primary, #f0f0f0);
+  transition: all duration(normal) easing(ease-out);
+  
+  // Add accessibility
+  @extend .accessible-button !optional;
+  cursor: pointer;
+  min-height: auto;
+  
+  // Enhanced animations
+  @extend .hover-lift !optional;
+  @extend .focus-visible !optional;
+  
+  // Loading animation on page load
+  @extend .animate-slide-up !optional;
+  
+  &:hover {
+    box-shadow: shadow(lg);
+    border-color: var(--border-secondary, rgba($goepik-primary, 0.15));
+    
+    .record-header button {
+      transform: scale(1.05);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: shadow(lg), 0 0 0 4px rgba($goepik-primary, 0.15);
+    outline: 2px solid $goepik-primary;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  // Add keyboard navigation support
+  &[tabindex="0"] {
+    &:focus {
+      transform: translateY(-2px);
+    }
+  }
 }
 
 .record-header {
@@ -257,43 +310,126 @@
   justify-content: space-between;
   align-items: center;
   font-size: 15px;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin-bottom: spacing(sm); // 8px
+  padding-bottom: spacing(sm); // 8px
+  border-bottom: 1px solid #f5f5f5;
 
   button {
-    background: none;
+    background: color(primary);
+    color: white;
     border: none;
-    color: $goepik-primary;
+    border-radius: radius(md); // 6px
+    padding: spacing(xs) spacing(md); // 4px 12px
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    padding: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color(primary, hover);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
   }
 }
 
 .record-details {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(xs); // 4px
+
   p {
-    margin: 6px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: spacing(xs) 0; // 4px 0
     font-size: 14px;
+    border-bottom: 1px solid #fafafa;
+
+    &:last-child {
+      border-bottom: none;
+    }
 
     strong {
-      color: #444;
+      color: #666;
+      font-weight: 500;
+      font-size: 13px;
+      min-width: 120px;
+      text-align: left;
+    }
+
+    span {
+      flex: 1;
+      text-align: right;
+      font-weight: 500;
+      color: #333;
     }
   }
 }
 
 
-@media (max-width: 425px) {
-  .record-justification-actions {
-    margin-top: 10px;
+.record-justification-actions {
+  margin-top: spacing(md); // 12px
+  padding-top: spacing(md); // 12px
+  border-top: 1px solid #f5f5f5;
 
-    .record-justification-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 6px;
+  p {
+    margin-bottom: spacing(sm); // 8px
+    padding: 0;
+    border-bottom: none;
 
-      button {
-        flex: 1 1 auto;
-        min-width: 100px;
+    strong {
+      color: #333;
+      font-weight: 600;
+    }
+  }
+
+  .record-justification-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing(sm); // 8px
+    margin-top: spacing(sm); // 8px
+
+    .ant-btn {
+      flex: 1 1 auto;
+      min-width: 90px;
+      height: 36px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: radius(md); // 6px
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &.ant-btn-primary {
+        background: color(success);
+        border-color: color(success);
+
+        &:hover {
+          background: darken(color(success), 10%);
+          border-color: darken(color(success), 10%);
+        }
+      }
+
+      &.ant-btn-danger {
+        background: color(error);
+        border-color: color(error);
+
+        &:hover {
+          background: darken(color(error), 10%);
+          border-color: darken(color(error), 10%);
+        }
       }
     }
   }

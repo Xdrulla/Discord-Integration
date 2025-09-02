@@ -195,40 +195,36 @@ const Dashboard = () => {
           onReject={(id) => handlePendingStatus(id, "reprovado")}
         />
       )}
-      <div className="dashboard-content">
+      <div className="dashboard-wrapper">
+        <DashboardOverview resumo={resumo} />
 
-        <div className="dashboard-content">
-          <DashboardOverview resumo={resumo} />
+        <Tabs defaultActiveKey="1" className="dashboard-tabs">
+          <Tabs.TabPane tab="Registros de Ponto" key="1">
+            <FilterBar
+              role={role}
+              searchUser={searchUser}
+              setSearchUser={setSearchUser}
+              setDateRange={setDateRange}
+              currentTab="1"
+            />
 
-          <Tabs defaultActiveKey="1">
-            <Tabs.TabPane tab="Registros de Ponto" key="1">
-              <FilterBar
-                role={role}
-                searchUser={searchUser}
-                setSearchUser={setSearchUser}
-                setDateRange={setDateRange}
-                currentTab="1"
-              />
+            <RecordsTable
+              loading={loading}
+              filteredData={filteredData}
+              initialRecordId={initialRecordId}
+            />
+          </Tabs.TabPane>
 
-              <RecordsTable
-                loading={loading}
-                filteredData={filteredData}
-                initialRecordId={initialRecordId}
-              />
+          <Tabs.TabPane tab="Estatísticas" key="2">
+            <DashboardStats resumo={resumo} loading={resumoLoading} todosRegistros={data} />
+          </Tabs.TabPane>
+
+          {role === "admin" && (
+            <Tabs.TabPane tab="Resumo Geral" key="3">
+              <DashboardGeneral />
             </Tabs.TabPane>
-
-            <Tabs.TabPane tab="Estatísticas" key="2">
-              <DashboardStats resumo={resumo} loading={resumoLoading} todosRegistros={data} />
-            </Tabs.TabPane>
-
-            {role === "admin" && (
-              <Tabs.TabPane tab="Resumo Geral" key="3">
-                <DashboardGeneral />
-              </Tabs.TabPane>
-            )}
-
-          </Tabs>
-        </div>
+          )}
+        </Tabs>
       </div>
     </>
   );

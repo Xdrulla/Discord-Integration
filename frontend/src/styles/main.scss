@@ -1,4 +1,9 @@
 @use "variables";
+@use "animations";
+@use "dark-mode";
+@use "skeleton";
+@use "accessibility";
+@use "performance";
 @use "login";
 @use "dashboard";
 @use "dashboard-stats";
@@ -42,39 +47,18 @@ body {
   }
 }
 
-.dashboard-wrapper {
-  background: #f5f6fa;
-  min-height: 100vh;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-}
+.ant-table {
+  th, td {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    line-height: 1.4 !important;
+    font-size: 13px !important;
 
-.dashboard-content {
-  min-height: auto !important;
-  background-color: #ffffff;
-  border-radius: 2rem;
-  padding: 1rem 1.5rem 2rem !important;
-  margin: 1rem auto !important;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 1400px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  flex-grow: 1;
-
-  @media (max-width: 425px) {
-    display: flex;
-    padding: 10px;
+    @media (max-width: 768px) {
+      font-size: 12px !important;
+      padding: 6px !important;
+    }
   }
-}
-
-.dashboard-content table th,
-.dashboard-content table td {
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-  line-height: 1.4 !important;
-  font-size: 13px !important;
 }
 
 body.dark {
@@ -108,7 +92,8 @@ body.dark {
   color: #4da6ff;
 }
 
-.dark .dashboard-content,
+.dark .dashboard-wrapper,
+.dark .dashboard-tabs,
 .dark .overview-card,
 .dark .table-container {
   background-color: var(--card-bg);

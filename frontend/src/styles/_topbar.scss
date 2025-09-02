@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -6,9 +8,13 @@
   padding: 0 24px;
   height: 75px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  z-index: 10;
+  z-index: z-index(topbar); // 1001
   position: fixed;
-  width: 100%;
+  top: 0;
+  left: 220px; // Sidebar width
+  right: 0;
+  width: calc(100vw - 220px);
+  transition: all 0.3s ease;
 
   &__left {
     display: flex;
@@ -50,11 +56,26 @@
   &__right {
     display: flex;
     align-items: center;
+    padding-right: 8px;
+    gap: 16px;
   }
 
-  @media (max-width: 425px) {
-    padding: 0 16px;
+  @media (max-width: breakpoint(tablet)) { // 768px
+    left: 0;
+    width: 100vw;
+    padding: 0 spacing(lg); // 16px
     height: 65px;
+  }
+}
+
+// When sidebar is collapsed
+.sidebar.collapsed + .topbar {
+  left: 70px;
+  width: calc(100vw - 70px);
+
+  @media (max-width: breakpoint(tablet)) { // 768px
+    left: 0;
+    width: 100vw;
   }
 }
 

@@ -1,0 +1,440 @@
+@use "variables" as *;
+
+// === ACCESSIBILITY SYSTEM ===
+
+// Focus management
+.focus-visible {
+  outline: none;
+  
+  &:focus-visible {
+    outline: 2px solid $goepik-primary;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba($goepik-primary, 0.15);
+    border-radius: radius(sm);
+    transition: all duration(fast) easing(ease-out);
+  }
+}
+
+// Enhanced focus for interactive elements
+button, 
+input, 
+select, 
+textarea, 
+[tabindex="0"],
+[tabindex="-1"],
+.focusable {
+  @extend .focus-visible !optional;
+}
+
+// Skip navigation
+.skip-nav {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: $goepik-primary;
+  color: white;
+  padding: spacing(sm) spacing(md);
+  text-decoration: none;
+  border-radius: 0 0 radius(md) 0;
+  font-weight: 600;
+  z-index: z-index(modal);
+  transition: top duration(fast) easing(ease-out);
+  
+  &:focus {
+    top: 0;
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+}
+
+// Screen reader only content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Show on focus for debugging
+.sr-only-focusable {
+  @extend .sr-only !optional;
+  
+  &:focus,
+  &:active {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: spacing(xs) spacing(sm);
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background: $goepik-warning;
+    color: $goepik-dark;
+    border-radius: radius(sm);
+    font-weight: 600;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .overview-card,
+  .record-card,
+  .table-container {
+    border: 2px solid currentColor;
+  }
+  
+  .ant-btn {
+    border-width: 2px;
+  }
+  
+  .overview-icon {
+    border: 2px solid white;
+  }
+  
+  // Ensure text meets contrast requirements
+  body {
+    --text-primary: #000000;
+    --text-secondary: #333333;
+  }
+  
+  body.dark {
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+  }
+}
+
+// Color blind friendly indicators
+.status-indicator {
+  position: relative;
+  
+  // Add patterns for color blind users
+  &.status-success::after {
+    content: "✓";
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  &.status-error::after {
+    content: "✗";
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  &.status-warning::after {
+    content: "!";
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+  }
+}
+
+// Improved button accessibility
+.accessible-button {
+  position: relative;
+  min-height: 44px; // Touch target size
+  min-width: 44px;
+  cursor: pointer;
+  transition: all duration(fast) easing(ease-out);
+  
+  // Loading state
+  &[aria-busy="true"] {
+    pointer-events: none;
+    opacity: 0.7;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      margin: -8px 0 0 -8px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  // Disabled state
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  // Pressed state for touch devices
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Form accessibility improvements
+.accessible-form {
+  .form-group {
+    position: relative;
+    margin-bottom: spacing(lg);
+    
+    label {
+      display: block;
+      margin-bottom: spacing(sm);
+      font-weight: 500;
+      color: var(--text-primary);
+      
+      &.required::after {
+        content: " *";
+        color: $goepik-error;
+        margin-left: 2px;
+      }
+    }
+    
+    input,
+    textarea,
+    select {
+      width: 100%;
+      min-height: 44px;
+      border: 2px solid var(--border-primary);
+      border-radius: radius(md);
+      padding: spacing(md);
+      font-size: 16px; // Prevent zoom on mobile
+      transition: all duration(fast) easing(ease-out);
+      
+      &:focus {
+        border-color: $goepik-primary;
+        box-shadow: 0 0 0 4px rgba($goepik-primary, 0.15);
+        outline: none;
+      }
+      
+      &[aria-invalid="true"] {
+        border-color: $goepik-error;
+        box-shadow: 0 0 0 4px rgba($goepik-error, 0.15);
+      }
+    }
+    
+    .error-message {
+      display: flex;
+      align-items: center;
+      gap: spacing(xs);
+      margin-top: spacing(sm);
+      color: $goepik-error;
+      font-size: 14px;
+      
+      &::before {
+        content: "⚠️";
+        flex-shrink: 0;
+      }
+    }
+    
+    .help-text {
+      margin-top: spacing(sm);
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// Table accessibility improvements
+.accessible-table {
+  .ant-table {
+    // Ensure row headers are properly associated
+    th[scope="col"] {
+      background-color: var(--bg-tertiary);
+      font-weight: 600;
+    }
+    
+    td[scope="row"] {
+      font-weight: 500;
+    }
+    
+    // Row selection
+    tr {
+      &:hover {
+        background-color: var(--hover-bg);
+      }
+      
+      &[aria-selected="true"] {
+        background-color: rgba($goepik-primary, 0.1);
+        border: 2px solid $goepik-primary;
+      }
+      
+      &:focus {
+        outline: 2px solid $goepik-primary;
+        outline-offset: -2px;
+      }
+    }
+  }
+  
+  // Mobile table accessibility
+  @media (max-width: breakpoint(tablet)) {
+    .record-card {
+      &:focus {
+        outline: 2px solid $goepik-primary;
+        outline-offset: 2px;
+      }
+      
+      // Add keyboard navigation
+      &[tabindex="0"] {
+        cursor: pointer;
+        
+        &:focus {
+          transform: translateY(-2px);
+          box-shadow: shadow(lg), 0 0 0 4px rgba($goepik-primary, 0.15);
+        }
+      }
+    }
+  }
+}
+
+// Modal accessibility
+.accessible-modal {
+  &[aria-hidden="true"] {
+    display: none;
+  }
+  
+  .modal-content {
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .modal-header {
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .modal-close {
+      @extend .accessible-button !optional;
+      
+      position: absolute;
+      top: spacing(md);
+      right: spacing(md);
+      background: none;
+      border: none;
+      font-size: 20px;
+      padding: spacing(sm);
+      
+      &::before {
+        content: "Fechar modal";
+        @extend .sr-only !optional;
+      }
+    }
+  }
+}
+
+// Navigation accessibility
+.accessible-nav {
+  nav[role="navigation"] {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    li {
+      a, button {
+        @extend .accessible-button !optional;
+        
+        display: flex;
+        align-items: center;
+        gap: spacing(md);
+        padding: spacing(md);
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: all duration(fast) easing(ease-out);
+        
+        &:hover {
+          background-color: var(--hover-bg);
+          color: $goepik-primary;
+        }
+        
+        &[aria-current="page"] {
+          background-color: rgba($goepik-primary, 0.1);
+          color: $goepik-primary;
+          font-weight: 600;
+          
+          &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: $goepik-primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Loading states with proper announcements
+.loading-container {
+  &[aria-busy="true"] {
+    position: relative;
+    
+    &::after {
+      content: "Carregando...";
+      @extend .sr-only !optional;
+    }
+  }
+}
+
+// Keyframes for accessibility animations
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .accessible-button {
+    &:active {
+      transform: none;
+    }
+    
+    &[aria-busy="true"]::after {
+      animation: none;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+    }
+  }
+  
+  .record-card:focus {
+    transform: none !important;
+  }
+}
+
+// Touch device improvements
+@media (hover: none) {
+  .accessible-button {
+    min-height: 48px; // Larger touch targets
+    min-width: 48px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    min-height: 48px;
+  }
+}

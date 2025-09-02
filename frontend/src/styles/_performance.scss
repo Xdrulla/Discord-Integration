@@ -1,0 +1,394 @@
+@use "variables" as *;
+
+// === PERFORMANCE OPTIMIZATIONS ===
+
+// Will-change for animated elements
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+// Hardware acceleration for smooth animations
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+}
+
+// Optimized scrolling areas
+.optimized-scrolling {
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--bg-tertiary, #f5f5f5);
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-primary, #ddd);
+    border-radius: 4px;
+    transition: background-color duration(fast) easing(ease-out);
+    
+    &:hover {
+      background: $goepik-primary;
+    }
+  }
+  
+  body.dark & {
+    &::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-primary);
+      
+      &:hover {
+        background: $goepik-primary;
+      }
+    }
+  }
+}
+
+// Containment for layout performance
+.layout-contained {
+  contain: layout;
+}
+
+.style-contained {
+  contain: style;
+}
+
+.paint-contained {
+  contain: paint;
+}
+
+.strict-contained {
+  contain: strict;
+}
+
+// Optimized table rendering
+.optimized-table {
+  @extend .strict-contained !optional;
+  
+  .ant-table-tbody {
+    .ant-table-row {
+      @extend .layout-contained !optional;
+    }
+  }
+}
+
+// Optimized grid layouts
+.optimized-grid {
+  @extend .layout-contained !optional;
+  
+  display: grid;
+  grid-template-rows: masonry; // Future CSS feature
+  
+  > * {
+    @extend .paint-contained !optional;
+  }
+}
+
+// Lazy loading placeholder with intersection observer
+.lazy-load-placeholder {
+  background: var(--bg-tertiary, #f5f5f5);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity duration(normal) easing(ease-out);
+  
+  &.loading {
+    @extend .skeleton !optional;
+  }
+  
+  &.loaded {
+    opacity: 1;
+  }
+}
+
+// Critical resource hints
+.preload-font {
+  font-display: swap;
+}
+
+// === MICRO-INTERACTIONS ===
+
+// Button micro-interactions
+.micro-button {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transition: width duration(fast) easing(ease-out), 
+                height duration(fast) easing(ease-out),
+                top duration(fast) easing(ease-out),
+                left duration(fast) easing(ease-out);
+  }
+  
+  &:active::before {
+    width: 300px;
+    height: 300px;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+  }
+  
+  // Success animation
+  &.success {
+    animation: success-pulse duration(slower) easing(ease-out);
+  }
+  
+  // Error shake animation  
+  &.error {
+    animation: error-shake duration(slower) easing(ease-out);
+  }
+}
+
+// Input focus micro-interactions
+.micro-input {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: $goepik-primary;
+    transition: width duration(normal) easing(ease-out),
+                left duration(normal) easing(ease-out);
+  }
+  
+  &:focus-within::after {
+    width: 100%;
+    left: 0;
+  }
+}
+
+// Card hover micro-interactions
+.micro-card {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+      $goepik-blue, 
+      $goepik-green, 
+      $goepik-orange, 
+      $goepik-purple
+    );
+    opacity: 0;
+    transition: opacity duration(normal) easing(ease-out);
+  }
+  
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// Loading micro-interactions
+.micro-loading {
+  position: relative;
+  
+  .loading-dots {
+    display: inline-flex;
+    gap: 4px;
+    
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: $goepik-primary;
+      border-radius: 50%;
+      animation: loading-dots 1.4s ease-in-out infinite both;
+      
+      &:nth-child(1) { animation-delay: -0.32s; }
+      &:nth-child(2) { animation-delay: -0.16s; }
+      &:nth-child(3) { animation-delay: 0s; }
+    }
+  }
+}
+
+// Success checkmark animation
+.success-checkmark {
+  position: relative;
+  
+  &::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: $goepik-success;
+    font-weight: bold;
+    font-size: 20px;
+    animation: checkmark-pop duration(slower) easing(bounce);
+  }
+}
+
+// Toast notification slide-in
+.toast-notification {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all duration(normal) easing(ease-out);
+  
+  &.show {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  &.hide {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Progress bar animation
+.progress-bar {
+  position: relative;
+  background: var(--bg-tertiary, #f5f5f5);
+  border-radius: radius(sm);
+  overflow: hidden;
+  height: 8px;
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, 
+      $goepik-primary, 
+      $goepik-primary-hover
+    );
+    border-radius: radius(sm);
+    transition: width duration(slower) easing(ease-out);
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent
+      );
+      animation: progress-shimmer 2s infinite;
+    }
+  }
+}
+
+// === KEYFRAMES ===
+
+@keyframes success-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    background-color: $goepik-success;
+  }
+  50% { 
+    transform: scale(1.05); 
+    background-color: lighten($goepik-success, 10%);
+  }
+}
+
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes loading-dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes checkmark-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes progress-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Performance monitoring utilities
+@supports (content-visibility: auto) {
+  .lazy-content {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px;
+  }
+}
+
+// Responsive images optimization
+.optimized-image {
+  object-fit: cover;
+  object-position: center;
+  loading: lazy;
+  decoding: async;
+}
+
+// Critical above-the-fold content
+.above-fold {
+  // Prioritize rendering
+  contain: none;
+  
+  img {
+    loading: eager;
+    decoding: sync;
+  }
+}

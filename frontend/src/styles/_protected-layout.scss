@@ -1,29 +1,55 @@
+@use "variables" as *;
+
 .protected-layout {
   display: flex;
+  min-height: 100vh;
   flex-direction: row;
 
-  @media (max-width: 768px) {
+  @media (max-width: breakpoint(tablet)) { // 768px
     flex-direction: column;
   }
 
   .content-container {
     flex: 1;
     position: relative;
-    padding: 80px 24px 80px;
+    padding-top: 100px; // Topbar height + margin
+    padding-bottom: 40px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 220px; // Sidebar width
+    width: calc(100vw - 220px);
+    transition: all 0.3s ease;
+    overflow-x: hidden;
 
-    @media (max-width: 425px) {
-      padding: 72px 16px 72px;
+    @media (max-width: breakpoint(tablet)) { // 768px
+      margin-left: 0;
+      width: 100vw;
+      padding-top: 85px; // Mobile topbar height + margin
+      padding-bottom: 85px; // Mobile bottom nav space + margin
+      padding-left: spacing(lg); // 16px
+      padding-right: spacing(lg); // 16px
     }
   }
 
-  .user-profile-container {
-    position: absolute;
-    right: 20px;
-    top: 10px;
+  // When sidebar is collapsed
+  .sidebar.collapsed + .content-container {
+    margin-left: 70px;
+    width: calc(100vw - 70px);
 
-    @media (max-width: 425px) {
-      right: 10px;
-      top: 8px;
+    @media (max-width: breakpoint(tablet)) { // 768px
+      margin-left: 0;
+      width: 100vw;
     }
+  }
+}
+
+.user-profile-container {
+  position: absolute;
+  right: spacing(xl); // 20px
+  top: spacing(sm); // 8px
+
+  @media (max-width: breakpoint(mobile)) { // 480px
+    right: spacing(sm); // 8px
+    top: spacing(xs); // 4px
   }
 }

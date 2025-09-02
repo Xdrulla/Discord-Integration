@@ -1,126 +1,30 @@
 @use "variables" as *;
 
-.button-primary {
-  background-color: $btn-primary-color;
-  color: $goepik-btn-primary-color;
-  border-radius: $btn-border-radius;
-  border: none;
-  padding: 8px 16px;
+// REMOVIDO: Botões customizados substituídos por Ant Design
+// Use as seguintes classes do Ant Design:
+// .button-primary → Button type="primary"
+// .button-secondary → Button type="default"  
+// .button-danger → Button type="primary" danger
+// .upload-button → Upload component
+
+// Customizações específicas para Ant Design buttons
+.ant-btn {
   font-weight: 600;
-  transition: all 0.3s ease-in-out;
-  text-align: center;
+  border-radius: radius(md); // 6px
+  transition: all 0.2s ease;
 
-  &:hover {
-    background-color: $btn-primary-hover-color;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba($btn-primary-hover-color, 0.5);
-  }
-
-  &:disabled {
-    background-color: $goepik-disabled-color;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(mobile)) { // 480px
     width: 100%;
-    padding: 12px;
+    height: auto;
+    padding: spacing(md) spacing(lg); // 12px 16px
     font-size: 16px;
   }
-}
-
-.button-secondary {
-  background-color: $btn-secondary-color;
-  color: $goepik-dark;
-  border: 1px solid $btn-dark-medium;
-  border-radius: $btn-border-radius;
-  padding: 8px 16px;
-  transition: all 0.3s ease-in-out;
-  text-align: center;
 
   &:hover {
-    background-color: $btn-secondary-hover-color;
+    transform: translateY(-1px);
   }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba($btn-secondary-hover-color, 0.5);
-  }
-
-  &:disabled {
-    background-color: $goepik-disabled-color;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 425px) {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-  }
-}
-
-.button-danger {
-  background-color: $goepik-error-primary;
-  color: $goepik-btn-primary-color;
-  border-radius: $btn-border-radius;
-  padding: 8px 16px;
-  font-weight: 600;
-  transition: all 0.3s ease-in-out;
-  text-align: center;
-
-  &:hover {
-    background-color: $goepik-error-primary-hover;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba($goepik-error-primary-hover, 0.5);
-  }
-
-  &:disabled {
-    background-color: $goepik-disabled-color;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 425px) {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-  }
-}
-
-.upload-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-weight: 600;
-  border-radius: $btn-border-radius;
-  background-color: $btn-secondary-color;
-  border: 1px solid $btn-dark-medium;
-  color: $goepik-dark;
-  transition: all 0.3s ease;
-  margin: 10px 0;
-  text-align: center;
-
-  &:hover {
-    background-color: $btn-secondary-hover-color;
-  }
-
-  &:focus {
-    box-shadow: 0 0 5px rgba($btn-secondary-hover-color, 0.5);
-  }
-
-  &:disabled {
-    background-color: $goepik-disabled-color;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 425px) {
-    width: 100%;
-    padding: 12px;
-    justify-content: center;
+  &:active {
+    transform: translateY(0);
   }
 }
