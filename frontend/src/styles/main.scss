@@ -37,10 +37,11 @@ body,
 }
 
 body {
-  background-color: #f8f9fa;
+  background-color: var(--bg-primary, #f8f9fa);
   background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 12px 12px;
   background-position: 0 0;
+  color: var(--text-primary, #333);
 
   @media (max-width: 425px) {
     background-size: 10px 10px;

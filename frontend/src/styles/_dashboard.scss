@@ -17,15 +17,16 @@
 }
 
 .dashboard-tabs {
-  background: #fff;
+  background: var(--bg-secondary, #fff);
   border-radius: radius(xl); // 12px
   box-shadow: shadow(md); // 0 2px 8px rgba(0, 0, 0, 0.06)
   overflow: hidden;
+  border: 1px solid var(--border-primary, transparent);
 
   .ant-tabs-nav {
     margin: 0;
     padding: 0 spacing(xxl); // 24px
-    background: #fafafa;
+    background: var(--bg-quaternary, #fafafa);
 
     @media (max-width: breakpoint(tablet)) { // 768px
       padding: 0 spacing(lg); // 16px

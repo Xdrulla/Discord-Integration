@@ -87,6 +87,6 @@
 
 .overview-text p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary, #555);
   font-size: 0.9rem;
 }

@@ -1,7 +1,7 @@
 @use "variables" as *;
 
 .filter-container {
-  background: #fff;
+  background: var(--bg-secondary, #fff);
   padding: spacing(lg); // 16px
   border-radius: radius(lg); // 8px
   box-shadow: shadow(md); // 0 2px 8px rgba(0, 0, 0, 0.06)
@@ -10,6 +10,7 @@
   align-items: center;
   max-width: 100%;
   position: relative;
+  border: 1px solid var(--border-primary, transparent);
 
   @media (max-width: breakpoint(tablet)) { // 768px
     flex-direction: column;

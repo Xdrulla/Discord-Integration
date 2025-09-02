@@ -5,14 +5,19 @@
 // Dark mode color variables
 :root {
   // Light mode (default)
-  --bg-primary: #{$goepik-background};
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f5f5f5;
-  --text-primary: #{$goepik-dark};
-  --text-secondary: #{$goepik-medium};
-  --text-tertiary: #{$goepik-light};
-  --border-primary: #{$goepik-border};
-  --border-secondary: #e8e8e8;
+  --bg-primary: #{$goepik-background};        // #f8f9fa
+  --bg-secondary: #ffffff;                    // Cards, containers
+  --bg-tertiary: #f5f5f5;                     // Subtle backgrounds
+  --bg-quaternary: #fafafa;                   // Tab nav backgrounds
+  
+  --text-primary: #{$goepik-dark};            // #2c3e50
+  --text-secondary: #{$goepik-medium};        // #7f8c8d  
+  --text-tertiary: #{$goepik-light};          // #bdc3c7
+  
+  --border-primary: #{$goepik-border};        // #ecf0f1
+  --border-secondary: #e8e8e8;               // Subtle borders
+  --border-tertiary: #ddd;                   // Lighter borders
+  
   --shadow-sm: #{shadow(sm)};
   --shadow-md: #{shadow(md)};
   --shadow-lg: #{shadow(lg)};
@@ -21,18 +26,29 @@
   --hover-bg: rgba(67, 205, 178, 0.04);
   --active-bg: rgba(67, 205, 178, 0.08);
   --focus-ring: rgba(67, 205, 178, 0.15);
+  
+  // Status colors (maintain in both modes)
+  --success-color: #{$goepik-success};
+  --warning-color: #{$goepik-warning};
+  --error-color: #{$goepik-error};
+  --info-color: #{$goepik-info};
 }
 
 // Dark mode variables
 body.dark {
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2a2a2a;
-  --text-primary: #f0f0f0;
-  --text-secondary: #b0b0b0;
-  --text-tertiary: #808080;
-  --border-primary: #333333;
-  --border-secondary: #404040;
+  --bg-primary: #0f0f0f;                      // Main background
+  --bg-secondary: #1a1a1a;                    // Cards, containers
+  --bg-tertiary: #2a2a2a;                     // Subtle backgrounds
+  --bg-quaternary: #1e1e1e;                   // Tab nav backgrounds
+  
+  --text-primary: #f0f0f0;                    // Main text
+  --text-secondary: #b0b0b0;                  // Secondary text
+  --text-tertiary: #808080;                   // Tertiary text
+  
+  --border-primary: #333333;                  // Main borders
+  --border-secondary: #404040;               // Subtle borders
+  --border-tertiary: #4a4a4a;                // Lighter borders
+  
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
@@ -142,6 +158,41 @@ body.dark {
       background-color: var(--bg-tertiary);
       border-color: var(--border-primary);
       color: var(--text-primary);
+      
+      // Column sorting arrows and hover states
+      &:hover {
+        background-color: var(--hover-bg);
+        color: $goepik-primary;
+      }
+      
+      &.ant-table-column-sort {
+        background-color: var(--hover-bg);
+      }
+      
+      // Sorting indicators
+      .ant-table-column-sorter {
+        color: var(--text-tertiary);
+        
+        &-up,
+        &-down {
+          &.active {
+            color: $goepik-primary;
+          }
+        }
+      }
+      
+      // Filter dropdown trigger
+      .ant-table-filter-trigger {
+        color: var(--text-secondary);
+        
+        &:hover {
+          color: $goepik-primary;
+        }
+        
+        &.active {
+          color: $goepik-primary;
+        }
+      }
     }
     
     .ant-table-tbody > tr > td {
@@ -187,6 +238,7 @@ body.dark {
   .ant-modal-content {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
+    border: 1px solid var(--border-primary);
   }
   
   .ant-modal-header {
@@ -196,11 +248,62 @@ body.dark {
     .ant-modal-title {
       color: var(--text-primary);
     }
+    
+    .ant-modal-close {
+      color: var(--text-secondary);
+      
+      &:hover {
+        color: var(--text-primary);
+      }
+    }
   }
   
   .ant-modal-footer {
     background-color: var(--bg-secondary);
     border-color: var(--border-primary);
+  }
+  
+  .ant-modal-body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    
+    p {
+      color: var(--text-primary);
+    }
+  }
+  
+  // Custom input masked - increased specificity 
+  .justificativa-modal .ant-input-masked,
+  .ant-modal-body .ant-input-masked {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+    
+    &::placeholder {
+      color: var(--text-tertiary) !important;
+    }
+    
+    &:focus,
+    &:hover {
+      border-color: $goepik-primary !important;
+      box-shadow: 0 0 0 2px var(--focus-ring) !important;
+    }
+    
+    &[disabled] {
+      background-color: var(--bg-tertiary) !important;
+      color: var(--text-tertiary) !important;
+    }
+  }
+  
+  // Force visibility for all modal elements
+  .ant-modal .ant-modal-body * {
+    color: inherit;
+  }
+  
+  .ant-modal .ant-modal-body p,
+  .ant-modal .ant-modal-body strong,
+  .ant-modal .ant-modal-body b {
+    color: var(--text-primary) !important;
   }
   
   // Topbar
@@ -220,6 +323,12 @@ body.dark {
   
   // Pagination
   .ant-pagination {
+    color: var(--text-primary);
+    
+    .ant-pagination-total-text {
+      color: var(--text-primary) !important;
+    }
+    
     .ant-pagination-item {
       background-color: var(--bg-secondary);
       border-color: var(--border-primary);
@@ -255,6 +364,200 @@ body.dark {
       
       &:hover .ant-pagination-item-link {
         background-color: var(--hover-bg);
+        color: $goepik-primary;
+      }
+    }
+    
+    .ant-pagination-options {
+      .ant-select {
+        .ant-select-selector {
+          background-color: var(--bg-secondary);
+          border-color: var(--border-primary);
+          color: var(--text-primary);
+        }
+      }
+      
+      .ant-pagination-options-size-changer {
+        color: var(--text-primary);
+      }
+    }
+    
+    .ant-pagination-jump-prev,
+    .ant-pagination-jump-next {
+      .ant-pagination-item-container {
+        .ant-pagination-item-link-icon,
+        .ant-pagination-item-ellipsis {
+          color: var(--text-secondary);
+        }
+      }
+      
+      &:hover {
+        .ant-pagination-item-container {
+          .ant-pagination-item-link-icon {
+            color: $goepik-primary;
+          }
+        }
+      }
+    }
+  }
+  
+  // Ant Design Input components
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-picker,
+  .ant-select-selector,
+  .ant-picker-input input {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+    
+    &::placeholder {
+      color: var(--text-tertiary) !important;
+    }
+    
+    &:hover {
+      border-color: var(--border-secondary) !important;
+    }
+    
+    &:focus,
+    &.ant-input-focused,
+    &.ant-picker-focused {
+      border-color: $goepik-primary !important;
+      box-shadow: 0 0 0 2px var(--focus-ring) !important;
+    }
+  }
+  
+  // Date/Time picker dropdown
+  .ant-picker-panel-container {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    
+    .ant-picker-panel {
+      background-color: var(--bg-secondary);
+      
+      .ant-picker-header {
+        border-color: var(--border-primary);
+        
+        button {
+          color: var(--text-primary);
+          
+          &:hover {
+            color: $goepik-primary;
+          }
+        }
+      }
+      
+      .ant-picker-content {
+        .ant-picker-cell {
+          color: var(--text-primary);
+          
+          &:hover {
+            background-color: var(--hover-bg);
+          }
+          
+          &.ant-picker-cell-selected {
+            background-color: $goepik-primary;
+            color: white;
+          }
+          
+          &.ant-picker-cell-today {
+            border-color: $goepik-primary;
+          }
+        }
+      }
+      
+      .ant-picker-time-panel {
+        .ant-picker-time-panel-column {
+          ul li {
+            color: var(--text-primary);
+            
+            &:hover {
+              background-color: var(--hover-bg);
+            }
+            
+            &.ant-picker-time-panel-cell-selected {
+              background-color: $goepik-primary;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Upload component
+  .ant-upload {
+    .ant-btn {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+      
+      &:hover {
+        background-color: var(--hover-bg);
+        border-color: $goepik-primary;
+        color: $goepik-primary;
+      }
+    }
+  }
+  
+  .ant-upload-list {
+    .ant-upload-list-item {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      
+      .ant-upload-list-item-name {
+        color: var(--text-primary);
+      }
+    }
+  }
+  
+  // Ant Design Buttons
+  .ant-btn {
+    &:not(.ant-btn-primary):not(.ant-btn-danger) {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-primary);
+      color: var(--text-primary);
+      
+      &:hover {
+        background-color: var(--hover-bg);
+        border-color: var(--border-secondary);
+        color: $goepik-primary;
+      }
+    }
+  }
+  
+  // Ant Design Dropdown
+  .ant-dropdown {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    
+    .ant-dropdown-menu {
+      background-color: var(--bg-secondary);
+      
+      .ant-dropdown-menu-item {
+        color: var(--text-primary);
+        
+        &:hover {
+          background-color: var(--hover-bg);
+        }
+      }
+    }
+  }
+  
+  // Ant Design Select
+  .ant-select-dropdown {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    
+    .ant-select-item {
+      color: var(--text-primary);
+      
+      &:hover {
+        background-color: var(--hover-bg);
+      }
+      
+      &.ant-select-item-option-selected {
+        background-color: rgba($goepik-primary, 0.1);
         color: $goepik-primary;
       }
     }

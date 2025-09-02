@@ -2,16 +2,34 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: #fff;
+  background: var(--bg-secondary, #fff);
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: center;
   padding: 10px 0;
   height: 60px;
   z-index: 10;
+  border-top: 1px solid var(--border-primary, transparent);
+  
+  .ant-pagination {
+    color: var(--text-primary);
+    
+    .ant-pagination-total-text {
+      color: var(--text-primary);
+    }
+  }
 }
 
 body.dark .pagination-footer {
-  background-color: var(--sidebar-bg);
-  box-shadow: none;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid var(--border-primary);
+  
+  .ant-pagination {
+    color: var(--text-primary);
+    
+    .ant-pagination-total-text {
+      color: var(--text-primary) !important;
+    }
+  }
 }

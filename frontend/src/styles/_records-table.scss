@@ -71,7 +71,12 @@
 .data-bold {
   font-weight: bold;
   font-size: 15px;
-  color: $goepik-dark;
+  color: var(--text-primary, $goepik-dark);
+}
+
+.user-text {
+  font-weight: bold;
+  color: var(--text-primary, $goepik-dark);
 }
 
 .ant-table {
@@ -105,10 +110,11 @@
     .ant-table-tbody > tr {
       display: block;
       margin-bottom: 16px;
-      background-color: #fff;
+      background-color: var(--bg-secondary, #fff);
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
       padding: 12px;
+      border: 1px solid var(--border-primary, transparent);
     }
 
     .ant-table-cell {
@@ -123,7 +129,7 @@
       &::before {
         content: attr(data-label);
         font-weight: 600;
-        color: #666;
+        color: var(--text-secondary, #666);
         flex: 1;
         text-align: left;
       }
@@ -159,49 +165,87 @@
 }
 
 .tag-success {
-  background-color: color.adjust($goepik-done-background, $lightness: 5%);
-  color: $goepik-done-color;
-  border: 1px solid color.adjust($goepik-done-color, $lightness: -10%);
+  background-color: rgba($goepik-success, 0.1);
+  color: $goepik-success;
+  border: 1px solid rgba($goepik-success, 0.3);
 
   @media (max-width: 425px) {
     font-weight: 500;
     border-radius: 6px;
+  }
+  
+  body.dark & {
+    background-color: rgba($goepik-success, 0.15);
+    color: lighten($goepik-success, 10%);
+    border-color: rgba($goepik-success, 0.4);
   }
 }
 
 .tag-error {
-  background-color: color.adjust($goepik-overdue-background, $lightness: 5%);
-  color: $goepik-overdue-color;
-  border: 1px solid color.adjust($goepik-overdue-color, $lightness: -10%);
+  background-color: rgba($goepik-error, 0.1);
+  color: $goepik-error;
+  border: 1px solid rgba($goepik-error, 0.3);
 
   @media (max-width: 425px) {
     font-weight: 500;
     border-radius: 6px;
+  }
+  
+  body.dark & {
+    background-color: rgba($goepik-error, 0.15);
+    color: lighten($goepik-error, 10%);
+    border-color: rgba($goepik-error, 0.4);
   }
 }
 
 .tag-blue {
-  background-color: color.adjust(
-    $goepik-in-progress-background,
-    $lightness: 5%
-  );
-  color: $goepik-in-progress-color;
-  border: 1px solid color.adjust($goepik-in-progress-color, $lightness: -10%);
+  background-color: rgba($goepik-blue, 0.1);
+  color: $goepik-blue;
+  border: 1px solid rgba($goepik-blue, 0.3);
 
   @media (max-width: 425px) {
     font-weight: 500;
     border-radius: 6px;
   }
+  
+  body.dark & {
+    background-color: rgba($goepik-blue, 0.15);
+    color: lighten($goepik-blue, 10%);
+    border-color: rgba($goepik-blue, 0.4);
+  }
 }
 
 .tag-purple {
-  background-color: color.adjust($goepik-external-background, $lightness: 5%);
-  color: color.adjust($goepik-external-background, $lightness: -30%);
-  border: 1px solid color.adjust($goepik-external-background, $lightness: -10%);
+  background-color: rgba($goepik-purple, 0.1);
+  color: $goepik-purple;
+  border: 1px solid rgba($goepik-purple, 0.3);
 
   @media (max-width: 425px) {
     font-weight: 500;
     border-radius: 6px;
+  }
+  
+  body.dark & {
+    background-color: rgba($goepik-purple, 0.15);
+    color: lighten($goepik-purple, 15%);
+    border-color: rgba($goepik-purple, 0.4);
+  }
+}
+
+.tag-warning {
+  background-color: rgba($goepik-warning, 0.1);
+  color: $goepik-warning;
+  border: 1px solid rgba($goepik-warning, 0.3);
+
+  @media (max-width: 425px) {
+    font-weight: 500;
+    border-radius: 6px;
+  }
+  
+  body.dark & {
+    background-color: rgba($goepik-warning, 0.15);
+    color: lighten($goepik-warning, 10%);
+    border-color: rgba($goepik-warning, 0.4);
   }
 }
 
@@ -215,8 +259,8 @@
 @media (max-width: 425px) {
   .mobile-expandable-row {
     padding: 12px;
-    background: #f9f9f9;
-    border-top: 1px solid #ddd;
+    background: var(--bg-tertiary, #f9f9f9);
+    border-top: 1px solid var(--border-primary, #ddd);
     font-size: 14px;
     text-align: left;
 
@@ -224,7 +268,7 @@
       margin: 6px 0;
 
       strong {
-        color: #333;
+        color: var(--text-primary, #333);
       }
     }
   }
@@ -356,7 +400,7 @@
     }
 
     strong {
-      color: #666;
+      color: var(--text-secondary, #666);
       font-weight: 500;
       font-size: 13px;
       min-width: 120px;
@@ -367,7 +411,7 @@
       flex: 1;
       text-align: right;
       font-weight: 500;
-      color: #333;
+      color: var(--text-primary, #333);
     }
   }
 }
@@ -384,7 +428,7 @@
     border-bottom: none;
 
     strong {
-      color: #333;
+      color: var(--text-primary, #333);
       font-weight: 600;
     }
   }

@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--bg-secondary, #fff);
   padding: 0 24px;
   height: 75px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
@@ -57,7 +57,48 @@
     display: flex;
     align-items: center;
     padding-right: 8px;
-    gap: 16px;
+    gap: spacing(lg);
+  }
+
+  // Theme toggle button
+  .theme-toggle {
+    position: relative;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-secondary, #555);
+    transition: all duration(normal) easing(ease-out);
+    border-radius: radius(md);
+    padding: spacing(sm);
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      color: $goepik-primary;
+      background-color: var(--hover-bg, rgba($goepik-primary, 0.04));
+    }
+    
+    &:focus-visible {
+      outline: 2px solid $goepik-primary;
+      outline-offset: 2px;
+    }
+    
+    .anticon {
+      vertical-align: middle;
+      transition: transform duration(normal) easing(bounce);
+    }
+    
+    &:hover .anticon {
+      transform: scale(1.1) rotate(10deg);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
   }
 
   @media (max-width: breakpoint(tablet)) { // 768px
@@ -111,25 +152,34 @@
 }
 
 body.dark .topbar {
-  background-color: var(--sidebar-bg);
-  box-shadow: none;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
 
   &__nav a,
-  &__nav button,
-  &__right button {
-    color: var(--text-color) !important;
+  &__nav button {
+    color: var(--text-primary);
 
     &:hover {
-      color: #4da6ff !important;
+      color: $goepik-primary;
     }
   }
 
   &__nav .active {
-    border-bottom: 2px solid #4da6ff;
-    color: #4da6ff !important;
+    border-bottom: 2px solid $goepik-primary;
+    color: $goepik-primary;
   }
 
   &__logo {
     filter: brightness(0) invert(1);
+  }
+  
+  .theme-toggle {
+    color: var(--text-primary);
+    
+    &:hover {
+      color: $goepik-primary;
+      background-color: var(--hover-bg);
+    }
   }
 }
