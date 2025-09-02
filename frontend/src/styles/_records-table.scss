@@ -38,12 +38,14 @@
     max-width: 1200px;
   }
 
-  @media (max-width: 425px) {
-    padding: 12px;
-    width: 100vw;
-    border-radius: 0;
-    box-shadow: none;
-    border: none;
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    padding: spacing(sm); // 8px - Match container padding
+    margin: 0; // No extra margins - rely on container padding
+    border-radius: radius(md); // Keep consistent radius
+    box-shadow: shadow(sm); // Minimal shadow for definition
+    border: 1px solid var(--border-primary, transparent);
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -57,14 +59,22 @@
     flex-direction: column;
     gap: 10px;
   }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    margin-bottom: spacing(sm); // 8px reduced margin
+    gap: spacing(sm); // 8px consistent gap
+    padding: 0; // No extra padding - inherit from container
+  }
 }
 
 .ant-table-wrapper {
   overflow-x: auto;
   flex: 1;
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     overflow-x: visible;
+    margin: 0; // Remove negative margin for proper alignment
+    padding: 0; // Remove extra padding
   }
 }
 
@@ -151,10 +161,11 @@
   min-width: 75px;
   text-align: center;
 
-  @media (max-width: 425px) {
-    font-size: 13px;
-    padding: 4px 10px;
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    font-size: 12px; // Further reduced font size
+    padding: spacing(xs) spacing(sm); // 4px 8px using design tokens
     min-width: unset;
+    border-radius: radius(sm); // 4px smaller radius
   }
 }
 
@@ -169,9 +180,9 @@
   color: $goepik-success;
   border: 1px solid rgba($goepik-success, 0.3);
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: radius(sm); // 4px consistent with design tokens
   }
   
   body.dark & {
@@ -186,9 +197,9 @@
   color: $goepik-error;
   border: 1px solid rgba($goepik-error, 0.3);
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: radius(sm); // 4px consistent with design tokens
   }
   
   body.dark & {
@@ -203,9 +214,9 @@
   color: $goepik-blue;
   border: 1px solid rgba($goepik-blue, 0.3);
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: radius(sm); // 4px consistent with design tokens
   }
   
   body.dark & {
@@ -220,9 +231,9 @@
   color: $goepik-purple;
   border: 1px solid rgba($goepik-purple, 0.3);
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: radius(sm); // 4px consistent with design tokens
   }
   
   body.dark & {
@@ -237,9 +248,9 @@
   color: $goepik-warning;
   border: 1px solid rgba($goepik-warning, 0.3);
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: radius(sm); // 4px consistent with design tokens
   }
   
   body.dark & {
@@ -250,22 +261,23 @@
 }
 
 .column-btn {
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     width: 100%;
     justify-content: center;
+    min-height: 44px; // Better touch target
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: breakpoint(small-mobile)) { // 425px
   .mobile-expandable-row {
-    padding: 12px;
+    padding: spacing(sm); // 8px using design tokens
     background: var(--bg-tertiary, #f9f9f9);
     border-top: 1px solid var(--border-primary, #ddd);
-    font-size: 14px;
+    font-size: 13px; // Slightly smaller text
     text-align: left;
 
     p {
-      margin: 6px 0;
+      margin: spacing(xs) 0; // 4px vertical margin
 
       strong {
         color: var(--text-primary, #333);
@@ -278,10 +290,12 @@
     border: none;
     color: $goepik-primary;
     font-weight: 600;
-    margin-top: 10px;
+    margin-top: spacing(sm); // 8px using design tokens
     padding: 0;
     cursor: pointer;
     text-align: left;
+    min-height: 44px; // Better touch target
+    font-size: 14px; // Explicit font size
   }
 
   .ant-table-wrapper {
@@ -300,6 +314,12 @@
   flex-direction: column;
   gap: spacing(lg); // 16px
   padding: 0 spacing(xs); // 4px
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    gap: spacing(md); // 12px reduced gap for tighter layout
+    padding: 0; // No padding - rely on container padding
+    margin: 0; // Ensure no margin offset
+  }
 }
 
 .record-card {
@@ -309,6 +329,12 @@
   padding: spacing(lg);
   border: 1px solid var(--border-primary, #f0f0f0);
   transition: all duration(normal) easing(ease-out);
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    padding: spacing(md); // 12px reduced padding
+    border-radius: radius(md); // 6px smaller radius
+    margin: 0; // Remove side margins for perfect alignment
+  }
   
   // Add accessibility
   @extend .accessible-button !optional;
@@ -358,6 +384,12 @@
   margin-bottom: spacing(sm); // 8px
   padding-bottom: spacing(sm); // 8px
   border-bottom: 1px solid #f5f5f5;
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    font-size: 14px; // Smaller header text
+    margin-bottom: spacing(xs); // 4px reduced margin
+    padding-bottom: spacing(xs); // 4px reduced padding
+  }
 
   button {
     background: color(primary);
@@ -369,6 +401,12 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      font-size: 11px; // Smaller button text
+      padding: spacing(xs) spacing(sm); // 4px 8px tighter padding
+      min-height: 32px; // Better touch target
+    }
 
     &:hover {
       background: color(primary, hover);
@@ -386,6 +424,10 @@
   flex-direction: column;
   gap: spacing(xs); // 4px
 
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    gap: 2px; // Tighter spacing for compact view
+  }
+
   p {
     display: flex;
     justify-content: space-between;
@@ -394,6 +436,11 @@
     padding: spacing(xs) 0; // 4px 0
     font-size: 14px;
     border-bottom: 1px solid #fafafa;
+    
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      font-size: 13px; // Smaller text
+      padding: 2px 0; // Reduced padding
+    }
 
     &:last-child {
       border-bottom: none;
@@ -405,6 +452,11 @@
       font-size: 13px;
       min-width: 120px;
       text-align: left;
+      
+      @media (max-width: breakpoint(small-mobile)) { // 425px
+        font-size: 12px; // Smaller label text
+        min-width: 100px; // Reduced min width for compact view
+      }
     }
 
     span {
@@ -412,6 +464,10 @@
       text-align: right;
       font-weight: 500;
       color: var(--text-primary, #333);
+      
+      @media (max-width: breakpoint(small-mobile)) { // 425px
+        font-size: 13px; // Slightly smaller value text
+      }
     }
   }
 }

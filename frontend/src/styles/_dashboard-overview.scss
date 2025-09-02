@@ -17,6 +17,19 @@
   @media (max-width: breakpoint(mobile)) {
     grid-template-columns: 1fr;
   }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    gap: spacing(sm); // Reduced gap
+    margin-bottom: spacing(lg); // Reduced margin
+  }
+}
+
+// Container wrapper para consistência de layout
+.dashboard-section {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    padding: 0; // Remove qualquer padding extra
+    margin: 0; // Remove qualquer margin extra
+  }
 }
 
 .dashboard-overview * {
@@ -54,6 +67,15 @@
     outline-offset: 2px;
     box-shadow: shadow(lg), 0 0 0 4px rgba($goepik-primary, 0.15);
   }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    padding: spacing(md); // Reduced padding
+    border-radius: 12px; // Slightly smaller radius
+    gap: spacing(md); // Reduced gap
+    flex-direction: column; // Stack items vertically
+    text-align: center; // Center align content
+    min-height: 80px; // Minimum height for better touch
+  }
 }
 
 .overview-icon {
@@ -77,16 +99,33 @@
   &.purple {
     background-color: $goepik-purple; // #8e44ad
   }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    font-size: 1.5rem; // Reduced icon size
+    padding: 8px; // Reduced padding
+    border-radius: 8px; // Smaller radius
+    margin-bottom: spacing(xs); // Space below icon when stacked
+  }
 }
 
 .overview-text h3 {
   margin: 0;
   font-size: 1.8rem;
   font-weight: 600;
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    font-size: 1.4rem; // Smaller heading for mobile
+    margin-bottom: spacing(xs); // Space below heading
+  }
 }
 
 .overview-text p {
   margin: 0;
   color: var(--text-secondary, #555);
   font-size: 0.9rem;
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    font-size: 0.85rem; // Slightly smaller text
+    text-align: center; // Center align description
+  }
 }

@@ -17,6 +17,13 @@
     align-items: stretch;
     padding: spacing(md); // 12px
   }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    padding: spacing(sm); // 8px - Match container padding
+    margin: 0; // No extra margins - rely on container padding
+    border-radius: radius(md); // 6px - Smaller radius
+    gap: spacing(sm); // 8px - Reduced gap
+  }
 }
 
 .filter-elements {
@@ -25,11 +32,30 @@
   flex: 1;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%; // Garante largura total
+  justify-content: flex-start; // Alinhamento consistente
 
   @media (max-width: breakpoint(mobile)) { // 480px
     flex-direction: column;
     align-items: stretch;
     gap: spacing(md); // 12px
+  }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    gap: spacing(sm); // 8px - Further reduced gap
+    align-items: center; // Volta para center em mobile muito pequeno
+  }
+  
+  // Override do Space component do Ant Design
+  &.ant-space {
+    width: 100% !important;
+    
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      display: flex !important;
+      flex-wrap: wrap !important;
+      justify-content: space-between;
+      align-items: center !important;
+    }
   }
 }
 
@@ -49,9 +75,12 @@
     border-color: $goepik-primary-hover;
   }
 
-  @media (max-width: 425px) {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
     width: 100%;
-    font-size: 0.95rem;
+    font-size: 0.9rem; // Slightly smaller text
+    height: 2.25rem; // Reduced height for better mobile UX
+    padding: 0 spacing(sm); // 8px horizontal padding
+    min-width: 0; // Remove min-width constraint
   }
 }
 
@@ -69,9 +98,16 @@
     border-color: $goepik-primary-hover;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: breakpoint(tablet)) { // 768px
     width: 100%;
     margin-top: 0.75rem;
+  }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    height: 2.25rem; // Match filter input height
+    margin-top: 0; // Remove margin since we're using gap
+    min-width: 0; // Remove min-width constraint
+    flex: 1 1 auto; // Allow flexible sizing
   }
 }
 
@@ -93,6 +129,29 @@
 body.dark .filter-container {
   background-color: var(--card-bg);
   box-shadow: none;
+}
+
+// Botão circular de adicionar registro manual
+.filter-container .ant-btn-circle {
+  flex-shrink: 0; // Não permite encolher
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    flex-shrink: 0; // Garante que não estique
+  }
+  
+  .anticon {
+    font-size: 16px;
+    
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      font-size: 14px;
+    }
+  }
 }
 
 body.dark .filter-input,

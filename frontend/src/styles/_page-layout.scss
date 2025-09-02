@@ -1,0 +1,49 @@
+@use "variables" as *;
+
+// Layout consistente para páginas em 425px
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(lg); // 16px
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    gap: spacing(md); // 12px - Reduced gap for tighter layout
+    
+    // Garante que todos os componentes filhos tenham alinhamento consistente
+    > * {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    
+    // Filtros, tabelas, cards - todos seguem o mesmo padrão
+    .filter-container,
+    .table-container,
+    .records-mobile-list {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    
+    // Remove qualquer padding extra que possa desalinhar
+    .ant-space,
+    .ant-row,
+    .ant-col {
+      width: 100% !important;
+    }
+  }
+}
+
+// Container específico para seções de registros
+.records-section {
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    // Garante espaçamento consistente entre elementos
+    > .filter-container {
+      margin-bottom: spacing(md); // 12px
+    }
+    
+    > .table-container,
+    > .records-mobile-list {
+      margin-top: 0;
+    }
+  }
+}

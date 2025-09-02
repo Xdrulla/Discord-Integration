@@ -29,6 +29,13 @@
       padding-left: spacing(lg); // 16px
       padding-right: spacing(lg); // 16px
     }
+    
+    @media (max-width: breakpoint(small-mobile)) { // 425px
+      padding-top: 70px; // Further reduced for very small screens
+      padding-bottom: 70px; // Further reduced for very small screens
+      padding-left: spacing(sm); // 8px - Consistent container padding
+      padding-right: spacing(sm); // 8px - Consistent container padding
+    }
   }
 
   // When sidebar is collapsed
@@ -51,5 +58,10 @@
   @media (max-width: breakpoint(mobile)) { // 480px
     right: spacing(sm); // 8px
     top: spacing(xs); // 4px
+  }
+  
+  @media (max-width: breakpoint(small-mobile)) { // 425px
+    right: spacing(xs); // 4px - Further reduced
+    top: 2px; // Even smaller top spacing for compact layout
   }
 }
