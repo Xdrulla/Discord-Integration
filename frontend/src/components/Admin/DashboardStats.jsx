@@ -13,7 +13,7 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading, todosR
   const [loading, setLoading] = useState(initialLoading);
 
   const [searchUser, setSearchUser] = useState("");
-  const [dateRange, setDateRange] = useState([dayjs(), dayjs()]);
+  const [dateRange, setDateRange] = useState([dayjs().startOf('month'), dayjs().endOf('month')]);
 
   const discordIdFromSearch = useMemo(() => {
     if (!searchUser || !todosRegistros?.length) return null;
@@ -60,6 +60,7 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading, todosR
         role={role}
         searchUser={searchUser}
         setSearchUser={setSearchUser}
+        dateRange={dateRange}
         setDateRange={setDateRange}
         currentTab="2"
       />

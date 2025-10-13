@@ -36,7 +36,10 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchUser, setSearchUser] = useState("");
-  const [dateRange, setDateRange] = useState([dayjs(), dayjs()]);
+  const [dateRange, setDateRange] = useState([
+    dayjs().subtract(30, 'day'), // Últimos 30 dias
+    dayjs() // Hoje
+  ]);
   const [resumo, setResumo] = useState(null);
   const [resumoLoading, setResumoLoading] = useState(true);
   const [initialRecordId, setInitialRecordId] = useState(null);
@@ -204,6 +207,7 @@ const Dashboard = () => {
               role={role}
               searchUser={searchUser}
               setSearchUser={setSearchUser}
+              dateRange={dateRange}
               setDateRange={setDateRange}
               currentTab="1"
             />

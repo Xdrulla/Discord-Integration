@@ -6,7 +6,7 @@ import AddManualRecordModal from './AddManualRecordModal';
 
 const { RangePicker } = DatePicker;
 
-const FilterBar = ({ role, searchUser, setSearchUser, setDateRange, currentTab }) => {
+const FilterBar = ({ role, searchUser, setSearchUser, dateRange, setDateRange, currentTab }) => {
   const [manualModalOpen, setManualModalOpen] = useState(false);
 
   const handleUserSearch = e => setSearchUser(e.target.value);
@@ -34,7 +34,7 @@ const FilterBar = ({ role, searchUser, setSearchUser, setDateRange, currentTab }
         {showManual && (
           <RangePicker
             className="date-picker"
-            value={null}
+            value={dateRange}
             onChange={handleDateChange}
             allowClear
             format="DD/MM/YYYY"
@@ -67,6 +67,7 @@ FilterBar.propTypes = {
   role: PropTypes.oneOf(['admin', 'leitor']).isRequired,
   searchUser: PropTypes.string.isRequired,
   setSearchUser: PropTypes.func.isRequired,
+  dateRange: PropTypes.array,
   setDateRange: PropTypes.func.isRequired,
   currentTab: PropTypes.string,
 };

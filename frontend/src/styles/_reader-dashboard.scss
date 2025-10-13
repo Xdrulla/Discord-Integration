@@ -1,0 +1,988 @@
+// Reader Dashboard Styles - Design System 2025
+// Cores semânticas modernas e sistema de espaçamento consistente
+
+// =============================================================================
+// VARIÁVEIS E CONFIGURAÇÕES
+// =============================================================================
+
+// Cores semânticas 2025
+$success-primary: #00D084;    // Verde vibrante (trabalhando)
+$warning-primary: #FFB800;    // Amarelo energético (pausa)
+$danger-primary: #FF4757;     // Vermelho suave (alerta)
+$info-primary: #3742FA;       // Azul confiável (informações)
+$neutral-light: #F8FAFC;      // Background claro
+$neutral-dark: #1A1D29;       // Background escuro
+
+// Sistema de espaçamento
+$space-xs: 0.25rem;   // 4px
+$space-sm: 0.5rem;    // 8px
+$space-md: 1rem;      // 16px
+$space-lg: 1.5rem;    // 24px
+$space-xl: 2rem;      // 32px
+$space-2xl: 3rem;     // 48px
+
+// Breakpoints
+$mobile-max: 425px;
+$tablet-max: 768px;
+
+// Shadows
+$shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+$shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
+$shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+// =============================================================================
+// READER DASHBOARD PRINCIPAL
+// =============================================================================
+
+.reader-dashboard {
+  padding: $space-sm;
+  background: transparent; // Usa o background padrão da aplicação
+  height: 100%;
+  overflow-y: auto;
+
+  @media (max-width: $mobile-max) {
+    padding: $space-xs;
+  }
+
+  &__header {
+    margin-bottom: $space-xs; // Reduzido de sm para xs
+    text-align: center;
+
+    @media (max-width: $tablet-max) {
+      margin-bottom: 2px;
+    }
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary, #2c3e50);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-xs;
+
+    .brand {
+      font-weight: 700;
+    }
+
+    .user-info {
+      font-weight: 500;
+      color: var(--text-secondary, #666);
+    }
+
+    @media (max-width: $mobile-max) {
+      font-size: 0.85rem;
+      flex-direction: column;
+      gap: 2px;
+
+      .user-info {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  &__grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: fit-content;
+  }
+
+  &__status {
+    margin-bottom: $space-xs; // Reduzido para economizar espaço
+
+    @media (max-width: $tablet-max) {
+      margin-bottom: 2px;
+    }
+  }
+}
+
+// Dark mode support
+[data-theme='dark'] .reader-dashboard {
+  background: $neutral-dark;
+
+  &__title {
+    color: #ffffff;
+  }
+}
+
+// =============================================================================
+// STATUS ATUAL CARD (Componente Hero)
+// =============================================================================
+
+.status-atual-card {
+  border-radius: 12px;
+  box-shadow: $shadow-soft;
+  border: none;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-primary, #333);
+  overflow: hidden;
+  position: relative;
+
+  // Ant Design override - mais compacto
+  .ant-card-body {
+    padding: $space-sm; // Reduzido de md para sm
+
+    @media (max-width: $mobile-max) {
+      padding: $space-xs;
+    }
+  }
+
+  // Estados por status - seguindo DS da aplicação
+  &.status-trabalhando {
+    border-left: 4px solid $success-primary;
+    background: var(--card-bg, #ffffff);
+  }
+
+  &.status-pausado {
+    border-left: 4px solid $warning-primary;
+    background: var(--card-bg, #ffffff);
+  }
+
+  &.status-nao-iniciado {
+    border-left: 4px solid #8C8C8C;
+    background: var(--card-bg, #ffffff);
+  }
+
+  &.status-finalizado {
+    border-left: 4px solid $success-primary;
+    background: var(--card-bg, #ffffff);
+  }
+
+  &.loading {
+    border-left: 4px solid #ddd;
+    background: var(--card-bg, #ffffff);
+  }
+}
+
+.status-atual-content {
+  position: relative;
+  z-index: 2;
+}
+
+.status-header {
+  margin-bottom: $space-sm;
+
+  .status-text {
+    color: var(--text-primary, #333) !important;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+
+    @media (max-width: $mobile-max) {
+      font-size: 1rem;
+    }
+  }
+
+  .hora-atual {
+    color: var(--text-secondary, #666);
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .status-icon {
+    font-size: 1.5rem;
+    margin-right: $space-sm;
+    
+    &.success { color: $success-primary; }
+    &.warning { color: $warning-primary; }
+    &.neutral { color: #8C8C8C; }
+
+    @media (max-width: $mobile-max) {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.tempo-info {
+  margin-bottom: $space-xs; // Reduzido
+
+  .tempo-stats {
+    width: 100%;
+    justify-content: space-around;
+
+    @media (max-width: $mobile-max) {
+      flex-direction: column;
+      gap: 2px; // Reduzido
+    }
+  }
+
+  .tempo-item {
+    text-align: center;
+    
+    .tempo-label {
+      color: var(--text-secondary, #666) !important;
+      font-size: 0.75rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .tempo-value {
+      color: var(--text-primary, #333) !important;
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+
+      @media (max-width: $mobile-max) {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.progresso-container {
+  margin-bottom: $space-xs; // Reduzido
+
+  .progresso-barra {
+    .ant-progress-bg {
+      border-radius: 4px !important;
+    }
+
+    .ant-progress-outer {
+      .ant-progress-inner {
+        background: var(--border-color, #e9ecef) !important;
+        border-radius: 4px !important;
+        height: 4px !important; // Barra ainda mais fina para economizar espaço
+      }
+    }
+  }
+
+  .progresso-text {
+    color: var(--text-secondary, #666);
+    font-weight: 600;
+    text-align: center;
+    display: block;
+    margin-top: 2px;
+    font-size: 0.8rem;
+  }
+}
+
+.mensagem-motivacional {
+  text-align: center;
+  
+  .mensagem-text {
+    color: var(--text-secondary, #666);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+.status-loading-container {
+  text-align: center;
+  padding: $space-xl;
+  
+  .ant-spin {
+    margin-bottom: $space-md;
+  }
+}
+
+// =============================================================================
+// MEU DIA CARD
+// =============================================================================
+
+.meu-dia-card {
+  border-radius: 12px;
+  box-shadow: $shadow-soft;
+  height: 100%;
+  background: var(--card-bg, #ffffff);
+
+  .ant-card-head {
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+    padding: 2px $space-xs; // Reduzido header
+    
+    .ant-card-head-title {
+      font-weight: 600;
+      color: var(--text-primary, #2c3e50);
+      font-size: 0.75rem; // Ligeiramente menor
+    }
+  }
+
+  .ant-card-body {
+    padding: $space-xs; // Mais compacto
+    
+    @media (max-width: $mobile-max) {
+      padding: 2px;
+    }
+  }
+
+  .info-row {
+    padding: 2px 0; // Ainda mais compacto
+    border-bottom: 1px solid var(--border-color, #f8f9fa);
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &.meta-row {
+      border-top: 1px solid var(--border-color, #e9ecef);
+      padding-top: $space-xs; // Reduzido
+      margin-top: 2px;
+    }
+
+    .icon {
+      font-size: 1rem;
+      
+      &.entrada {
+        color: $info-primary;
+      }
+
+      &.saida {
+        color: $success-primary;
+      }
+
+      &.pausas {
+        color: $warning-primary;
+      }
+
+      &.meta {
+        color: #f39c12;
+      }
+    }
+
+    .valor-entrada,
+    .valor-saida,
+    .valor-pausas,
+    .valor-meta {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary, #333);
+    }
+
+    .limite-pausas {
+      font-size: 0.75rem;
+      color: var(--text-secondary, #666);
+    }
+  }
+
+  .mensagem-contextual {
+    background: var(--bg-secondary, #f8f9fa);
+    padding: $space-xs;
+    border-radius: 4px;
+    margin-top: $space-xs;
+
+    .dica-horario,
+    .dica-inicio {
+      font-size: 0.75rem;
+      line-height: 1.3;
+      color: var(--text-secondary, #666);
+    }
+  }
+}
+
+// =============================================================================
+// RESUMO MENSAL CARD
+// =============================================================================
+
+.resumo-mensal-card {
+  border-radius: 12px;
+  box-shadow: $shadow-soft;
+  height: 100%;
+  background: var(--card-bg, #ffffff);
+
+  .ant-card-head {
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+    padding: 2px $space-xs; // Reduzido header
+    
+    .ant-card-head-title {
+      font-weight: 600;
+      color: var(--text-primary, #2c3e50);
+      font-size: 0.75rem; // Reduzido
+    }
+  }
+
+  .ant-card-body {
+    padding: $space-xs; // Mais compacto
+    
+    @media (max-width: $mobile-max) {
+      padding: 2px;
+    }
+  }
+
+  .info-row {
+    padding: 2px 0; // Reduzido para coincidir com meu-dia-card
+    border-bottom: 1px solid var(--border-color, #f8f9fa);
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &.banco-row {
+      border-bottom: 2px solid var(--border-color, #e9ecef);
+      padding-bottom: $space-xs; // Reduzido
+      margin-bottom: $space-xs; // Reduzido
+    }
+
+    &.banco-acumulado-row {
+      background: var(--bg-secondary, #f8f9fa);
+      padding: $space-xs; // Reduzido
+      border-radius: 6px;
+      margin: $space-xs 0; // Reduzido
+      border-left: 3px solid $info-primary;
+    }
+
+    .icon {
+      font-size: 1.2rem;
+      
+      &.banco {
+        color: $info-primary;
+      }
+
+      &.meta {
+        color: $success-primary;
+      }
+
+      &.semana {
+        color: $warning-primary;
+      }
+
+      &.banco-acumulado {
+        color: #8B5A3C; // Cor diferenciada para banco acumulado
+        font-size: 1.4rem;
+      }
+    }
+
+    .valor-banco {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+
+      &.positiva {
+        color: $success-primary;
+      }
+
+      &.negativa {
+        color: $danger-primary;
+      }
+
+      &.neutra {
+        color: #6c757d;
+      }
+    }
+
+    .valor-semana {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .valor-banco-acumulado {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+
+      &.positiva {
+        color: $success-primary;
+      }
+
+      &.negativa {
+        color: $danger-primary;
+      }
+
+      &.neutra {
+        color: #6c757d;
+      }
+    }
+
+    .periodo-info {
+      font-size: 0.7rem;
+      color: var(--text-secondary, #666);
+      font-weight: 400;
+    }
+
+    .tendencia-symbol {
+      font-size: 1.2rem;
+      margin-left: $space-xs;
+    }
+  }
+
+  .meta-progress {
+    margin-top: $space-sm;
+
+    .meta-values {
+      display: flex;
+      justify-content: space-between;
+      margin-top: $space-xs;
+
+      .meta-atual {
+        font-weight: 600;
+        color: $info-primary;
+      }
+
+      .meta-total {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .justificativas-info {
+    margin-top: $space-md;
+    padding-top: $space-md;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .detalhamento-banco {
+    background: var(--bg-secondary, #f8f9fa);
+    padding: $space-xs; // Reduzido
+    border-radius: 4px;
+    margin-top: $space-xs; // Reduzido
+    border: 1px solid var(--border-color, #e9ecef);
+
+    .detalhamento-titulo {
+      font-size: 0.7rem; // Ligeiramente menor
+      color: var(--text-primary, #333);
+      margin-bottom: 2px; // Reduzido
+      display: block;
+    }
+
+    .periodos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px; // Reduzido
+
+      .periodo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1px $space-xs; // Reduzido
+        background: var(--card-bg, #ffffff);
+        border-radius: 3px;
+        border: 1px solid var(--border-color, #f0f0f0);
+
+        .periodo-nome {
+          font-size: 0.7rem; // Ligeiramente menor
+          color: var(--text-secondary, #666);
+          font-weight: 500;
+        }
+
+        .periodo-saldo {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.75rem; // Ligeiramente menor
+          font-weight: 600;
+
+          &.positivo {
+            color: $success-primary;
+          }
+
+          &.negativo {
+            color: $danger-primary;
+          }
+        }
+      }
+    }
+  }
+
+  .mensagem-mensal {
+    background: $neutral-light;
+    padding: $space-xs; // Reduzido drasticamente
+    border-radius: 6px;
+    margin-top: $space-xs; // Reduzido
+    text-align: center;
+
+    .parabeniza,
+    .quase-meta,
+    .banco-positivo,
+    .banco-acumulado-positivo,
+    .banco-acumulado-negativo {
+      font-weight: 500;
+      font-size: 0.75rem; // Ligeiramente menor
+      display: block;
+      margin: 1px 0; // Reduzido
+      line-height: 1.2; // Compacto
+    }
+  }
+}
+
+// =============================================================================
+// AÇÕES RÁPIDAS CARD
+// =============================================================================
+
+.acoes-rapidas-card {
+  border-radius: 12px;
+  box-shadow: $shadow-soft;
+  background: var(--card-bg, #ffffff);
+
+  .ant-card-head {
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+    padding: 2px $space-xs; // Reduzido header
+    
+    .ant-card-head-title {
+      font-weight: 600;
+      color: var(--text-primary, #2c3e50);
+      font-size: 0.75rem; // Reduzido
+    }
+  }
+
+  .ant-card-body {
+    padding: $space-xs; // Mais compacto
+    
+    @media (max-width: $mobile-max) {
+      padding: 2px;
+    }
+  }
+
+  .acoes-container {
+    .acoes-grid {
+      width: 100%;
+      justify-content: center;
+
+      @media (max-width: $mobile-max) {
+        justify-content: stretch;
+      }
+    }
+
+    .acao-button {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-medium;
+      }
+
+      &.acao-justificar {
+        background: $warning-primary;
+        border-color: $warning-primary;
+        color: white;
+
+        &:hover {
+          background: #e6a500;  // $warning-primary darkened by 10%
+          border-color: #e6a500;
+        }
+      }
+
+      @media (max-width: $mobile-max) {
+        width: 100%;
+        margin-bottom: $space-sm;
+      }
+    }
+
+    .dicas-contextuais {
+      background: var(--bg-secondary, #f8f9fa);
+      padding: $space-xs;
+      border-radius: 4px;
+      margin-top: $space-xs; // Reduzido
+      text-align: center;
+
+      .dica {
+        font-size: 0.7rem; // Ligeiramente menor
+        line-height: 1.2; // Mais compacto
+        display: block;
+        color: var(--text-secondary, #666);
+      }
+    }
+
+    .atalhos-info {
+      margin-top: $space-xs;
+      text-align: center;
+
+      .atalhos-texto {
+        font-size: 0.7rem;
+        color: var(--text-secondary, #6c757d);
+      }
+    }
+  }
+}
+
+// =============================================================================
+// RESPONSIVIDADE E ACESSIBILIDADE
+// =============================================================================
+
+// Mobile adjustments (425px e menor)
+@media (max-width: $mobile-max) {
+  .reader-dashboard {
+    padding: $space-xs;
+    
+    &__header {
+      margin-bottom: $space-xs;
+    }
+
+    &__title {
+      font-size: 0.85rem;
+    }
+
+    &__grid {
+      .ant-row {
+        margin: 0 !important;
+      }
+
+      .ant-col {
+        padding: $space-xs !important;
+      }
+    }
+
+    &__status {
+      margin-bottom: $space-xs;
+    }
+  }
+
+  .status-atual-card {
+    .ant-card-body {
+      padding: $space-sm;
+    }
+
+    .status-header {
+      margin-bottom: $space-xs;
+
+      .status-text {
+        font-size: 1rem;
+      }
+
+      .hora-atual {
+        font-size: 0.8rem;
+      }
+
+      .status-icon {
+        font-size: 1.2rem;
+        margin-right: $space-xs;
+      }
+    }
+
+    .tempo-info {
+      margin-bottom: $space-xs;
+
+      .tempo-stats {
+        flex-direction: row;
+        gap: $space-sm;
+      }
+
+      .tempo-item {
+        .tempo-label {
+          font-size: 0.7rem;
+          margin-bottom: 1px;
+        }
+
+        .tempo-value {
+          font-size: 0.85rem;
+        }
+      }
+    }
+
+    .progresso-container {
+      margin-bottom: $space-xs;
+
+      .progresso-barra {
+        .ant-progress-outer .ant-progress-inner {
+          height: 4px !important;
+        }
+      }
+
+      .progresso-text {
+        font-size: 0.7rem;
+        margin-top: 1px;
+      }
+    }
+
+    .mensagem-motivacional {
+      .mensagem-text {
+        font-size: 0.7rem;
+      }
+    }
+  }
+
+  .meu-dia-card,
+  .resumo-mensal-card,
+  .acoes-rapidas-card {
+    margin-bottom: $space-xs;
+
+    .ant-card-head {
+      padding: 2px $space-xs;
+
+      .ant-card-head-title {
+        font-size: 0.75rem;
+      }
+    }
+
+    .ant-card-body {
+      padding: $space-xs;
+    }
+
+    .info-row {
+      padding: 2px 0;
+
+      .icon {
+        font-size: 0.9rem;
+      }
+
+      .valor-entrada,
+      .valor-saida,
+      .valor-pausas,
+      .valor-meta,
+      .valor-banco,
+      .valor-semana {
+        font-size: 0.8rem;
+      }
+
+      .limite-pausas {
+        font-size: 0.7rem;
+      }
+    }
+
+    .mensagem-contextual,
+    .mensagem-mensal,
+    .dicas-contextuais {
+      padding: 2px;
+      margin-top: 2px;
+
+      .dica-horario,
+      .dica-inicio,
+      .parabeniza,
+      .quase-meta,
+      .banco-positivo,
+      .dica {
+        font-size: 0.7rem;
+        line-height: 1.2;
+      }
+    }
+  }
+
+  .acoes-rapidas-card {
+    .acoes-container {
+      .acoes-grid {
+        gap: $space-xs;
+      }
+
+      .acao-button {
+        width: 100%;
+        height: 32px;
+        font-size: 0.75rem;
+        margin-bottom: $space-xs;
+
+        .anticon {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  // Otimizações específicas para telas muito pequenas
+  @media (max-width: 375px) {
+    .reader-dashboard {
+      padding: 2px;
+      
+      &__title {
+        font-size: 0.8rem;
+      }
+    }
+
+    .status-atual-card {
+      .tempo-stats {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .tempo-item {
+        .tempo-value {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+// Acessibilidade
+@media (prefers-reduced-motion: reduce) {
+  .acao-button {
+    transition: none !important;
+
+    &:hover {
+      transform: none !important;
+    }
+  }
+
+  .progresso-barra .ant-progress-bg {
+    transition: none !important;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .status-atual-card {
+    border: 2px solid #000;
+  }
+
+  .meu-dia-card,
+  .resumo-mensal-card,
+  .acoes-rapidas-card {
+    border: 1px solid #333;
+  }
+}
+
+// Dark mode support
+body.dark {
+  .reader-dashboard {
+    &__title {
+      color: var(--text-color, #f0f0f0);
+    }
+  }
+
+  .status-atual-card,
+  .meu-dia-card,
+  .resumo-mensal-card,
+  .acoes-rapidas-card {
+    background: var(--card-bg, #1a1a1a) !important;
+    color: var(--text-color, #f0f0f0);
+
+    .ant-card-head {
+      background: var(--sidebar-bg, #1e1e1e) !important;
+      border-color: var(--border-color, #333) !important;
+
+      .ant-card-head-title {
+        color: var(--text-color, #f0f0f0) !important;
+      }
+    }
+
+    .info-row {
+      border-color: var(--border-color, #333) !important;
+    }
+
+    .status-text,
+    .tempo-value,
+    .valor-entrada,
+    .valor-saida,
+    .valor-pausas,
+    .valor-meta,
+    .valor-banco,
+    .valor-semana {
+      color: var(--text-color, #f0f0f0) !important;
+    }
+
+    .hora-atual,
+    .tempo-label,
+    .limite-pausas,
+    .progresso-text,
+    .mensagem-text {
+      color: #aaa !important;
+    }
+  }
+
+  .mensagem-contextual,
+  .mensagem-mensal,
+  .dicas-contextuais {
+    background: var(--hover-bg, #2c2c2c) !important;
+    color: var(--text-color, #f0f0f0) !important;
+
+    .dica-horario,
+    .dica-inicio,
+    .parabeniza,
+    .quase-meta,
+    .banco-positivo,
+    .dica {
+      color: #ccc !important;
+    }
+  }
+
+  .progresso-barra {
+    .ant-progress-outer .ant-progress-inner {
+      background: var(--border-color, #333) !important;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "../components/Admin/Dashboard";
+import ReaderDashboard from "../components/Reader/ReaderDashboard";
 import { AuthProvider } from "../context/AuthProvider";
 import PrivateRoute from "../components/Auth/PrivateRoute";
 import ManageUsers from "../components/Admin/ManageUsers";
@@ -19,6 +20,7 @@ function App() {
 
           <Route element={<PrivateRoute><ProtectedLayout /></PrivateRoute>}>
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/reader-dashboard" element={<PrivateRoute><ReaderDashboard /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} />
             <Route path="/admin/manage-users" element={<PrivateRoute roleRequired="admin"><ManageUsers /></PrivateRoute>} />
             <Route path="/admin/goals" element={<PrivateRoute roleRequired="admin"><GoalsManager /></PrivateRoute>} />

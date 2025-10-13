@@ -8,6 +8,7 @@ import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 
 import { useAuth } from "../../context/useAuth";
@@ -35,16 +36,18 @@ const SidebarMenu = () => {
     }
   };
 
-  const menuItems = [
-    { key: "/dashboard", label: "Dashboard", icon: <BarChartOutlined /> },
-    ...(role === "admin"
-      ? [
+  const menuItems = role === "admin" 
+    ? [
+        { key: "/dashboard", label: "Dashboard Admin", icon: <BarChartOutlined /> },
         { key: "/admin/manage-users", label: "Usuários", icon: <UserOutlined /> },
         { key: "/admin/goals", label: "Metas", icon: <CalendarOutlined /> },
+        { key: "/profile", label: "Perfil", icon: <SettingOutlined /> },
       ]
-      : []),
-    { key: "/profile", label: "Perfil", icon: <SettingOutlined /> },
-  ];
+    : [
+        { key: "/reader-dashboard", label: "Meu Ponto", icon: <HomeOutlined /> },
+        { key: "/dashboard", label: "Histórico", icon: <BarChartOutlined /> },
+        { key: "/profile", label: "Perfil", icon: <SettingOutlined /> },
+      ];
 
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
