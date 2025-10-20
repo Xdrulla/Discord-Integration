@@ -42,17 +42,12 @@ export const handleMessage = async (message) => {
  * @param {string} discordId - ID do Discord
  */
 const processarMensagemNLP = async (message, content, nomeUsuario, discordId) => {
-  const { intent, score } = await nlpService.classificarMensagem(content)
-
-  console.log(`📊 Mensagem: "${content}" | Intent: ${intent} | Confiança: ${(score * 100).toFixed(1)}%`)
+  const { intent } = await nlpService.classificarMensagem(content)
 
   if (intent === 'neutro') return
 
   if (intent === 'entrada' || intent === 'saida') {
     await apiService.registrar(nomeUsuario, content, discordId)
-    console.log(`✅ ${intent.toUpperCase()} registrada para ${nomeUsuario}`)
-
-    // Se for saída, verificar se precisa notificar sobre horas trabalhadas
     if (intent === 'saida') {
       await verificarNotificacaoHoras(message, nomeUsuario)
     }

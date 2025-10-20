@@ -30,7 +30,6 @@ exports.getSession = async (userId) => {
     const hoursDiff = (now - lastActivity) / (1000 * 60 * 60);
 
     if (hoursDiff > SESSION_CONFIG.EXPIRATION_HOURS) {
-      console.log(`🕐 Sessão expirada para usuário ${userId} (${hoursDiff.toFixed(1)}h de inatividade)`);
       await exports.clearSession(userId);
       return [];
     }
@@ -64,7 +63,6 @@ exports.addMessage = async (userId, role, content) => {
       userId
     });
 
-    console.log(`💬 Mensagem adicionada à sessão de ${userId} (${recentMessages.length} msgs no histórico)`);
   } catch (error) {
     console.error('❌ Erro ao adicionar mensagem:', error.message);
   }
@@ -79,7 +77,6 @@ exports.clearSession = async (userId) => {
 
   try {
     await db.collection('chat_sessions').doc(userId).delete();
-    console.log(`🗑️  Sessão limpa para usuário ${userId}`);
   } catch (error) {
     console.error('❌ Erro ao limpar sessão:', error.message);
   }

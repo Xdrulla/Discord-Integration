@@ -23,12 +23,10 @@ export const handlePresenceUpdate = async (oldPresence, newPresence) => {
 
     if (deveIniciarPausa(statusAntigo, statusAtual, registro)) {
       await apiService.iniciarPausa(usuario, discordId)
-      console.log(`⏸️  Pausa iniciada para ${usuario} (${statusAntigo} → ${statusAtual})`)
     }
 
     if (deveFinalizarPausa(statusAntigo, statusAtual, registro)) {
       await apiService.finalizarPausa(usuario, discordId)
-      console.log(`▶️  Pausa finalizada para ${usuario} (${statusAntigo} → ${statusAtual})`)
     }
   } catch (error) {
     console.error("❌ Erro inesperado na atualização de presença:", error.message)
