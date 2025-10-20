@@ -74,6 +74,50 @@
             "intent": "entrada",
             "domain": "default"
           },
+          "boa,gal,tard": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "boa,noit": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "boa,noit,pessoal": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "cheg": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "chegu": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "aqu,to": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "aqu,estou": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "volt": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "de,volt": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "de,estou,volt": {
+            "intent": "entrada",
+            "domain": "default"
+          },
+          "retorn": {
+            "intent": "entrada",
+            "domain": "default"
+          },
           "ate,log": {
             "intent": "saida",
             "domain": "default"
@@ -129,11 +173,156 @@
           "bye": {
             "intent": "saida",
             "domain": "default"
+          },
+          "tchau": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "pessoal,tchau": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "sair,vou": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "estou,saind": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "encerr,hoj,por": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "finaliz": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,segund": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "a,ate,proxim": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ate,mais,tard": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "desped,me": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ness,vou": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ir,que,tenh": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "ir,precis": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "embor,vou": {
+            "intent": "saida",
+            "domain": "default"
+          },
+          "dar,rap,said,uma,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "faz,interval,um,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "ja,volt": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "a,daqu,eu,pouc,volt": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "almoc,ja,volt,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "almoc,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "almoc,do,hor": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "lanch,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "banheir,no,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "brb": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "em,instant,volt": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "alguns,minut,por,saind": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "dar,uma,volt,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "paus,rap": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "afk,minut,por,uns": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "afk": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "ausent,temporari": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "pouc,sair,um,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "e,sai,volt": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "algo,rap,resolv,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "atend,ligaca,uma,vou": {
+            "intent": "neutro",
+            "domain": "default"
+          },
+          "caf,par,paus": {
+            "intent": "neutro",
+            "domain": "default"
           }
         },
         "intentDict": {
           "entrada": "default",
-          "saida": "default"
+          "saida": "default",
+          "neutro": "default"
         },
         "sentences": [
           {
@@ -184,6 +373,61 @@
           {
             "domain": "default",
             "utterance": "boa tarde pessoal",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "boa tarde galera",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "boa noite",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "boa noite pessoal",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "chegando",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "cheguei",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "to aqui",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "estou aqui",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "voltei",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "de volta",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "estou de volta",
+            "intent": "entrada"
+          },
+          {
+            "domain": "default",
+            "utterance": "retornando",
             "intent": "entrada"
           },
           {
@@ -258,13 +502,193 @@
           },
           {
             "domain": "default",
-            "utterance": "bye, bye",
+            "utterance": "bye bye",
             "intent": "saida"
           },
           {
             "domain": "default",
-            "utterance": "bye bye",
+            "utterance": "tchau",
             "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "tchau pessoal",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou sair",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "estou saindo",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "encerrando por hoje",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "finalizando",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até segunda",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até a próxima",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "até mais tarde",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "me despedindo",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou nessa",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "tenho que ir",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "preciso ir",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou embora",
+            "intent": "saida"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou dar uma saída rápida",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou fazer um intervalo",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "volto já",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "daqui a pouco eu volto",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou almoçar, já volto",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou almoçar",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "hora do almoço",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou lanchar",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou no banheiro",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "brb",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "já volto",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "volto em instantes",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "saindo por alguns minutos",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou dar uma volta",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "pausa rápida",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "afk por uns minutos",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "afk",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "ausente temporariamente",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou sair um pouco",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "saio e volto",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou resolver algo rápido",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "vou atender uma ligação",
+            "intent": "neutro"
+          },
+          {
+            "domain": "default",
+            "utterance": "pausa para café",
+            "intent": "neutro"
           }
         ],
         "domains": {
@@ -292,6 +716,14 @@
               "tod": 1,
               "boa": 1,
               "tard": 1,
+              "noit": 1,
+              "cheg": 1,
+              "to": 1,
+              "aqu": 1,
+              "estou": 1,
+              "volt": 1,
+              "de": 1,
+              "retorn": 1,
               "ate": 1,
               "log": 1,
               "brev": 1,
@@ -304,14 +736,65 @@
               "fal": 1,
               "fui": 1,
               "final": 1,
-              "de": 1,
               "feri": 1,
               "fim": 1,
-              "bye": 1
+              "bye": 1,
+              "tchau": 1,
+              "vou": 1,
+              "sair": 1,
+              "saind": 1,
+              "encerr": 1,
+              "por": 1,
+              "hoj": 1,
+              "finaliz": 1,
+              "segund": 1,
+              "proxim": 1,
+              "me": 1,
+              "desped": 1,
+              "ness": 1,
+              "tenh": 1,
+              "ir": 1,
+              "precis": 1,
+              "embor": 1,
+              "dar": 1,
+              "uma": 1,
+              "said": 1,
+              "rap": 1,
+              "faz": 1,
+              "um": 1,
+              "interval": 1,
+              "ja": 1,
+              "daqu": 1,
+              "pouc": 1,
+              "eu": 1,
+              "almoc": 1,
+              "hor": 1,
+              "do": 1,
+              "lanch": 1,
+              "no": 1,
+              "banheir": 1,
+              "brb": 1,
+              "em": 1,
+              "instant": 1,
+              "alguns": 1,
+              "minut": 1,
+              "paus": 1,
+              "afk": 1,
+              "uns": 1,
+              "ausent": 1,
+              "temporari": 1,
+              "sai": 1,
+              "resolv": 1,
+              "algo": 1,
+              "atend": 1,
+              "ligaca": 1,
+              "par": 1,
+              "caf": 1
             },
             "intents": {
               "entrada": 1,
-              "saida": 1
+              "saida": 1,
+              "neutro": 1
             },
             "intentFeatures": {
               "entrada": {
@@ -325,7 +808,15 @@
                 "a": 1,
                 "tod": 1,
                 "boa": 1,
-                "tard": 1
+                "tard": 1,
+                "noit": 1,
+                "cheg": 1,
+                "to": 1,
+                "aqu": 1,
+                "estou": 1,
+                "volt": 1,
+                "de": 1,
+                "retorn": 1
               },
               "saida": {
                 "ate": 1,
@@ -346,7 +837,70 @@
                 "feri": 1,
                 "fim": 1,
                 "gal": 1,
-                "bye": 1
+                "bye": 1,
+                "tchau": 1,
+                "vou": 1,
+                "sair": 1,
+                "estou": 1,
+                "saind": 1,
+                "encerr": 1,
+                "por": 1,
+                "hoj": 1,
+                "finaliz": 1,
+                "segund": 1,
+                "a": 1,
+                "proxim": 1,
+                "tard": 1,
+                "me": 1,
+                "desped": 1,
+                "ness": 1,
+                "tenh": 1,
+                "ir": 1,
+                "precis": 1,
+                "embor": 1
+              },
+              "neutro": {
+                "vou": 1,
+                "dar": 1,
+                "uma": 1,
+                "said": 1,
+                "rap": 1,
+                "faz": 1,
+                "um": 1,
+                "interval": 1,
+                "volt": 1,
+                "ja": 1,
+                "daqu": 1,
+                "a": 1,
+                "pouc": 1,
+                "eu": 1,
+                "almoc": 1,
+                "hor": 1,
+                "do": 1,
+                "lanch": 1,
+                "no": 1,
+                "banheir": 1,
+                "brb": 1,
+                "em": 1,
+                "instant": 1,
+                "saind": 1,
+                "por": 1,
+                "alguns": 1,
+                "minut": 1,
+                "paus": 1,
+                "afk": 1,
+                "uns": 1,
+                "ausent": 1,
+                "temporari": 1,
+                "sair": 1,
+                "sai": 1,
+                "e": 1,
+                "resolv": 1,
+                "algo": 1,
+                "atend": 1,
+                "ligaca": 1,
+                "par": 1,
+                "caf": 1
               }
             },
             "featuresToIntent": {
@@ -362,7 +916,8 @@
                 "saida"
               ],
               "e": [
-                "entrada"
+                "entrada",
+                "neutro"
               ],
               "ai": [
                 "entrada"
@@ -375,7 +930,9 @@
                 "saida"
               ],
               "a": [
-                "entrada"
+                "entrada",
+                "saida",
+                "neutro"
               ],
               "tod": [
                 "entrada"
@@ -384,6 +941,34 @@
                 "entrada"
               ],
               "tard": [
+                "entrada",
+                "saida"
+              ],
+              "noit": [
+                "entrada"
+              ],
+              "cheg": [
+                "entrada"
+              ],
+              "to": [
+                "entrada"
+              ],
+              "aqu": [
+                "entrada"
+              ],
+              "estou": [
+                "entrada",
+                "saida"
+              ],
+              "volt": [
+                "entrada",
+                "neutro"
+              ],
+              "de": [
+                "entrada",
+                "saida"
+              ],
+              "retorn": [
                 "entrada"
               ],
               "ate": [
@@ -422,9 +1007,6 @@
               "final": [
                 "saida"
               ],
-              "de": [
-                "saida"
-              ],
               "feri": [
                 "saida"
               ],
@@ -433,6 +1015,163 @@
               ],
               "bye": [
                 "saida"
+              ],
+              "tchau": [
+                "saida"
+              ],
+              "vou": [
+                "saida",
+                "neutro"
+              ],
+              "sair": [
+                "saida",
+                "neutro"
+              ],
+              "saind": [
+                "saida",
+                "neutro"
+              ],
+              "encerr": [
+                "saida"
+              ],
+              "por": [
+                "saida",
+                "neutro"
+              ],
+              "hoj": [
+                "saida"
+              ],
+              "finaliz": [
+                "saida"
+              ],
+              "segund": [
+                "saida"
+              ],
+              "proxim": [
+                "saida"
+              ],
+              "me": [
+                "saida"
+              ],
+              "desped": [
+                "saida"
+              ],
+              "ness": [
+                "saida"
+              ],
+              "tenh": [
+                "saida"
+              ],
+              "ir": [
+                "saida"
+              ],
+              "precis": [
+                "saida"
+              ],
+              "embor": [
+                "saida"
+              ],
+              "dar": [
+                "neutro"
+              ],
+              "uma": [
+                "neutro"
+              ],
+              "said": [
+                "neutro"
+              ],
+              "rap": [
+                "neutro"
+              ],
+              "faz": [
+                "neutro"
+              ],
+              "um": [
+                "neutro"
+              ],
+              "interval": [
+                "neutro"
+              ],
+              "ja": [
+                "neutro"
+              ],
+              "daqu": [
+                "neutro"
+              ],
+              "pouc": [
+                "neutro"
+              ],
+              "eu": [
+                "neutro"
+              ],
+              "almoc": [
+                "neutro"
+              ],
+              "hor": [
+                "neutro"
+              ],
+              "do": [
+                "neutro"
+              ],
+              "lanch": [
+                "neutro"
+              ],
+              "no": [
+                "neutro"
+              ],
+              "banheir": [
+                "neutro"
+              ],
+              "brb": [
+                "neutro"
+              ],
+              "em": [
+                "neutro"
+              ],
+              "instant": [
+                "neutro"
+              ],
+              "alguns": [
+                "neutro"
+              ],
+              "minut": [
+                "neutro"
+              ],
+              "paus": [
+                "neutro"
+              ],
+              "afk": [
+                "neutro"
+              ],
+              "uns": [
+                "neutro"
+              ],
+              "ausent": [
+                "neutro"
+              ],
+              "temporari": [
+                "neutro"
+              ],
+              "sai": [
+                "neutro"
+              ],
+              "resolv": [
+                "neutro"
+              ],
+              "algo": [
+                "neutro"
+              ],
+              "atend": [
+                "neutro"
+              ],
+              "ligaca": [
+                "neutro"
+              ],
+              "par": [
+                "neutro"
+              ],
+              "caf": [
+                "neutro"
               ]
             },
             "neuralNetwork": {
@@ -459,6 +1198,14 @@
                 "tod",
                 "boa",
                 "tard",
+                "noit",
+                "cheg",
+                "to",
+                "aqu",
+                "estou",
+                "volt",
+                "de",
+                "retorn",
                 "ate",
                 "log",
                 "brev",
@@ -471,75 +1218,330 @@
                 "fal",
                 "fui",
                 "final",
-                "de",
                 "feri",
                 "fim",
-                "bye"
+                "bye",
+                "tchau",
+                "vou",
+                "sair",
+                "saind",
+                "encerr",
+                "por",
+                "hoj",
+                "finaliz",
+                "segund",
+                "proxim",
+                "me",
+                "desped",
+                "ness",
+                "tenh",
+                "ir",
+                "precis",
+                "embor",
+                "dar",
+                "uma",
+                "said",
+                "rap",
+                "faz",
+                "um",
+                "interval",
+                "ja",
+                "daqu",
+                "pouc",
+                "eu",
+                "almoc",
+                "hor",
+                "do",
+                "lanch",
+                "no",
+                "banheir",
+                "brb",
+                "em",
+                "instant",
+                "alguns",
+                "minut",
+                "paus",
+                "afk",
+                "uns",
+                "ausent",
+                "temporari",
+                "sai",
+                "resolv",
+                "algo",
+                "atend",
+                "ligaca",
+                "par",
+                "caf"
               ],
               "intents": [
                 "entrada",
-                "saida"
+                "saida",
+                "neutro"
               ],
               "perceptrons": [
                 [
-                  2.9540016651153564,
-                  9.819194793701172,
-                  0.0023225671611726284,
-                  0.0018645157106220722,
-                  0.0018645157106220722,
-                  0.005251487251371145,
-                  0.003133669961243868,
-                  0.0006923594628460705,
-                  0.0006923594628460705,
-                  6.387618541717529,
-                  6.387618541717529,
-                  -2.1477487087249756,
-                  -0.30926546454429626,
-                  -0.2744998633861542,
-                  -0.687863290309906,
-                  -0.20140379667282104,
-                  -0.17244835197925568,
-                  -2.48883318901062,
-                  -0.06864012032747269,
-                  -0.06864012032747269,
-                  -1.508871078491211,
-                  -1.5088518857955933,
-                  -1.3149380683898926,
-                  -2.3516197204589844,
-                  -4.469505786895752,
-                  -0.8249796628952026,
-                  -1.582502841949463,
-                  1.5091256999346208
+                  -4.318871974945068,
+                  7.575311183929443,
+                  0.3350110352039337,
+                  -4.577032089233398,
+                  5.336125373840332,
+                  2.4699764251708984,
+                  0.4561886191368103,
+                  -1.830747365951538,
+                  2.410315752029419,
+                  2.98762845993042,
+                  0.8658537864685059,
+                  0.9742264151573181,
+                  4.212341785430908,
+                  -0.49102845788002014,
+                  4.568509578704834,
+                  -0.38188406825065613,
+                  4.171642780303955,
+                  0.11957814544439316,
+                  4.175387859344482,
+                  -8.951705932617188,
+                  -1.227919340133667,
+                  -1.2268315553665161,
+                  -2.5071284770965576,
+                  -1.225746750831604,
+                  -1.224662184715271,
+                  -6.009318828582764,
+                  -2.217839479446411,
+                  -0.15212410688400269,
+                  -10.106671333312988,
+                  -10.10445499420166,
+                  -2.772451162338257,
+                  -6.182091236114502,
+                  -2.9286468029022217,
+                  -10.143021583557129,
+                  -10.444451332092285,
+                  -9.144638061523438,
+                  -1.0240594148635864,
+                  -9.709405899047852,
+                  -3.271294116973877,
+                  -3.609492063522339,
+                  -3.271294116973877,
+                  -10.09373664855957,
+                  -1.2084143161773682,
+                  -0.01193025428801775,
+                  -5.067276477813721,
+                  -5.067276477813721,
+                  -1.0162467956542969,
+                  -1.9135915040969849,
+                  -6.027365207672119,
+                  -4.11263370513916,
+                  -1.0138638019561768,
+                  -3.8105647563934326,
+                  -3.8105647563934326,
+                  -0.12713290750980377,
+                  -4.126819133758545,
+                  -0.3408592641353607,
+                  -0.3408592641353607,
+                  -0.3408592641353607,
+                  -14.350138664245605,
+                  -4.217199802398682,
+                  -4.217199802398682,
+                  -4.217199802398682,
+                  -3.6588871479034424,
+                  -3.243351459503174,
+                  -3.243351459503174,
+                  -1.011420488357544,
+                  -0.5089216232299805,
+                  -0.5089216232299805,
+                  -10.086528778076172,
+                  -7.173279285430908,
+                  -7.173279285430908,
+                  -0.0801718458533287,
+                  -0.31563887000083923,
+                  -6.009547233581543,
+                  -10.08341121673584,
+                  -0.1927655041217804,
+                  -5.062380790710449,
+                  -5.062380790710449,
+                  -9.913150787353516,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -2.069216728210449,
+                  -2.069216728210449,
+                  10.161673486162034
                 ],
                 [
-                  -3.4041950702667236,
-                  -9.72584056854248,
-                  3.27754545211792,
-                  -0.5518180727958679,
-                  -0.5518180727958679,
-                  -0.6152719259262085,
-                  3.0206711292266846,
-                  -0.7561493515968323,
-                  -0.7561493515968323,
-                  -6.548445224761963,
-                  -6.548445224761963,
-                  3.0258920192718506,
-                  1.3676068782806396,
-                  1.3760364055633545,
-                  -2.2633724212646484,
-                  1.3512234687805176,
-                  1.344319462776184,
-                  1.6468408107757568,
-                  -0.15353924036026,
-                  -0.15353924036026,
-                  4.425032615661621,
-                  4.426938533782959,
-                  0.6159964799880981,
-                  1.8002758026123047,
-                  4.528357028961182,
-                  1.192923665046692,
-                  4.400413990020752,
-                  9.896714172888533
+                  -1.710617184638977,
+                  -9.853987693786621,
+                  1.9237502813339233,
+                  -0.77437824010849,
+                  -0.4093708395957947,
+                  -9.588109016418457,
+                  1.9315688610076904,
+                  -0.3199780583381653,
+                  -0.8085808157920837,
+                  -14.480437278747559,
+                  2.9129185676574707,
+                  -2.2098419666290283,
+                  -9.589486122131348,
+                  -1.6585432291030884,
+                  -9.22482681274414,
+                  -0.39561620354652405,
+                  -9.586223602294922,
+                  -0.3332538902759552,
+                  -9.584847450256348,
+                  3.553805351257324,
+                  1.106681227684021,
+                  1.1090930700302124,
+                  -1.8209847211837769,
+                  1.0595333576202393,
+                  1.0474433898925781,
+                  2.3564064502716064,
+                  0.08214090764522552,
+                  -1.4077893495559692,
+                  4.677419185638428,
+                  4.678781986236572,
+                  1.4148796796798706,
+                  4.381576061248779,
+                  2.362318277359009,
+                  4.654775142669678,
+                  3.6551249027252197,
+                  -2.3483736515045166,
+                  6.985745906829834,
+                  5.039927959442139,
+                  3.7145514488220215,
+                  -2.7832348346710205,
+                  3.7145514488220215,
+                  4.683830261230469,
+                  1.0700076818466187,
+                  1.396594524383545,
+                  2.3296995162963867,
+                  2.3296995162963867,
+                  6.990002632141113,
+                  1.490083932876587,
+                  3.072597026824951,
+                  1.5832240581512451,
+                  6.991365432739258,
+                  -1.330736756324768,
+                  -3.4080121517181396,
+                  -1.2507274150848389,
+                  -4.951510429382324,
+                  -1.8603992462158203,
+                  -7.696439266204834,
+                  -1.8603992462158203,
+                  -2.3087682723999023,
+                  -0.7264225482940674,
+                  -6.590492248535156,
+                  -0.7264225482940674,
+                  -7.293773651123047,
+                  -1.5924814939498901,
+                  -1.5924814939498901,
+                  -7.293192386627197,
+                  -3.648252487182617,
+                  -3.648252487182617,
+                  -9.597164154052734,
+                  -0.7771609425544739,
+                  -0.7771609425544739,
+                  -5.401512622833252,
+                  -6.49716329574585,
+                  -4.676241874694824,
+                  -9.595100402832031,
+                  -0.998878002166748,
+                  -4.810279369354248,
+                  -4.810279369354248,
+                  -0.2747337818145752,
+                  -1.3475379943847656,
+                  -1.3475379943847656,
+                  -1.9426738023757935,
+                  -1.9426738023757935,
+                  -2.4793169498443604,
+                  -2.4793169498443604,
+                  9.643405210005684
+                ],
+                [
+                  -6.146191596984863,
+                  -5.5318121910095215,
+                  -2.5023109912872314,
+                  5.467538356781006,
+                  -3.0804734230041504,
+                  -9.208054542541504,
+                  -0.8145262002944946,
+                  0.4151047170162201,
+                  -0.5499189496040344,
+                  -6.18579626083374,
+                  -3.093346357345581,
+                  -3.090798854827881,
+                  -9.210637092590332,
+                  -4.233274459838867,
+                  -5.022578716278076,
+                  -8.061448097229004,
+                  -9.054292678833008,
+                  -5.44607400894165,
+                  -9.197710990905762,
+                  -8.069768905639648,
+                  -1.2106269598007202,
+                  -1.2095500230789185,
+                  -0.10635830461978912,
+                  -1.208433985710144,
+                  -1.2072969675064087,
+                  -0.22213393449783325,
+                  -2.0237767696380615,
+                  -0.22213393449783325,
+                  -9.193577766418457,
+                  -9.1909818649292,
+                  0,
+                  -0.6132317185401917,
+                  0,
+                  -9.236403465270996,
+                  -9.185137748718262,
+                  -1.091194987297058,
+                  -8.152763366699219,
+                  -1.1797404289245605,
+                  -4.018589496612549,
+                  -1.20845365524292,
+                  -4.018589496612549,
+                  -9.179547309875488,
+                  -1.189509391784668,
+                  -1.6102393865585327,
+                  -4.613585472106934,
+                  -4.613585472106934,
+                  -8.150853157043457,
+                  -1.7427815198898315,
+                  -5.488631248474121,
+                  -3.744525909423828,
+                  -8.147150039672852,
+                  7.802774429321289,
+                  7.23184871673584,
+                  -8.65521240234375,
+                  -0.2192503660917282,
+                  0.13207115232944489,
+                  5.860145568847656,
+                  0.13207115232944489,
+                  13.027801513671875,
+                  2.6263067722320557,
+                  8.354897499084473,
+                  2.6263067722320557,
+                  4.114630222320557,
+                  0.46952369809150696,
+                  0.46952369809150696,
+                  6.1450324058532715,
+                  3.0581254959106445,
+                  3.0581254959106445,
+                  5.0895867347717285,
+                  7.014893531799316,
+                  7.014893531799316,
+                  4.5625786781311035,
+                  2.8115921020507812,
+                  5.199302673339844,
+                  5.089050769805908,
+                  -1.75081205368042,
+                  2.50787353515625,
+                  2.50787353515625,
+                  8.548508644104004,
+                  3.1367573738098145,
+                  3.1367573738098145,
+                  -0.5718125104904175,
+                  -0.5718125104904175,
+                  -0.10146564245223999,
+                  -0.10146564245223999,
+                  9.312401086968771
                 ]
               ]
             }
@@ -588,6 +1590,50 @@
       [
         "pt",
         "boa tarde pessoal"
+      ],
+      [
+        "pt",
+        "boa tarde galera"
+      ],
+      [
+        "pt",
+        "boa noite"
+      ],
+      [
+        "pt",
+        "boa noite pessoal"
+      ],
+      [
+        "pt",
+        "chegando"
+      ],
+      [
+        "pt",
+        "cheguei"
+      ],
+      [
+        "pt",
+        "to aqui"
+      ],
+      [
+        "pt",
+        "estou aqui"
+      ],
+      [
+        "pt",
+        "voltei"
+      ],
+      [
+        "pt",
+        "de volta"
+      ],
+      [
+        "pt",
+        "estou de volta"
+      ],
+      [
+        "pt",
+        "retornando"
       ],
       [
         "pt",
@@ -647,11 +1693,155 @@
       ],
       [
         "pt",
-        "bye, bye"
+        "bye bye"
       ],
       [
         "pt",
-        "bye bye"
+        "tchau"
+      ],
+      [
+        "pt",
+        "tchau pessoal"
+      ],
+      [
+        "pt",
+        "vou sair"
+      ],
+      [
+        "pt",
+        "estou saindo"
+      ],
+      [
+        "pt",
+        "encerrando por hoje"
+      ],
+      [
+        "pt",
+        "finalizando"
+      ],
+      [
+        "pt",
+        "até segunda"
+      ],
+      [
+        "pt",
+        "até a próxima"
+      ],
+      [
+        "pt",
+        "até mais tarde"
+      ],
+      [
+        "pt",
+        "me despedindo"
+      ],
+      [
+        "pt",
+        "vou nessa"
+      ],
+      [
+        "pt",
+        "tenho que ir"
+      ],
+      [
+        "pt",
+        "preciso ir"
+      ],
+      [
+        "pt",
+        "vou embora"
+      ],
+      [
+        "pt",
+        "vou dar uma saída rápida"
+      ],
+      [
+        "pt",
+        "vou fazer um intervalo"
+      ],
+      [
+        "pt",
+        "volto já"
+      ],
+      [
+        "pt",
+        "daqui a pouco eu volto"
+      ],
+      [
+        "pt",
+        "vou almoçar, já volto"
+      ],
+      [
+        "pt",
+        "vou almoçar"
+      ],
+      [
+        "pt",
+        "hora do almoço"
+      ],
+      [
+        "pt",
+        "vou lanchar"
+      ],
+      [
+        "pt",
+        "vou no banheiro"
+      ],
+      [
+        "pt",
+        "brb"
+      ],
+      [
+        "pt",
+        "já volto"
+      ],
+      [
+        "pt",
+        "volto em instantes"
+      ],
+      [
+        "pt",
+        "saindo por alguns minutos"
+      ],
+      [
+        "pt",
+        "vou dar uma volta"
+      ],
+      [
+        "pt",
+        "pausa rápida"
+      ],
+      [
+        "pt",
+        "afk por uns minutos"
+      ],
+      [
+        "pt",
+        "afk"
+      ],
+      [
+        "pt",
+        "ausente temporariamente"
+      ],
+      [
+        "pt",
+        "vou sair um pouco"
+      ],
+      [
+        "pt",
+        "saio e volto"
+      ],
+      [
+        "pt",
+        "vou resolver algo rápido"
+      ],
+      [
+        "pt",
+        "vou atender uma ligação"
+      ],
+      [
+        "pt",
+        "pausa para café"
       ]
     ]
   },

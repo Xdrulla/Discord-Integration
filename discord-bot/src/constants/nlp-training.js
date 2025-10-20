@@ -1,0 +1,93 @@
+/**
+ * Dados de treinamento para o NLP
+ * Intents: entrada, saida, neutro
+ */
+
+export const TRAINING_DATA = {
+  entrada: [
+    'bom dia',
+    'bom dia pessoal',
+    'e aí, bom dia',
+    'cheguei, bom dia',
+    'bom dia galera',
+    'bom dia a todos',
+    'bom dia a todos pessoal',
+    'bom dia a todos galera',
+    'boa tarde',
+    'boa tarde pessoal',
+    'boa tarde galera',
+    'boa noite',
+    'boa noite pessoal',
+    'chegando',
+    'cheguei',
+    'to aqui',
+    'estou aqui',
+    'voltei',
+    'de volta',
+    'estou de volta',
+    'retornando',
+  ],
+  
+  saida: [
+    'até logo',
+    'até breve',
+    'até mais pessoal',
+    'até amanhã',
+    'até depois',
+    'até semana que vem',
+    'falou',
+    'fui',
+    'bom final de semana pessoal',
+    'até mais pessoal bom final de semana',
+    'bom feriado pessoal',
+    'bom fim de semana galera',
+    'bom fim de semana pessoal',
+    'bye',
+    'bye bye',
+    'tchau',
+    'tchau pessoal',
+    'vou sair',
+    'estou saindo',
+    'encerrando por hoje',
+    'finalizando',
+    'até segunda',
+    'até a próxima',
+    'até mais tarde',
+    'me despedindo',
+    'vou nessa',
+    'tenho que ir',
+    'preciso ir',
+    'vou embora',
+  ],
+  
+  neutro: [
+    'vou dar uma saída rápida',
+    'vou fazer um intervalo',
+    'volto já',
+    'daqui a pouco eu volto',
+    'vou almoçar, já volto',
+    'vou almoçar',
+    'hora do almoço',
+    'vou lanchar',
+    'vou no banheiro',
+    'brb',
+    'já volto',
+    'volto em instantes',
+    'saindo por alguns minutos',
+    'vou dar uma volta',
+    'pausa rápida',
+    'afk por uns minutos',
+    'afk',
+    'ausente temporariamente',
+    'vou sair um pouco',
+    'saio e volto',
+    'vou resolver algo rápido',
+    'vou atender uma ligação',
+    'pausa para café',
+  ]
+}
+
+export const NLP_CONFIG = {
+  languages: ['pt'],
+  minConfidence: 0.7
+}
