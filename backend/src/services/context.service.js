@@ -99,7 +99,7 @@ exports.getRegistroData = async (discordId, usuario, data) => {
 };
 
 /**
- * Busca resumo mensal do usuário
+ * Busca resumo mensal do usuário com projeção
  * @param {string} discordId - Discord ID do usuário
  * @param {string} usuario - Nome do usuário
  * @param {number} ano - Ano
@@ -121,16 +121,70 @@ exports.getResumoMensal = async (discordId, usuario, ano, mes) => {
     const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
       'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 
+    // Calcular projeção se for mês atual
+    let projecao = '';
+    const hoje = dayjs();
+    const mesAtual = hoje.month() + 1;
+    const anoAtual = hoje.year();
+
+    if (mes === mesAtual && ano === anoAtual) {
+      projecao = await calcularProjecaoMensal(discordId, resumo);
+    }
+
     return `Resumo de ${meses[mes - 1]}/${ano} para ${usuario}:
-- Total trabalhado: ${resumo.total_horas}
+- Total trabalhado até agora: ${resumo.total_horas}
 - Meta do mês: ${resumo.meta}
-- Saldo de horas: ${resumo.saldo}
-- Status: ${resumo.saldo.includes('-') ? 'Devendo horas' : 'Banco de horas positivo'}`;
+- Saldo atual: ${resumo.saldo}
+- Status: ${resumo.saldo.includes('-') ? 'Devendo horas' : 'Banco de horas positivo'}
+${projecao}`;
   } catch (error) {
     console.error('❌ Erro ao buscar resumo mensal:', error.message);
     return '';
   }
 };
+
+/**
+ * Calcula projeção de fechamento do mês
+ * @param {string} discordId - Discord ID
+ * @param {Object} resumo - Resumo atual
+ * @returns {Promise<string>} Texto com projeção
+ */
+const calcularProjecaoMensal = async (discordId, resumo) => {
+  const { contarDiasUteisValidos } = require('../utils/timeUtils');
+  const { extrairMinutosDeString } = require('../utils/timeUtils');
+
+  const hoje = dayjs();
+  const mes = hoje.month() + 1;
+  const ano = hoje.year();
+  const diaAtual = hoje.date();
+
+  const totalDiasUteis = await contarDiasUteisValidos(ano, mes, discordId);
+
+  const diasPassados = Math.floor(diaAtual * (5 / 7));
+  const diasRestantes = Math.max(0, totalDiasUteis - diasPassados);
+
+  const minutosTrabalhados = extrairMinutosDeString(resumo.total_horas);
+  const metaMinutos = extrairMinutosDeString(resumo.meta);
+  const minutosRestantes = metaMinutos - minutosTrabalhados;
+
+  if (diasRestantes === 0) {
+    return '\n**Projeção:** Mês finalizado.';
+  }
+
+  const mediaDiaria = diasPassados > 0 ? minutosTrabalhados / diasPassados : 0;
+
+  const projecaoTotal = minutosTrabalhados + (mediaDiaria * diasRestantes);
+  const projecaoExtras = projecaoTotal - metaMinutos;
+
+  const horasRestantesPorDia = diasRestantes > 0 ? minutosRestantes / diasRestantes / 60 : 0;
+
+  return `
+**Projeção para fechamento do mês:**
+- Dias úteis restantes: aproximadamente ${diasRestantes}
+- Horas necessárias por dia para bater meta: ${horasRestantesPorDia.toFixed(1)}h
+- Se manter ritmo atual (${(mediaDiaria / 60).toFixed(1)}h/dia): vai fechar com ${projecaoExtras >= 0 ? '+' : ''}${(projecaoExtras / 60).toFixed(1)}h de saldo`;
+};
+
 
 /**
  * Monta contexto completo baseado na intenção detectada
