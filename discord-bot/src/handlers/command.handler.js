@@ -24,7 +24,7 @@ export const handleRegistroCommand = async (message, nomeUsuario) => {
  */
 export const handlePerguntaCommand = async (message, nomeUsuario, discordId) => {
   const pergunta = message.content.replace('!pergunta', '').trim()
-  
+
   if (!pergunta) return
 
   try {
@@ -41,13 +41,16 @@ export const handlePerguntaCommand = async (message, nomeUsuario, discordId) => 
  */
 export const handleDMQuestion = async (message) => {
   const pergunta = message.content.trim()
-  
+
   if (!pergunta) return
 
   try {
+    const displayName = message.member?.displayName || message.author.displayName || message.author.username
+    console.log('displayName', displayName);
+    
     const resposta = await apiService.perguntarIA(
       pergunta,
-      message.author.username,
+      displayName,
       message.author.id
     )
     await message.reply(resposta)
