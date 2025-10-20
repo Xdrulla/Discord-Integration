@@ -1,95 +1,78 @@
-const OpenAI = require('openai');
-const db = require('../config/firebase');
-const dayjs = require('dayjs');
-const { calcularResumoMensal } = require('../utils/resumeUtils');
+const chatSessionService = require('../services/chatSession.service');
+const openaiService = require('../services/openai.service');
+const contextService = require('../services/context.service');
+const { sanitizeInput, formatResponse, extractDateFromText } = require('../utils/chatHelpers');
 
-const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-});
-
+/**
+ * Handler principal do chat com IA
+ */
 exports.chat = async (req, res) => {
 	try {
-		const { question, usuario, discordId } = req.body;
+		const { question, usuario, discordId } = req.body;		
 		if (!question) {
 			return res.status(400).json({ error: 'Pergunta não fornecida.' });
 		}
 
-		let context = 'Você é o assistente do Pontobot e responde em português.';
-
-		if (usuario) {
-			const data = dayjs().format('YYYY-MM-DD');
-			const doc = await db.collection('registros').doc(`${usuario}_${data}`).get();
-			if (doc.exists) {
-				const registro = doc.data();
-				context += ` Registro de hoje para ${usuario}: entrada ${registro.entrada || 'não marcada'}, ` +
-					`saída ${registro.saida || 'não marcada'}, ` +
-					`total de horas ${registro.total_horas || 'n/a'}.`;
-			}
-		}
-
-		let extra = {};
-		try {
-			const analise = await openai.chat.completions.create({
-				model: 'gpt-3.5-turbo',
-				messages: [
-					{
-						role: 'system',
-						content: `Você é um extrator de intenção. Dado o input do usuário, retorne **somente** um JSON com a estrutura:
-{ "intencao": "resumo_mensal" | "registro_hoje" | "outra", "mes": "junho", "ano": 2025? }.
-Inclua o campo "ano" apenas se ele for mencionado pelo usuário.
-Use "outra" se a pergunta não for sobre isso.`
-					},
-					{ role: 'user', content: question }
-				],
+		const questionSanitized = sanitizeInput(question);
+		const intent = await openaiService.analyzeIntent(questionSanitized);
+		if (intent.intencao === 'limpar_contexto') {
+			await chatSessionService.clearSession(discordId);
+			return res.json({
+				answer: '🗑️ Contexto limpo! Vamos começar uma nova conversa. Como posso ajudar?'
 			});
-
-			extra = JSON.parse(analise.choices[0].message.content);
-		} catch (e) {
-			console.warn('⚠️ Não foi possível interpretar a intenção:', e.message);
 		}
 
-		if (extra.intencao === 'resumo_mensal' && extra.mes && discordId) {
-			const meses = {
-				janeiro: 1, fevereiro: 2, marco: 3, março: 3, abril: 4,
-				maio: 5, junho: 6, julho: 7, agosto: 8, setembro: 9,
-				outubro: 10, novembro: 11, dezembro: 12,
-			};
+		const historico = await chatSessionService.getSession(discordId);
+		const additionalContext = await contextService.buildContextFromIntent({
+			intent,
+			usuario,
+			discordId
+		});
 
-			const mes = meses[extra.mes.toLowerCase()];
-			let ano = new Date().getFullYear();
-
-			const anoMatch = question.match(/\b(20\d{2})\b/);
-			if (anoMatch) {
-				ano = parseInt(anoMatch[1]);
-			}
-
-			if (mes) {
-				try {
-					const resumo = await calcularResumoMensal(discordId, ano, mes);
-					if (resumo?.total_horas) {
-						context += ` O usuário ${usuario} trabalhou ${resumo.total_horas} no mês de ${extra.mes}/${ano}. `;
-						context += ` O saldo de horas foi ${resumo.saldo}, com meta de ${resumo.meta}. `;
-					} else {
-						context += ` Nenhum dado encontrado para ${usuario} no mês de ${extra.mes}/${ano}.`;
-					}
-				} catch (e) {
-					console.error('Erro ao calcular resumo mensal:', e.message);
+		if (intent.intencao === 'outra' && usuario) {
+			const dataExtraida = extractDateFromText(questionSanitized);
+			if (dataExtraida && dataExtraida !== new Date().toISOString().split('T')[0]) {
+				const registroData = await contextService.getRegistroData(usuario, dataExtraida);
+				if (registroData) {
+					intent.intencao = 'registro_data';
+					intent.data = dataExtraida;
 				}
 			}
 		}
 
-		const completion = await openai.chat.completions.create({
-			model: 'gpt-3.5-turbo',
-			messages: [
-				{ role: 'system', content: context },
-				{ role: 'user', content: question },
-			],
-		});
+		const messages = [
+			{
+				role: 'system',
+				content: contextService.getSystemContext()
+			}
+		];
 
-		const answer = completion.choices[0].message.content.trim();
-		res.json({ answer });
+		if (additionalContext) {
+			messages.push({
+				role: 'system',
+				content: `**Informações relevantes:**\n${additionalContext}`
+			});
+		}
+
+		const historicoFormatado = chatSessionService.formatMessagesForOpenAI(historico);
+		messages.push(...historicoFormatado);
+
+		messages.push({ role: 'user', content: questionSanitized });
+
+		const answer = await openaiService.chatCompletion(messages);
+		const answerFormatted = formatResponse(answer);
+
+		if (discordId) {
+			await chatSessionService.addMessage(discordId, 'user', questionSanitized);
+			await chatSessionService.addMessage(discordId, 'assistant', answerFormatted);
+		}
+
+		res.json({ answer: answerFormatted });
+
 	} catch (error) {
-		console.error('Erro na integração com a IA:', error.message);
-		res.status(500).json({ error: 'Erro ao processar a pergunta.' });
+		console.error('❌ Erro na integração com a IA:', error.message);
+		res.status(500).json({
+			error: 'Erro ao processar a pergunta. Tente novamente em instantes.'
+		});
 	}
 };
