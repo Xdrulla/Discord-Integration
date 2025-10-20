@@ -8,7 +8,7 @@ const { sanitizeInput, formatResponse, extractDateFromText } = require('../utils
  */
 exports.chat = async (req, res) => {
 	try {
-		const { question, usuario, discordId } = req.body;		
+		const { question, usuario, discordId } = req.body;
 		if (!question) {
 			return res.status(400).json({ error: 'Pergunta não fornecida.' });
 		}
@@ -29,10 +29,11 @@ exports.chat = async (req, res) => {
 			discordId
 		});
 
-		if (intent.intencao === 'outra' && usuario) {
+		if (intent.intencao === 'outra' && discordId) {
 			const dataExtraida = extractDateFromText(questionSanitized);
 			if (dataExtraida && dataExtraida !== new Date().toISOString().split('T')[0]) {
-				const registroData = await contextService.getRegistroData(usuario, dataExtraida);
+				// Usuário perguntou sobre uma data específica
+				const registroData = await contextService.getRegistroData(discordId, usuario, dataExtraida);
 				if (registroData) {
 					intent.intencao = 'registro_data';
 					intent.data = dataExtraida;

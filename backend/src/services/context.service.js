@@ -31,22 +31,29 @@ exports.getSystemContext = () => {
 
 /**
  * Busca informações do registro do dia atual
- * @param {string} usuario - Nome do usuário
+ * @param {string} discordId - Discord ID do usuário
+ * @param {string} usuario - Nome do usuário (para exibição)
  * @returns {Promise<string>} Contexto do registro de hoje
  */
-exports.getRegistroHoje = async (usuario) => {
-  if (!usuario) return '';
+exports.getRegistroHoje = async (discordId, usuario) => {
+  if (!discordId) return '';
 
   try {
     const data = dayjs().format('YYYY-MM-DD');
-    const doc = await db.collection('registros').doc(`${usuario}_${data}`).get();
 
-    if (!doc.exists) {
-      return `O usuário ${usuario} ainda não possui registro para hoje (${dayjs().format('DD/MM/YYYY')}).`;
+    // Busca por discordId + data (query por campo)
+    const snapshot = await db.collection('registros')
+      .where('discordId', '==', discordId)
+      .where('data', '==', data)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return `O usuário ${usuario || 'usuário'} ainda não possui registro para hoje (${dayjs().format('DD/MM/YYYY')}).`;
     }
 
-    const registro = doc.data();
-    return `Registro de hoje (${dayjs().format('DD/MM/YYYY')}) para ${usuario}:
+    const registro = snapshot.docs[0].data();
+    return `Registro de hoje (${dayjs().format('DD/MM/YYYY')}) para ${usuario || 'usuário'}:
 - Entrada: ${registro.entrada || 'não marcada'}
 - Saída: ${registro.saida || 'não marcada'}
 - Total de horas: ${registro.total_horas || 'em andamento'}
@@ -59,22 +66,28 @@ exports.getRegistroHoje = async (usuario) => {
 
 /**
  * Busca informações de registro de data específica
- * @param {string} usuario - Nome do usuário
+ * @param {string} discordId - Discord ID do usuário
+ * @param {string} usuario - Nome do usuário (para exibição)
  * @param {string} data - Data no formato YYYY-MM-DD
  * @returns {Promise<string>} Contexto do registro da data
  */
-exports.getRegistroData = async (usuario, data) => {
-  if (!usuario || !data) return '';
+exports.getRegistroData = async (discordId, usuario, data) => {
+  if (!discordId || !data) return '';
 
   try {
-    const doc = await db.collection('registros').doc(`${usuario}_${data}`).get();
+    // Busca por discordId + data
+    const snapshot = await db.collection('registros')
+      .where('discordId', '==', discordId)
+      .where('data', '==', data)
+      .limit(1)
+      .get();
 
-    if (!doc.exists) {
-      return `Nenhum registro encontrado para ${usuario} em ${dayjs(data).format('DD/MM/YYYY')}.`;
+    if (snapshot.empty) {
+      return `Nenhum registro encontrado para ${usuario || 'usuário'} em ${dayjs(data).format('DD/MM/YYYY')}.`;
     }
 
-    const registro = doc.data();
-    return `Registro de ${dayjs(data).format('DD/MM/YYYY')} para ${usuario}:
+    const registro = snapshot.docs[0].data();
+    return `Registro de ${dayjs(data).format('DD/MM/YYYY')} para ${usuario || 'usuário'}:
 - Entrada: ${registro.entrada || 'não marcada'}
 - Saída: ${registro.saida || 'não marcada'}
 - Total de horas: ${registro.total_horas || 'n/a'}
@@ -130,8 +143,8 @@ exports.getResumoMensal = async (discordId, usuario, ano, mes) => {
 exports.buildContextFromIntent = async ({ intent, usuario, discordId }) => {
   let additionalContext = '';
 
-  if (usuario) {
-    additionalContext += await exports.getRegistroHoje(usuario);
+  if (discordId) {
+    additionalContext += await exports.getRegistroHoje(discordId, usuario);
   }
 
   switch (intent.intencao) {
@@ -153,8 +166,8 @@ exports.buildContextFromIntent = async ({ intent, usuario, discordId }) => {
       break;
 
     case 'registro_data':
-      if (intent.data && usuario) {
-        const registro = await exports.getRegistroData(usuario, intent.data);
+      if (intent.data && discordId) {
+        const registro = await exports.getRegistroData(discordId, usuario, intent.data);
         additionalContext += '\n\n' + registro;
       }
       break;
