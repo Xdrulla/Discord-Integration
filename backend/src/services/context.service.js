@@ -1,6 +1,7 @@
 const db = require('../config/firebase');
 const dayjs = require('dayjs');
 const { calcularResumoMensal } = require('../utils/resumeUtils');
+const { contarDiasUteisValidos, extrairMinutosDeString } = require('../utils/timeUtils');
 
 /**
  * Monta o contexto do sistema (personalidade da IA)
@@ -131,11 +132,34 @@ exports.getResumoMensal = async (discordId, usuario, ano, mes) => {
       projecao = await calcularProjecaoMensal(discordId, resumo);
     }
 
+    let detalheDias = '';
+    if (resumo.diasTrabalhados && resumo.diasTrabalhados.length > 0) {
+      const sabados = resumo.diasTrabalhados.filter(d => d.tipo === 'sabado');
+      const domingos = resumo.diasTrabalhados.filter(d => d.tipo === 'domingo' || d.tipo === 'feriado');
+
+      if (sabados.length > 0) {
+        detalheDias += `\n\n**Sábados trabalhados:**\n`;
+        sabados.forEach(d => {
+          detalheDias += `- ${d.data}: ${d.entrada || '?'} às ${d.saida || '?'} (${d.total})\n`;
+        });
+      }
+
+      if (domingos.length > 0) {
+        detalheDias += `\n**Domingos/Feriados trabalhados:**\n`;
+        domingos.forEach(d => {
+          detalheDias += `- ${d.data}: ${d.entrada || '?'} às ${d.saida || '?'} (${d.total})\n`;
+        });
+      }
+    }
+
     return `Resumo de ${meses[mes - 1]}/${ano} para ${usuario}:
 - Total trabalhado até agora: ${resumo.total_horas}
 - Meta do mês: ${resumo.meta}
 - Saldo atual: ${resumo.saldo}
 - Status: ${resumo.saldo.includes('-') ? 'Devendo horas' : 'Banco de horas positivo'}
+- Horas extras em sábados: ${resumo.extras.sabado}
+- Horas extras em domingos/feriados: ${resumo.extras.domingo_feriado}
+${detalheDias}
 ${projecao}`;
   } catch (error) {
     console.error('❌ Erro ao buscar resumo mensal:', error.message);
@@ -150,9 +174,6 @@ ${projecao}`;
  * @returns {Promise<string>} Texto com projeção
  */
 const calcularProjecaoMensal = async (discordId, resumo) => {
-  const { contarDiasUteisValidos } = require('../utils/timeUtils');
-  const { extrairMinutosDeString } = require('../utils/timeUtils');
-
   const hoje = dayjs();
   const mes = hoje.month() + 1;
   const ano = hoje.year();

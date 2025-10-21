@@ -54,6 +54,18 @@ async function calcularResumoMensal(discordId, ano, mes) {
 
   const saldo = totalMinutos - metaMinutos;
 
+  const diasTrabalhados = registros.map(r => ({
+    data: r.data,
+    entrada: r.entrada,
+    saida: r.saida,
+    total: r.total_horas,
+    tipo: null
+  }));
+
+  for (const dia of diasTrabalhados) {
+    dia.tipo = await getTipoDeDia(dia.data);
+  }
+
   return {
     usuario: registros[0]?.usuario || discordId,
     total_horas: formatarMinutosParaHoras(totalMinutos),
@@ -66,6 +78,7 @@ async function calcularResumoMensal(discordId, ano, mes) {
     },
     pendentes,
     aprovadas,
+    diasTrabalhados
   };
 }
 
