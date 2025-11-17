@@ -2,11 +2,12 @@ import { fetchRegistros, fetchResumoMensal } from "../services/registroService";
 
 export const carregarRegistrosFiltrados = async (role, discordId, setData, setFilteredData, setLoading = null) => {
   try {
-    let registros = await fetchRegistros();
+    // Otimização: filtra no Firestore ao invés de buscar tudo e filtrar no frontend
+    const options = role === "leitor" 
+      ? { discordId, diasRetroativos: 60, maxResults: 300 }  // Leitor: últimos 60 dias
+      : { diasRetroativos: 30, maxResults: 500 };            // Admin: últimos 30 dias
 
-    if (role === "leitor") {
-      registros = registros.filter((record) => record.discordId === discordId);
-    }
+    const registros = await fetchRegistros(options);
 
     setData(registros);
     setFilteredData(registros);

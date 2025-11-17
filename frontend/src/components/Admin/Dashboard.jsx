@@ -22,6 +22,7 @@ import DashboardGeneral from "./DashboardGeneral";
 import DashboardOverview from "./DashboardOverview";
 import PendingJustificationsModal from "./justification/PendingJustificationsModal";
 import { upsertJustificativa } from "../../services/justificativaService";
+import BancoHorasHistorico from "./BancoHorasHistorico";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -219,8 +220,12 @@ const Dashboard = () => {
             <DashboardStats resumo={resumo} loading={resumoLoading} todosRegistros={data} />
           </Tabs.TabPane>
 
+          <Tabs.TabPane tab="Banco de Horas" key="3">
+            <BancoHorasHistorico discordId={discordId} />
+          </Tabs.TabPane>
+
           {role === "admin" && (
-            <Tabs.TabPane tab="Resumo Geral" key="3">
+            <Tabs.TabPane tab="Resumo Geral" key="4">
               <DashboardGeneral />
             </Tabs.TabPane>
           )}
