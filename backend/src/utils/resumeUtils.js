@@ -1,5 +1,6 @@
 const db = require("../config/firebase");
 const { extrairMinutosDeString, getTipoDeDia, formatarMinutosParaHoras, contarDiasUteisValidos } = require("./timeUtils");
+const bancoHorasService = require("../services/bancoHoras.service");
 
 async function calcularResumoMensal(discordId, ano, mes) {
   const prefixoData = `${ano}-${String(mes).padStart(2, "0")}`;
@@ -52,7 +53,11 @@ async function calcularResumoMensal(discordId, ano, mes) {
     console.warn("⚠️ Erro ao buscar meta personalizada:", err.message);
   }
 
-  const saldo = totalMinutos - metaMinutos;
+  const saldoMesAtual = totalMinutos - metaMinutos;
+  
+  // Busca banco de horas acumulado dos meses anteriores
+  const bancoAcumuladoAnterior = await bancoHorasService.calcularBancoAcumulado(discordId, ano, mes);
+  const saldoTotal = bancoAcumuladoAnterior + saldoMesAtual;
 
   const diasTrabalhados = registros.map(r => ({
     data: r.data,
@@ -69,7 +74,15 @@ async function calcularResumoMensal(discordId, ano, mes) {
   return {
     usuario: registros[0]?.usuario || discordId,
     total_horas: formatarMinutosParaHoras(totalMinutos),
-    saldo: formatarMinutosParaHoras(saldo),
+    horasTrabalhadas: totalMinutos,
+    metaMinutos: metaMinutos,
+    saldoMesAtual: formatarMinutosParaHoras(saldoMesAtual),
+    saldoMesAtualMinutos: saldoMesAtual,
+    bancoAcumuladoAnterior: formatarMinutosParaHoras(bancoAcumuladoAnterior),
+    bancoAcumuladoAnteriorMinutos: bancoAcumuladoAnterior,
+    saldoTotal: formatarMinutosParaHoras(saldoTotal),
+    saldoTotalMinutos: saldoTotal,
+    saldo: formatarMinutosParaHoras(saldoMesAtual), // Mantém compatibilidade
     meta: formatarMinutosParaHoras(metaMinutos),
     extras: {
       sabado: formatarMinutosParaHoras(extras.sabado),
