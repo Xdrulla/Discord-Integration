@@ -1,0 +1,540 @@
+/**
+ * Plus UI Design System - Typography Foundation
+ * Based on Plus UI Figma Design System
+ *
+ * Font family: Inter (Google Fonts)
+ * Font weights: Regular (400), Medium (500), Semi Bold (600), Bold (700)
+ */
+
+// ============================================================================
+// FONT FAMILY
+// ============================================================================
+
+$plus-ui-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+  'Helvetica Neue', sans-serif;
+
+// ============================================================================
+// FONT WEIGHTS
+// ============================================================================
+
+$plus-ui-font-weight-regular: 400;
+$plus-ui-font-weight-medium: 500;
+$plus-ui-font-weight-semibold: 600;
+$plus-ui-font-weight-bold: 700;
+
+// ============================================================================
+// FONT SIZES & LINE HEIGHTS
+// ============================================================================
+
+// Font Size Scale
+$plus-ui-font-size-xs: 12px;
+$plus-ui-font-size-sm: 14px;
+$plus-ui-font-size-base: 16px;
+$plus-ui-font-size-lg: 18px;
+$plus-ui-font-size-xl: 20px;
+$plus-ui-font-size-2xl: 24px;
+$plus-ui-font-size-3xl: 30px;
+$plus-ui-font-size-4xl: 36px;
+$plus-ui-font-size-5xl: 48px;
+$plus-ui-font-size-6xl: 60px;
+$plus-ui-font-size-7xl: 72px;
+$plus-ui-font-size-8xl: 96px;
+$plus-ui-font-size-9xl: 128px;
+
+// Line Height Scale
+$plus-ui-line-height-xs: 16px;
+$plus-ui-line-height-sm: 20px;
+$plus-ui-line-height-base: 24px;
+$plus-ui-line-height-lg: 28px;
+$plus-ui-line-height-xl: 28px;
+$plus-ui-line-height-2xl: 32px;
+$plus-ui-line-height-3xl: 36px;
+$plus-ui-line-height-4xl: 40px;
+$plus-ui-line-height-5xl: 48px;
+$plus-ui-line-height-6xl: 60px;
+$plus-ui-line-height-7xl: 72px;
+$plus-ui-line-height-8xl: 96px;
+$plus-ui-line-height-9xl: 128px;
+
+// Paragraph Spacing (based on line height + 4px)
+$plus-ui-paragraph-spacing-xs: 12px;
+$plus-ui-paragraph-spacing-sm: 14px;
+$plus-ui-paragraph-spacing-base: 16px;
+$plus-ui-paragraph-spacing-lg: 18px;
+$plus-ui-paragraph-spacing-xl: 20px;
+$plus-ui-paragraph-spacing-2xl: 24px;
+$plus-ui-paragraph-spacing-3xl: 30px;
+$plus-ui-paragraph-spacing-4xl: 36px;
+$plus-ui-paragraph-spacing-5xl: 48px;
+$plus-ui-paragraph-spacing-6xl: 60px;
+$plus-ui-paragraph-spacing-7xl: 72px;
+$plus-ui-paragraph-spacing-8xl: 96px;
+$plus-ui-paragraph-spacing-9xl: 128px;
+
+// ============================================================================
+// TEXT STYLES (Pre-defined combinations)
+// ============================================================================
+
+// text-xs: 12px / 16px
+@mixin plus-ui-text-xs-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xs;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-xs;
+}
+
+@mixin plus-ui-text-xs-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xs;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-xs;
+}
+
+@mixin plus-ui-text-xs-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xs;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-xs;
+}
+
+@mixin plus-ui-text-xs-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xs;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-xs;
+}
+
+// text-sm: 14px / 20px
+@mixin plus-ui-text-sm-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-sm;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-sm;
+}
+
+@mixin plus-ui-text-sm-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-sm;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-sm;
+}
+
+@mixin plus-ui-text-sm-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-sm;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-sm;
+}
+
+@mixin plus-ui-text-sm-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-sm;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-sm;
+}
+
+// text-base: 16px / 24px
+@mixin plus-ui-text-base-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-base;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-base;
+}
+
+@mixin plus-ui-text-base-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-base;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-base;
+}
+
+@mixin plus-ui-text-base-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-base;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-base;
+}
+
+@mixin plus-ui-text-base-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-base;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-base;
+}
+
+// text-lg: 18px / 28px
+@mixin plus-ui-text-lg-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-lg;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-lg;
+}
+
+@mixin plus-ui-text-lg-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-lg;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-lg;
+}
+
+@mixin plus-ui-text-lg-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-lg;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-lg;
+}
+
+@mixin plus-ui-text-lg-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-lg;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-lg;
+}
+
+// text-xl: 20px / 28px
+@mixin plus-ui-text-xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-xl;
+}
+
+@mixin plus-ui-text-xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-xl;
+}
+
+@mixin plus-ui-text-xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-xl;
+}
+
+@mixin plus-ui-text-xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-xl;
+}
+
+// text-2xl: 24px / 32px
+@mixin plus-ui-text-2xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-2xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-2xl;
+}
+
+@mixin plus-ui-text-2xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-2xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-2xl;
+}
+
+@mixin plus-ui-text-2xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-2xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-2xl;
+}
+
+@mixin plus-ui-text-2xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-2xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-2xl;
+}
+
+// text-3xl: 30px / 36px
+@mixin plus-ui-text-3xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-3xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-3xl;
+}
+
+@mixin plus-ui-text-3xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-3xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-3xl;
+}
+
+@mixin plus-ui-text-3xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-3xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-3xl;
+}
+
+@mixin plus-ui-text-3xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-3xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-3xl;
+}
+
+// text-4xl: 36px / 40px
+@mixin plus-ui-text-4xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-4xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-4xl;
+}
+
+@mixin plus-ui-text-4xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-4xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-4xl;
+}
+
+@mixin plus-ui-text-4xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-4xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-4xl;
+}
+
+@mixin plus-ui-text-4xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-4xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-4xl;
+}
+
+// text-5xl: 48px / 48px
+@mixin plus-ui-text-5xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-5xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-5xl;
+}
+
+@mixin plus-ui-text-5xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-5xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-5xl;
+}
+
+@mixin plus-ui-text-5xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-5xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-5xl;
+}
+
+@mixin plus-ui-text-5xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-5xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-5xl;
+}
+
+// text-6xl: 60px / 60px
+@mixin plus-ui-text-6xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-6xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-6xl;
+}
+
+@mixin plus-ui-text-6xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-6xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-6xl;
+}
+
+@mixin plus-ui-text-6xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-6xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-6xl;
+}
+
+@mixin plus-ui-text-6xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-6xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-6xl;
+}
+
+// text-7xl: 72px / 72px
+@mixin plus-ui-text-7xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-7xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-7xl;
+}
+
+@mixin plus-ui-text-7xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-7xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-7xl;
+}
+
+@mixin plus-ui-text-7xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-7xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-7xl;
+}
+
+@mixin plus-ui-text-7xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-7xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-7xl;
+}
+
+// text-8xl: 96px / 96px
+@mixin plus-ui-text-8xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-8xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-8xl;
+}
+
+@mixin plus-ui-text-8xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-8xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-8xl;
+}
+
+@mixin plus-ui-text-8xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-8xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-8xl;
+}
+
+@mixin plus-ui-text-8xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-8xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-8xl;
+}
+
+// text-9xl: 128px / 128px
+@mixin plus-ui-text-9xl-regular {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-9xl;
+  font-weight: $plus-ui-font-weight-regular;
+  line-height: $plus-ui-line-height-9xl;
+}
+
+@mixin plus-ui-text-9xl-medium {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-9xl;
+  font-weight: $plus-ui-font-weight-medium;
+  line-height: $plus-ui-line-height-9xl;
+}
+
+@mixin plus-ui-text-9xl-semibold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-9xl;
+  font-weight: $plus-ui-font-weight-semibold;
+  line-height: $plus-ui-line-height-9xl;
+}
+
+@mixin plus-ui-text-9xl-bold {
+  font-family: $plus-ui-font-family;
+  font-size: $plus-ui-font-size-9xl;
+  font-weight: $plus-ui-font-weight-bold;
+  line-height: $plus-ui-line-height-9xl;
+}
+
+// ============================================================================
+// UTILITY MIXINS
+// ============================================================================
+
+// Apply typography style by name and weight
+@mixin plus-ui-text($size, $weight: 'regular') {
+  @if $size == 'xs' {
+    @if $weight == 'medium' { @include plus-ui-text-xs-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-xs-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-xs-bold; }
+    @else { @include plus-ui-text-xs-regular; }
+  }
+  @else if $size == 'sm' {
+    @if $weight == 'medium' { @include plus-ui-text-sm-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-sm-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-sm-bold; }
+    @else { @include plus-ui-text-sm-regular; }
+  }
+  @else if $size == 'base' {
+    @if $weight == 'medium' { @include plus-ui-text-base-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-base-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-base-bold; }
+    @else { @include plus-ui-text-base-regular; }
+  }
+  @else if $size == 'lg' {
+    @if $weight == 'medium' { @include plus-ui-text-lg-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-lg-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-lg-bold; }
+    @else { @include plus-ui-text-lg-regular; }
+  }
+  @else if $size == 'xl' {
+    @if $weight == 'medium' { @include plus-ui-text-xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-xl-bold; }
+    @else { @include plus-ui-text-xl-regular; }
+  }
+  @else if $size == '2xl' {
+    @if $weight == 'medium' { @include plus-ui-text-2xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-2xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-2xl-bold; }
+    @else { @include plus-ui-text-2xl-regular; }
+  }
+  @else if $size == '3xl' {
+    @if $weight == 'medium' { @include plus-ui-text-3xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-3xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-3xl-bold; }
+    @else { @include plus-ui-text-3xl-regular; }
+  }
+  @else if $size == '4xl' {
+    @if $weight == 'medium' { @include plus-ui-text-4xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-4xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-4xl-bold; }
+    @else { @include plus-ui-text-4xl-regular; }
+  }
+  @else if $size == '5xl' {
+    @if $weight == 'medium' { @include plus-ui-text-5xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-5xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-5xl-bold; }
+    @else { @include plus-ui-text-5xl-regular; }
+  }
+  @else if $size == '6xl' {
+    @if $weight == 'medium' { @include plus-ui-text-6xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-6xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-6xl-bold; }
+    @else { @include plus-ui-text-6xl-regular; }
+  }
+  @else if $size == '7xl' {
+    @if $weight == 'medium' { @include plus-ui-text-7xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-7xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-7xl-bold; }
+    @else { @include plus-ui-text-7xl-regular; }
+  }
+  @else if $size == '8xl' {
+    @if $weight == 'medium' { @include plus-ui-text-8xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-8xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-8xl-bold; }
+    @else { @include plus-ui-text-8xl-regular; }
+  }
+  @else if $size == '9xl' {
+    @if $weight == 'medium' { @include plus-ui-text-9xl-medium; }
+    @else if $weight == 'semibold' { @include plus-ui-text-9xl-semibold; }
+    @else if $weight == 'bold' { @include plus-ui-text-9xl-bold; }
+    @else { @include plus-ui-text-9xl-regular; }
+  }
+}

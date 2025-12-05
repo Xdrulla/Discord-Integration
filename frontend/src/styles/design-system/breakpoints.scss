@@ -1,0 +1,374 @@
+/**
+ * Plus UI Design System - Breakpoints Foundation
+ * Based on Plus UI Figma Design System
+ *
+ * Responsive breakpoints for mobile-first design
+ */
+
+// ============================================================================
+// BREAKPOINTS (min-width)
+// ============================================================================
+
+$plus-ui-breakpoint-sm: 640px;      // Small devices (tablets)
+$plus-ui-breakpoint-md: 768px;      // Medium devices (tablets landscape)
+$plus-ui-breakpoint-lg: 1024px;     // Large devices (desktops)
+$plus-ui-breakpoint-xl: 1280px;     // Extra large devices (large desktops)
+$plus-ui-breakpoint-2xl: 1536px;    // 2X Extra large devices (wide screens)
+
+// ============================================================================
+// BREAKPOINTS MAP (for iteration and dynamic access)
+// ============================================================================
+
+$plus-ui-breakpoints: (
+  sm: $plus-ui-breakpoint-sm,
+  md: $plus-ui-breakpoint-md,
+  lg: $plus-ui-breakpoint-lg,
+  xl: $plus-ui-breakpoint-xl,
+  2xl: $plus-ui-breakpoint-2xl,
+);
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Get breakpoint value by key
+ * @param {string} $key - Breakpoint key (e.g., 'sm', 'md', 'lg', 'xl', '2xl')
+ * @return {string} - Breakpoint value
+ *
+ * Usage:
+ * @media (min-width: breakpoint(md)) {
+ *   .container {
+ *     max-width: 768px;
+ *   }
+ * }
+ */
+@function breakpoint($key) {
+  @return map-get($plus-ui-breakpoints, $key);
+}
+
+// ============================================================================
+// RESPONSIVE MIXINS
+// ============================================================================
+
+/**
+ * Apply styles for screens larger than or equal to the breakpoint (min-width)
+ * @param {string} $size - Breakpoint key (sm, md, lg, xl, 2xl)
+ *
+ * Usage (Mobile-first approach):
+ * .container {
+ *   padding: 16px;
+ *
+ *   @include screen-min(md) {
+ *     padding: 24px;
+ *   }
+ * }
+ */
+@mixin screen-min($size) {
+  @media (min-width: breakpoint($size)) {
+    @content;
+  }
+}
+
+/**
+ * Apply styles for screens smaller than the breakpoint (max-width)
+ * @param {string} $size - Breakpoint key (sm, md, lg, xl, 2xl)
+ *
+ * Usage (Desktop-first approach):
+ * .container {
+ *   padding: 24px;
+ *
+ *   @include screen-max(md) {
+ *     padding: 16px;
+ *   }
+ * }
+ */
+@mixin screen-max($size) {
+  @media (max-width: #{breakpoint($size) - 1px}) {
+    @content;
+  }
+}
+
+/**
+ * Apply styles for screens between two breakpoints
+ * @param {string} $min - Minimum breakpoint key
+ * @param {string} $max - Maximum breakpoint key
+ *
+ * Usage:
+ * .container {
+ *   @include screen-between(md, lg) {
+ *     padding: 20px;
+ *   }
+ * }
+ */
+@mixin screen-between($min, $max) {
+  @media (min-width: breakpoint($min)) and (max-width: #{breakpoint($max) - 1px}) {
+    @content;
+  }
+}
+
+/**
+ * Apply styles only for a specific breakpoint range
+ * @param {string} $size - Breakpoint key
+ *
+ * Usage:
+ * .container {
+ *   @include screen-only(md) {
+ *     padding: 20px;
+ *   }
+ * }
+ */
+@mixin screen-only($size) {
+  @if $size == 'sm' {
+    @media (min-width: breakpoint(sm)) and (max-width: #{breakpoint(md) - 1px}) {
+      @content;
+    }
+  } @else if $size == 'md' {
+    @media (min-width: breakpoint(md)) and (max-width: #{breakpoint(lg) - 1px}) {
+      @content;
+    }
+  } @else if $size == 'lg' {
+    @media (min-width: breakpoint(lg)) and (max-width: #{breakpoint(xl) - 1px}) {
+      @content;
+    }
+  } @else if $size == 'xl' {
+    @media (min-width: breakpoint(xl)) and (max-width: #{breakpoint(2xl) - 1px}) {
+      @content;
+    }
+  } @else if $size == '2xl' {
+    @media (min-width: breakpoint(2xl)) {
+      @content;
+    }
+  }
+}
+
+// ============================================================================
+// SHORTHAND ALIASES (Mobile-first by default)
+// ============================================================================
+
+/**
+ * Shorthand for small screens and up
+ */
+@mixin sm {
+  @include screen-min(sm) {
+    @content;
+  }
+}
+
+/**
+ * Shorthand for medium screens and up
+ */
+@mixin md {
+  @include screen-min(md) {
+    @content;
+  }
+}
+
+/**
+ * Shorthand for large screens and up
+ */
+@mixin lg {
+  @include screen-min(lg) {
+    @content;
+  }
+}
+
+/**
+ * Shorthand for extra large screens and up
+ */
+@mixin xl {
+  @include screen-min(xl) {
+    @content;
+  }
+}
+
+/**
+ * Shorthand for 2x extra large screens and up
+ */
+@mixin xxl {
+  @include screen-min(2xl) {
+    @content;
+  }
+}
+
+// ============================================================================
+// COMMON RESPONSIVE PATTERNS
+// ============================================================================
+
+/**
+ * Mobile-only styles (below sm breakpoint)
+ *
+ * Usage:
+ * .mobile-menu {
+ *   @include mobile-only {
+ *     display: block;
+ *   }
+ * }
+ */
+@mixin mobile-only {
+  @media (max-width: #{$plus-ui-breakpoint-sm - 1px}) {
+    @content;
+  }
+}
+
+/**
+ * Tablet styles (sm to lg)
+ *
+ * Usage:
+ * .tablet-layout {
+ *   @include tablet {
+ *     columns: 2;
+ *   }
+ * }
+ */
+@mixin tablet {
+  @include screen-between(sm, lg) {
+    @content;
+  }
+}
+
+/**
+ * Desktop styles (lg and up)
+ *
+ * Usage:
+ * .desktop-menu {
+ *   @include desktop {
+ *     display: flex;
+ *   }
+ * }
+ */
+@mixin desktop {
+  @include screen-min(lg) {
+    @content;
+  }
+}
+
+/**
+ * Wide desktop styles (xl and up)
+ *
+ * Usage:
+ * .container {
+ *   @include wide-desktop {
+ *     max-width: 1280px;
+ *   }
+ * }
+ */
+@mixin wide-desktop {
+  @include screen-min(xl) {
+    @content;
+  }
+}
+
+// ============================================================================
+// CONTAINER MAX-WIDTHS
+// ============================================================================
+
+// Container max-widths per breakpoint
+$plus-ui-container-sm: 640px;
+$plus-ui-container-md: 768px;
+$plus-ui-container-lg: 1024px;
+$plus-ui-container-xl: 1280px;
+$plus-ui-container-2xl: 1536px;
+
+/**
+ * Apply responsive container with max-widths
+ * @param {string} $padding - Horizontal padding (optional)
+ *
+ * Usage:
+ * .container {
+ *   @include container(24px);
+ * }
+ */
+@mixin container($padding: 16px) {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $padding;
+  padding-right: $padding;
+
+  @include sm {
+    max-width: $plus-ui-container-sm;
+  }
+
+  @include md {
+    max-width: $plus-ui-container-md;
+  }
+
+  @include lg {
+    max-width: $plus-ui-container-lg;
+  }
+
+  @include xl {
+    max-width: $plus-ui-container-xl;
+  }
+
+  @include xxl {
+    max-width: $plus-ui-container-2xl;
+  }
+}
+
+// ============================================================================
+// USAGE EXAMPLES (commented out)
+// ============================================================================
+
+/*
+// Example 1: Mobile-first responsive padding
+.component {
+  padding: 16px;
+
+  @include sm {
+    padding: 20px;
+  }
+
+  @include md {
+    padding: 24px;
+  }
+
+  @include lg {
+    padding: 32px;
+  }
+}
+
+// Example 2: Hide element on mobile
+.desktop-only {
+  display: none;
+
+  @include desktop {
+    display: block;
+  }
+}
+
+// Example 3: Different layouts per breakpoint
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include md {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include lg {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+// Example 4: Specific breakpoint range
+.tablet-only {
+  @include tablet {
+    display: block;
+  }
+}
+
+// Example 5: Between two breakpoints
+.medium-screens {
+  @include screen-between(md, xl) {
+    font-size: 18px;
+  }
+}
+*/

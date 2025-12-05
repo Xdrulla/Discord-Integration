@@ -1,0 +1,278 @@
+/**
+ * Plus UI Design System - Shadows & Effects Foundation
+ * Based on Plus UI Figma Design System
+ *
+ * Box shadows, blur effects, and background blur utilities
+ */
+
+// ============================================================================
+// BOX SHADOWS
+// ============================================================================
+
+// shadow-sm
+$plus-ui-shadow-sm:
+  0 0 2px 0 rgba(0, 0, 0, 0.05),
+  0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+// shadow (default)
+$plus-ui-shadow:
+  0 0 2px 0 rgba(0, 0, 0, 0.05),
+  0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+// shadow-md
+$plus-ui-shadow-md:
+  0 0 4px 0 rgba(0, 0, 0, 0.10),
+  0 4px 4px -2px rgba(0, 0, 0, 0.10),
+  0 4px 6px -4px rgba(0, 0, 0, 0.10);
+
+// shadow-lg
+$plus-ui-shadow-lg:
+  0 0 4px 0 rgba(0, 0, 0, 0.10),
+  0 10px 15px -3px rgba(0, 0, 0, 0.10);
+
+// shadow-xl
+$plus-ui-shadow-xl:
+  0 0 10px 0 rgba(0, 0, 0, 0.10),
+  0 20px 25px -5px rgba(0, 0, 0, 0.10);
+
+// shadow-2xl
+$plus-ui-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+// shadow-inner
+$plus-ui-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+// ============================================================================
+// LAYER BLUR (Backdrop Filter - Blur)
+// ============================================================================
+
+$plus-ui-blur-none: 0;
+$plus-ui-blur-sm: 4px;
+$plus-ui-blur: 8px;
+$plus-ui-blur-md: 12px;
+$plus-ui-blur-lg: 16px;
+$plus-ui-blur-xl: 24px;
+$plus-ui-blur-2xl: 40px;
+$plus-ui-blur-3xl: 64px;
+
+// ============================================================================
+// BACKGROUND BLUR (Backdrop Filter - Background Blur)
+// ============================================================================
+
+$plus-ui-backdrop-blur-none: 0;
+$plus-ui-backdrop-blur-sm: 4px;
+$plus-ui-backdrop-blur: 8px;
+$plus-ui-backdrop-blur-md: 12px;
+$plus-ui-backdrop-blur-lg: 16px;
+$plus-ui-backdrop-blur-xl: 24px;
+$plus-ui-backdrop-blur-2xl: 40px;
+$plus-ui-backdrop-blur-3xl: 64px;
+
+// ============================================================================
+// SHADOW MAP (for iteration and dynamic access)
+// ============================================================================
+
+$plus-ui-shadow-scale: (
+  sm: $plus-ui-shadow-sm,
+  default: $plus-ui-shadow,
+  md: $plus-ui-shadow-md,
+  lg: $plus-ui-shadow-lg,
+  xl: $plus-ui-shadow-xl,
+  2xl: $plus-ui-shadow-2xl,
+  inner: $plus-ui-shadow-inner,
+);
+
+$plus-ui-blur-scale: (
+  none: $plus-ui-blur-none,
+  sm: $plus-ui-blur-sm,
+  default: $plus-ui-blur,
+  md: $plus-ui-blur-md,
+  lg: $plus-ui-blur-lg,
+  xl: $plus-ui-blur-xl,
+  2xl: $plus-ui-blur-2xl,
+  3xl: $plus-ui-blur-3xl,
+);
+
+$plus-ui-backdrop-blur-scale: (
+  none: $plus-ui-backdrop-blur-none,
+  sm: $plus-ui-backdrop-blur-sm,
+  default: $plus-ui-backdrop-blur,
+  md: $plus-ui-backdrop-blur-md,
+  lg: $plus-ui-backdrop-blur-lg,
+  xl: $plus-ui-backdrop-blur-xl,
+  2xl: $plus-ui-backdrop-blur-2xl,
+  3xl: $plus-ui-backdrop-blur-3xl,
+);
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Get shadow value by key
+ * @param {string} $key - Shadow key (e.g., 'sm', 'md', 'lg')
+ * @return {string} - Shadow value
+ *
+ * Usage:
+ * .card {
+ *   box-shadow: shadow(md);
+ * }
+ */
+@function shadow($key: 'default') {
+  @return map-get($plus-ui-shadow-scale, $key);
+}
+
+/**
+ * Get blur value by key
+ * @param {string} $key - Blur key (e.g., 'sm', 'md', 'lg')
+ * @return {string} - Blur value
+ *
+ * Usage:
+ * .blurred {
+ *   filter: blur(blur(md));
+ * }
+ */
+@function blur($key: 'default') {
+  @return map-get($plus-ui-blur-scale, $key);
+}
+
+/**
+ * Get backdrop blur value by key
+ * @param {string} $key - Backdrop blur key (e.g., 'sm', 'md', 'lg')
+ * @return {string} - Backdrop blur value
+ *
+ * Usage:
+ * .glass {
+ *   backdrop-filter: blur(backdrop-blur(lg));
+ * }
+ */
+@function backdrop-blur($key: 'default') {
+  @return map-get($plus-ui-backdrop-blur-scale, $key);
+}
+
+// ============================================================================
+// UTILITY MIXINS
+// ============================================================================
+
+/**
+ * Apply box shadow
+ * @param {string} $size - Shadow size key
+ *
+ * Usage:
+ * .card {
+ *   @include shadow(md);
+ * }
+ */
+@mixin shadow($size: 'default') {
+  box-shadow: shadow($size);
+}
+
+/**
+ * Apply blur filter
+ * @param {string} $size - Blur size key
+ *
+ * Usage:
+ * .blurred-image {
+ *   @include blur(lg);
+ * }
+ */
+@mixin blur($size: 'default') {
+  filter: blur(blur($size));
+}
+
+/**
+ * Apply backdrop blur (glass effect)
+ * @param {string} $size - Backdrop blur size key
+ *
+ * Usage:
+ * .glass-card {
+ *   @include backdrop-blur(md);
+ *   background: rgba(255, 255, 255, 0.8);
+ * }
+ */
+@mixin backdrop-blur($size: 'default') {
+  backdrop-filter: blur(backdrop-blur($size));
+  -webkit-backdrop-filter: blur(backdrop-blur($size)); // Safari support
+}
+
+/**
+ * Apply glass morphism effect
+ * @param {string} $blur-size - Backdrop blur size key
+ * @param {color} $bg-color - Background color with transparency
+ * @param {string} $shadow-size - Shadow size key
+ *
+ * Usage:
+ * .glass-card {
+ *   @include glass-effect(md, rgba(255, 255, 255, 0.8), lg);
+ * }
+ */
+@mixin glass-effect($blur-size: 'md', $bg-color: rgba(255, 255, 255, 0.8), $shadow-size: 'lg') {
+  background: $bg-color;
+  backdrop-filter: blur(backdrop-blur($blur-size));
+  -webkit-backdrop-filter: blur(backdrop-blur($blur-size));
+  box-shadow: shadow($shadow-size);
+}
+
+/**
+ * Remove all shadows
+ *
+ * Usage:
+ * .no-shadow {
+ *   @include no-shadow;
+ * }
+ */
+@mixin no-shadow {
+  box-shadow: none;
+}
+
+// ============================================================================
+// ELEVATION SYSTEM (Semantic shadows for components)
+// ============================================================================
+
+// Card elevations
+$plus-ui-elevation-card-rest: $plus-ui-shadow-sm;
+$plus-ui-elevation-card-hover: $plus-ui-shadow-md;
+$plus-ui-elevation-card-active: $plus-ui-shadow-lg;
+
+// Modal/Dialog elevations
+$plus-ui-elevation-modal: $plus-ui-shadow-xl;
+$plus-ui-elevation-dialog: $plus-ui-shadow-2xl;
+
+// Dropdown/Menu elevations
+$plus-ui-elevation-dropdown: $plus-ui-shadow-lg;
+$plus-ui-elevation-popover: $plus-ui-shadow-md;
+
+// Tooltip elevation
+$plus-ui-elevation-tooltip: $plus-ui-shadow-sm;
+
+/**
+ * Apply elevation to component
+ * @param {string} $level - Elevation level (card-rest, card-hover, modal, etc.)
+ *
+ * Usage:
+ * .card {
+ *   @include elevation(card-rest);
+ *
+ *   &:hover {
+ *     @include elevation(card-hover);
+ *   }
+ * }
+ */
+@mixin elevation($level) {
+  @if $level == 'card-rest' {
+    box-shadow: $plus-ui-elevation-card-rest;
+  } @else if $level == 'card-hover' {
+    box-shadow: $plus-ui-elevation-card-hover;
+  } @else if $level == 'card-active' {
+    box-shadow: $plus-ui-elevation-card-active;
+  } @else if $level == 'modal' {
+    box-shadow: $plus-ui-elevation-modal;
+  } @else if $level == 'dialog' {
+    box-shadow: $plus-ui-elevation-dialog;
+  } @else if $level == 'dropdown' {
+    box-shadow: $plus-ui-elevation-dropdown;
+  } @else if $level == 'popover' {
+    box-shadow: $plus-ui-elevation-popover;
+  } @else if $level == 'tooltip' {
+    box-shadow: $plus-ui-elevation-tooltip;
+  }
+}

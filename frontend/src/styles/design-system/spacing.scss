@@ -1,0 +1,209 @@
+/**
+ * Plus UI Design System - Spacing Foundation
+ * Based on Plus UI Figma Design System
+ *
+ * Spacing scale for margins, paddings, gaps, and positioning
+ * Base unit: 1rem = 16px, with granular control using px and rem values
+ */
+
+// ============================================================================
+// SPACING SCALE
+// ============================================================================
+
+$plus-ui-spacing-0: 0px;               // spacing-0 / number/0
+$plus-ui-spacing-px: 1px;              // spacing-px / number/px
+$plus-ui-spacing-0-5: 2px;             // spacing-0-5 / number/0-5 (0.125rem)
+$plus-ui-spacing-1: 4px;               // spacing-1 / number/1 (0.25rem)
+$plus-ui-spacing-1-5: 6px;             // spacing-1-5 / number/1-5 (0.375rem)
+$plus-ui-spacing-2: 8px;               // spacing-2 / number/2 (0.5rem)
+$plus-ui-spacing-2-5: 10px;            // spacing-2-5 / number/2-5 (0.625rem)
+$plus-ui-spacing-3: 12px;              // spacing-3 / number/3 (0.75rem)
+$plus-ui-spacing-3-5: 14px;            // spacing-3-5 / number/3-5 (0.875rem)
+$plus-ui-spacing-4: 16px;              // spacing-4 / number/4 (1rem)
+$plus-ui-spacing-5: 20px;              // spacing-5 / number/5 (1.25rem)
+$plus-ui-spacing-6: 24px;              // spacing-6 / number/6 (1.5rem)
+$plus-ui-spacing-7: 28px;              // spacing-7 / number/7 (1.75rem)
+$plus-ui-spacing-8: 32px;              // spacing-8 / number/8 (2rem)
+$plus-ui-spacing-9: 36px;              // spacing-9 / number/9 (2.25rem)
+$plus-ui-spacing-10: 40px;             // spacing-10 / number/10 (2.5rem)
+$plus-ui-spacing-11: 44px;             // spacing-11 / number/11 (2.75rem)
+$plus-ui-spacing-12: 48px;             // spacing-12 / number/12 (3rem)
+$plus-ui-spacing-14: 56px;             // spacing-14 / number/14 (3.5rem)
+$plus-ui-spacing-16: 64px;             // spacing-16 / number/16 (4rem)
+$plus-ui-spacing-20: 80px;             // spacing-20 / number/20 (5rem)
+$plus-ui-spacing-24: 96px;             // spacing-24 / number/24 (6rem)
+$plus-ui-spacing-28: 112px;            // spacing-28 / number/28 (7rem)
+$plus-ui-spacing-32: 128px;            // spacing-32 / number/32 (8rem)
+$plus-ui-spacing-36: 144px;            // spacing-36 / number/36 (9rem)
+$plus-ui-spacing-40: 160px;            // spacing-40 / number/40 (10rem)
+$plus-ui-spacing-44: 176px;            // spacing-44 / number/44 (11rem)
+$plus-ui-spacing-48: 192px;            // spacing-48 / number/48 (12rem)
+$plus-ui-spacing-52: 208px;            // spacing-52 / number/52 (13rem)
+$plus-ui-spacing-56: 224px;            // spacing-56 / number/56 (14rem)
+$plus-ui-spacing-60: 240px;            // spacing-60 / number/60 (15rem)
+$plus-ui-spacing-64: 256px;            // spacing-64 / number/64 (16rem)
+$plus-ui-spacing-72: 288px;            // spacing-72 / number/72 (18rem)
+$plus-ui-spacing-80: 320px;            // spacing-80 / number/80 (20rem)
+$plus-ui-spacing-96: 384px;            // spacing-96 / number/96 (24rem)
+
+// ============================================================================
+// SPACING MAP (for iteration and dynamic access)
+// ============================================================================
+
+$plus-ui-spacing-scale: (
+  0: $plus-ui-spacing-0,
+  px: $plus-ui-spacing-px,
+  0-5: $plus-ui-spacing-0-5,
+  1: $plus-ui-spacing-1,
+  1-5: $plus-ui-spacing-1-5,
+  2: $plus-ui-spacing-2,
+  2-5: $plus-ui-spacing-2-5,
+  3: $plus-ui-spacing-3,
+  3-5: $plus-ui-spacing-3-5,
+  4: $plus-ui-spacing-4,
+  5: $plus-ui-spacing-5,
+  6: $plus-ui-spacing-6,
+  7: $plus-ui-spacing-7,
+  8: $plus-ui-spacing-8,
+  9: $plus-ui-spacing-9,
+  10: $plus-ui-spacing-10,
+  11: $plus-ui-spacing-11,
+  12: $plus-ui-spacing-12,
+  14: $plus-ui-spacing-14,
+  16: $plus-ui-spacing-16,
+  20: $plus-ui-spacing-20,
+  24: $plus-ui-spacing-24,
+  28: $plus-ui-spacing-28,
+  32: $plus-ui-spacing-32,
+  36: $plus-ui-spacing-36,
+  40: $plus-ui-spacing-40,
+  44: $plus-ui-spacing-44,
+  48: $plus-ui-spacing-48,
+  52: $plus-ui-spacing-52,
+  56: $plus-ui-spacing-56,
+  60: $plus-ui-spacing-60,
+  64: $plus-ui-spacing-64,
+  72: $plus-ui-spacing-72,
+  80: $plus-ui-spacing-80,
+  96: $plus-ui-spacing-96,
+);
+
+// ============================================================================
+// HELPER FUNCTION
+// ============================================================================
+
+/**
+ * Get spacing value by key
+ * @param {string} $key - Spacing key (e.g., '4', '2-5', 'px')
+ * @return {string} - Spacing value in px
+ *
+ * Usage:
+ * .component {
+ *   padding: spacing(4);        // 16px
+ *   margin: spacing(2-5);       // 10px
+ *   gap: spacing(6);            // 24px
+ * }
+ */
+@function spacing($key) {
+  @return map-get($plus-ui-spacing-scale, $key);
+}
+
+// ============================================================================
+// COMMON SPACING UTILITIES
+// ============================================================================
+
+// Component spacing presets (semantic names)
+$plus-ui-component-padding-sm: $plus-ui-spacing-2;      // 8px
+$plus-ui-component-padding-md: $plus-ui-spacing-4;      // 16px
+$plus-ui-component-padding-lg: $plus-ui-spacing-6;      // 24px
+
+$plus-ui-component-gap-sm: $plus-ui-spacing-2;          // 8px
+$plus-ui-component-gap-md: $plus-ui-spacing-4;          // 16px
+$plus-ui-component-gap-lg: $plus-ui-spacing-6;          // 24px
+
+$plus-ui-section-gap-sm: $plus-ui-spacing-8;            // 32px
+$plus-ui-section-gap-md: $plus-ui-spacing-12;           // 48px
+$plus-ui-section-gap-lg: $plus-ui-spacing-16;           // 64px
+
+$plus-ui-page-padding-sm: $plus-ui-spacing-4;           // 16px
+$plus-ui-page-padding-md: $plus-ui-spacing-6;           // 24px
+$plus-ui-page-padding-lg: $plus-ui-spacing-8;           // 32px
+
+// Button spacing (from Plus UI examples)
+$plus-ui-button-padding-x: $plus-ui-spacing-2-5;        // 10px
+$plus-ui-button-padding-y: $plus-ui-spacing-2;          // 8px
+$plus-ui-button-gap: $plus-ui-spacing-3;                // 12px
+
+// ============================================================================
+// UTILITY MIXINS
+// ============================================================================
+
+/**
+ * Apply padding using spacing scale
+ * @param {string} $size - Spacing key
+ *
+ * Usage:
+ * .card {
+ *   @include padding(6);     // padding: 24px
+ * }
+ */
+@mixin padding($size) {
+  padding: spacing($size);
+}
+
+/**
+ * Apply margin using spacing scale
+ * @param {string} $size - Spacing key
+ *
+ * Usage:
+ * .section {
+ *   @include margin(8);      // margin: 32px
+ * }
+ */
+@mixin margin($size) {
+  margin: spacing($size);
+}
+
+/**
+ * Apply gap using spacing scale
+ * @param {string} $size - Spacing key
+ *
+ * Usage:
+ * .flex-container {
+ *   display: flex;
+ *   @include gap(4);         // gap: 16px
+ * }
+ */
+@mixin gap($size) {
+  gap: spacing($size);
+}
+
+/**
+ * Apply stack spacing (vertical gap)
+ * @param {string} $size - Spacing key
+ *
+ * Usage:
+ * .stack {
+ *   @include stack(4);
+ * }
+ */
+@mixin stack($size) {
+  display: flex;
+  flex-direction: column;
+  gap: spacing($size);
+}
+
+/**
+ * Apply inline spacing (horizontal gap)
+ * @param {string} $size - Spacing key
+ *
+ * Usage:
+ * .inline {
+ *   @include inline(2);
+ * }
+ */
+@mixin inline($size) {
+  display: flex;
+  flex-direction: row;
+  gap: spacing($size);
+}

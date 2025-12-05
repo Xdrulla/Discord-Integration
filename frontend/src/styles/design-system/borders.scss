@@ -1,0 +1,306 @@
+/**
+ * Plus UI Design System - Borders Foundation
+ * Based on Plus UI Figma Design System
+ *
+ * Border radius and border width tokens
+ */
+
+// ============================================================================
+// BORDER RADIUS
+// ============================================================================
+
+$plus-ui-rounded-none: 0px;        // rounded-none / number/0
+$plus-ui-rounded-sm: 2px;          // rounded-sm / number/0-5
+$plus-ui-rounded: 4px;             // rounded / number/1
+$plus-ui-rounded-md: 6px;          // rounded-md / number/1-5
+$plus-ui-rounded-lg: 8px;          // rounded-lg / number/2
+$plus-ui-rounded-xl: 12px;         // rounded-xl / number/3
+$plus-ui-rounded-2xl: 16px;        // rounded-2xl / number/4
+$plus-ui-rounded-3xl: 24px;        // rounded-3xl / number/6
+$plus-ui-rounded-full: 9999px;     // rounded-full / full circle
+
+// ============================================================================
+// BORDER WIDTH
+// ============================================================================
+
+$plus-ui-border-0: 0px;            // border-0 / number/0
+$plus-ui-border: 1px;              // border / number/px (default)
+$plus-ui-border-2: 2px;            // border-2 / number/0-51
+$plus-ui-border-4: 4px;            // border-4 / number/1
+$plus-ui-border-8: 8px;            // border-8 / number/2
+
+// ============================================================================
+// BORDER RADIUS MAP (for iteration and dynamic access)
+// ============================================================================
+
+$plus-ui-border-radius-scale: (
+  none: $plus-ui-rounded-none,
+  sm: $plus-ui-rounded-sm,
+  default: $plus-ui-rounded,
+  md: $plus-ui-rounded-md,
+  lg: $plus-ui-rounded-lg,
+  xl: $plus-ui-rounded-xl,
+  2xl: $plus-ui-rounded-2xl,
+  3xl: $plus-ui-rounded-3xl,
+  full: $plus-ui-rounded-full,
+);
+
+$plus-ui-border-width-scale: (
+  0: $plus-ui-border-0,
+  default: $plus-ui-border,
+  2: $plus-ui-border-2,
+  4: $plus-ui-border-4,
+  8: $plus-ui-border-8,
+);
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Get border radius value by key
+ * @param {string} $key - Border radius key (e.g., 'sm', 'md', 'lg', 'full')
+ * @return {string} - Border radius value
+ *
+ * Usage:
+ * .button {
+ *   border-radius: rounded(md);
+ * }
+ */
+@function rounded($key: 'default') {
+  @return map-get($plus-ui-border-radius-scale, $key);
+}
+
+/**
+ * Get border width value by key
+ * @param {string} $key - Border width key (e.g., '0', '2', '4', '8')
+ * @return {string} - Border width value
+ *
+ * Usage:
+ * .card {
+ *   border-width: border-width(2);
+ * }
+ */
+@function border-width($key: 'default') {
+  @return map-get($plus-ui-border-width-scale, $key);
+}
+
+// ============================================================================
+// UTILITY MIXINS
+// ============================================================================
+
+/**
+ * Apply border radius
+ * @param {string} $size - Border radius size key
+ *
+ * Usage:
+ * .button {
+ *   @include rounded(lg);
+ * }
+ */
+@mixin rounded($size: 'default') {
+  border-radius: rounded($size);
+}
+
+/**
+ * Apply border radius to specific corners
+ * @param {string} $size - Border radius size key
+ * @param {string} $corners - Corners to apply (top, bottom, left, right, tl, tr, bl, br)
+ *
+ * Usage:
+ * .card-header {
+ *   @include rounded-corner(lg, top);
+ * }
+ */
+@mixin rounded-corner($size: 'default', $corners: 'all') {
+  $radius: rounded($size);
+
+  @if $corners == 'all' {
+    border-radius: $radius;
+  } @else if $corners == 'top' {
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+  } @else if $corners == 'bottom' {
+    border-bottom-left-radius: $radius;
+    border-bottom-right-radius: $radius;
+  } @else if $corners == 'left' {
+    border-top-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+  } @else if $corners == 'right' {
+    border-top-right-radius: $radius;
+    border-bottom-right-radius: $radius;
+  } @else if $corners == 'tl' {
+    border-top-left-radius: $radius;
+  } @else if $corners == 'tr' {
+    border-top-right-radius: $radius;
+  } @else if $corners == 'bl' {
+    border-bottom-left-radius: $radius;
+  } @else if $corners == 'br' {
+    border-bottom-right-radius: $radius;
+  }
+}
+
+/**
+ * Apply border with width and color
+ * @param {string} $width - Border width key
+ * @param {color} $color - Border color
+ * @param {string} $style - Border style (solid, dashed, dotted)
+ *
+ * Usage:
+ * .card {
+ *   @include border(2, $plus-ui-border-default-light, solid);
+ * }
+ */
+@mixin border($width: 'default', $color: null, $style: solid) {
+  border-width: border-width($width);
+  border-style: $style;
+
+  @if $color != null {
+    border-color: $color;
+  }
+}
+
+/**
+ * Apply border to specific sides
+ * @param {string} $width - Border width key
+ * @param {string} $sides - Sides to apply (top, bottom, left, right, x, y)
+ * @param {color} $color - Border color
+ * @param {string} $style - Border style
+ *
+ * Usage:
+ * .divider {
+ *   @include border-side(default, bottom, $plus-ui-neutral-200);
+ * }
+ */
+@mixin border-side($width: 'default', $sides: 'all', $color: null, $style: solid) {
+  $border-width: border-width($width);
+
+  @if $sides == 'all' {
+    border-width: $border-width;
+    border-style: $style;
+    @if $color != null {
+      border-color: $color;
+    }
+  } @else if $sides == 'top' {
+    border-top-width: $border-width;
+    border-top-style: $style;
+    @if $color != null {
+      border-top-color: $color;
+    }
+  } @else if $sides == 'bottom' {
+    border-bottom-width: $border-width;
+    border-bottom-style: $style;
+    @if $color != null {
+      border-bottom-color: $color;
+    }
+  } @else if $sides == 'left' {
+    border-left-width: $border-width;
+    border-left-style: $style;
+    @if $color != null {
+      border-left-color: $color;
+    }
+  } @else if $sides == 'right' {
+    border-right-width: $border-width;
+    border-right-style: $style;
+    @if $color != null {
+      border-right-color: $color;
+    }
+  } @else if $sides == 'x' {
+    border-left-width: $border-width;
+    border-right-width: $border-width;
+    border-left-style: $style;
+    border-right-style: $style;
+    @if $color != null {
+      border-left-color: $color;
+      border-right-color: $color;
+    }
+  } @else if $sides == 'y' {
+    border-top-width: $border-width;
+    border-bottom-width: $border-width;
+    border-top-style: $style;
+    border-bottom-style: $style;
+    @if $color != null {
+      border-top-color: $color;
+      border-bottom-color: $color;
+    }
+  }
+}
+
+/**
+ * Remove border
+ *
+ * Usage:
+ * .no-border {
+ *   @include no-border;
+ * }
+ */
+@mixin no-border {
+  border: none;
+}
+
+// ============================================================================
+// SEMANTIC BORDER PRESETS
+// ============================================================================
+
+// Component border defaults
+$plus-ui-component-border-radius: $plus-ui-rounded-lg;      // 8px
+$plus-ui-component-border-width: $plus-ui-border;           // 1px
+
+// Button borders
+$plus-ui-button-border-radius: $plus-ui-rounded-md;         // 6px
+$plus-ui-button-border-width: $plus-ui-border;              // 1px
+
+// Input borders
+$plus-ui-input-border-radius: $plus-ui-rounded-md;          // 6px
+$plus-ui-input-border-width: $plus-ui-border;               // 1px
+
+// Card borders
+$plus-ui-card-border-radius: $plus-ui-rounded-lg;           // 8px
+$plus-ui-card-border-width: $plus-ui-border;                // 1px
+
+// Modal borders
+$plus-ui-modal-border-radius: $plus-ui-rounded-xl;          // 12px
+$plus-ui-modal-border-width: $plus-ui-border-0;             // 0px (no border)
+
+// Badge/Tag borders
+$plus-ui-badge-border-radius: $plus-ui-rounded-full;        // 9999px (pill)
+$plus-ui-badge-border-width: $plus-ui-border-0;             // 0px
+
+// Avatar borders
+$plus-ui-avatar-border-radius: $plus-ui-rounded-full;       // 9999px (circle)
+$plus-ui-avatar-border-width: $plus-ui-border-2;            // 2px
+
+/**
+ * Apply component-specific border styles
+ * @param {string} $component - Component type (button, input, card, modal, badge, avatar)
+ *
+ * Usage:
+ * .button {
+ *   @include component-border(button);
+ * }
+ */
+@mixin component-border($component) {
+  @if $component == 'button' {
+    border-radius: $plus-ui-button-border-radius;
+    border-width: $plus-ui-button-border-width;
+    border-style: solid;
+  } @else if $component == 'input' {
+    border-radius: $plus-ui-input-border-radius;
+    border-width: $plus-ui-input-border-width;
+    border-style: solid;
+  } @else if $component == 'card' {
+    border-radius: $plus-ui-card-border-radius;
+    border-width: $plus-ui-card-border-width;
+    border-style: solid;
+  } @else if $component == 'modal' {
+    border-radius: $plus-ui-modal-border-radius;
+    border-width: $plus-ui-modal-border-width;
+  } @else if $component == 'badge' {
+    border-radius: $plus-ui-badge-border-radius;
+    border-width: $plus-ui-badge-border-width;
+  } @else if $component == 'avatar' {
+    border-radius: $plus-ui-avatar-border-radius;
+    border-width: $plus-ui-avatar-border-width;
+    border-style: solid;
+  }
+}

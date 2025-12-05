@@ -1,0 +1,457 @@
+/**
+ * Plus UI Design System - Color Foundation
+ * Based on Plus UI Figma Design System
+ *
+ * Color palette with 50-950 shades for each color family
+ * Supports light and dark mode with semantic tokens
+ */
+
+// ============================================================================
+// BASE COLORS
+// ============================================================================
+
+$plus-ui-white: #ffffff;
+$plus-ui-black: #000000;
+
+// ============================================================================
+// NEUTRAL/GRAY SCALES
+// ============================================================================
+
+// Slate
+$plus-ui-slate-50: #f8fafc;
+$plus-ui-slate-100: #f1f5f9;
+$plus-ui-slate-200: #e2e8f0;
+$plus-ui-slate-300: #cbd5e1;
+$plus-ui-slate-400: #94a3b8;
+$plus-ui-slate-500: #64748b;
+$plus-ui-slate-600: #475569;
+$plus-ui-slate-700: #334155;
+$plus-ui-slate-800: #1e293b;
+$plus-ui-slate-900: #0f172a;
+$plus-ui-slate-950: #020617;
+
+// Gray
+$plus-ui-gray-50: #f9fafb;
+$plus-ui-gray-100: #f3f4f6;
+$plus-ui-gray-200: #e5e7eb;
+$plus-ui-gray-300: #d1d5db;
+$plus-ui-gray-400: #9ca3af;
+$plus-ui-gray-500: #6b7280;
+$plus-ui-gray-600: #4b5563;
+$plus-ui-gray-700: #374151;
+$plus-ui-gray-800: #1f2937;
+$plus-ui-gray-900: #111827;
+$plus-ui-gray-950: #030712;
+
+// Zinc
+$plus-ui-zinc-50: #fafafa;
+$plus-ui-zinc-100: #f3f4f6;
+$plus-ui-zinc-200: #e5e7eb;
+$plus-ui-zinc-300: #d1d5db;
+$plus-ui-zinc-400: #9ca3af;
+$plus-ui-zinc-500: #6b7280;
+$plus-ui-zinc-600: #4b5563;
+$plus-ui-zinc-700: #374151;
+$plus-ui-zinc-800: #1f2937;
+$plus-ui-zinc-900: #111827;
+$plus-ui-zinc-950: #0a090b;
+
+// Neutral (Default)
+$plus-ui-neutral-50: #fafafa;
+$plus-ui-neutral-100: #f5f5f5;
+$plus-ui-neutral-200: #e5e5e5;
+$plus-ui-neutral-300: #d4d4d4;
+$plus-ui-neutral-400: #a3a3a3;
+$plus-ui-neutral-500: #737373;
+$plus-ui-neutral-600: #525252;
+$plus-ui-neutral-700: #404040;
+$plus-ui-neutral-800: #262626;
+$plus-ui-neutral-900: #171717;
+$plus-ui-neutral-950: #0a0a0a;
+
+// Stone
+$plus-ui-stone-50: #fafaf9;
+$plus-ui-stone-100: #f5f5f4;
+$plus-ui-stone-200: #e7e5e4;
+$plus-ui-stone-300: #d6d3d1;
+$plus-ui-stone-400: #a8a29e;
+$plus-ui-stone-500: #78716c;
+$plus-ui-stone-600: #57534e;
+$plus-ui-stone-700: #44403c;
+$plus-ui-stone-800: #292524;
+$plus-ui-stone-900: #1c1917;
+$plus-ui-stone-950: #0c0a09;
+
+// ============================================================================
+// PRIMARY COLOR - INDIGO
+// ============================================================================
+
+$plus-ui-indigo-50: #eef2ff;
+$plus-ui-indigo-100: #e0e7ff;
+$plus-ui-indigo-200: #c7d2fe;
+$plus-ui-indigo-300: #a5b4fc;
+$plus-ui-indigo-400: #818cf8;
+$plus-ui-indigo-500: #6366f1;
+$plus-ui-indigo-600: #4f46e5;
+$plus-ui-indigo-700: #4338ca;
+$plus-ui-indigo-800: #3730a3;
+$plus-ui-indigo-900: #312e81;
+$plus-ui-indigo-950: #1e1b4b;
+
+// ============================================================================
+// INFO COLOR - BLUE
+// ============================================================================
+
+$plus-ui-blue-50: #eff6ff;
+$plus-ui-blue-100: #dbeafe;
+$plus-ui-blue-200: #bfdbfe;
+$plus-ui-blue-300: #93c5fd;
+$plus-ui-blue-400: #60a5fa;
+$plus-ui-blue-500: #3b82f6;
+$plus-ui-blue-600: #2563eb;
+$plus-ui-blue-700: #1d4ed8;
+$plus-ui-blue-800: #1e40af;
+$plus-ui-blue-900: #1e3a8a;
+$plus-ui-blue-950: #172554;
+
+$plus-ui-sky-50: #f0f9ff;
+$plus-ui-sky-100: #e0f2fe;
+$plus-ui-sky-200: #bae6fd;
+$plus-ui-sky-300: #7dd3fc;
+$plus-ui-sky-400: #38bdf8;
+$plus-ui-sky-500: #0ea5e9;
+$plus-ui-sky-600: #0284c7;
+$plus-ui-sky-700: #0369a1;
+$plus-ui-sky-800: #075985;
+$plus-ui-sky-900: #0c4a6e;
+$plus-ui-sky-950: #082f49;
+
+// ============================================================================
+// SUCCESS COLOR - GREEN
+// ============================================================================
+
+$plus-ui-green-50: #f0fdf4;
+$plus-ui-green-100: #dcfce7;
+$plus-ui-green-200: #bbf7d0;
+$plus-ui-green-300: #86efac;
+$plus-ui-green-400: #4ade80;
+$plus-ui-green-500: #22c55e;
+$plus-ui-green-600: #16a34a;
+$plus-ui-green-700: #15803d;
+$plus-ui-green-800: #166534;
+$plus-ui-green-900: #14532d;
+$plus-ui-green-950: #052e16;
+
+$plus-ui-emerald-50: #ecfdf5;
+$plus-ui-emerald-100: #d1fae5;
+$plus-ui-emerald-200: #a7f3d0;
+$plus-ui-emerald-300: #6ee7b7;
+$plus-ui-emerald-400: #34d399;
+$plus-ui-emerald-500: #10b981;
+$plus-ui-emerald-600: #059669;
+$plus-ui-emerald-700: #047857;
+$plus-ui-emerald-800: #065f46;
+$plus-ui-emerald-900: #064e3b;
+$plus-ui-emerald-950: #022c22;
+
+$plus-ui-teal-50: #f0fdfa;
+$plus-ui-teal-100: #ccfbf1;
+$plus-ui-teal-200: #99f6e4;
+$plus-ui-teal-300: #5eead4;
+$plus-ui-teal-400: #2dd4bf;
+$plus-ui-teal-500: #14b8a6;
+$plus-ui-teal-600: #0d9488;
+$plus-ui-teal-700: #0f766e;
+$plus-ui-teal-800: #115e59;
+$plus-ui-teal-900: #134e4a;
+$plus-ui-teal-950: #042f2e;
+
+$plus-ui-lime-50: #f7fee7;
+$plus-ui-lime-100: #ecfccb;
+$plus-ui-lime-200: #d9f99d;
+$plus-ui-lime-300: #bef264;
+$plus-ui-lime-400: #a3e635;
+$plus-ui-lime-500: #84cc16;
+$plus-ui-lime-600: #65a30d;
+$plus-ui-lime-700: #4d7c0f;
+$plus-ui-lime-800: #3f6212;
+$plus-ui-lime-900: #365314;
+$plus-ui-lime-950: #1a2e05;
+
+// ============================================================================
+// WARNING COLOR - YELLOW/ORANGE
+// ============================================================================
+
+$plus-ui-yellow-50: #fefce8;
+$plus-ui-yellow-100: #fef9c3;
+$plus-ui-yellow-200: #fef08a;
+$plus-ui-yellow-300: #fde047;
+$plus-ui-yellow-400: #facc15;
+$plus-ui-yellow-500: #eab308;
+$plus-ui-yellow-600: #ca8a04;
+$plus-ui-yellow-700: #a16207;
+$plus-ui-yellow-800: #854d0e;
+$plus-ui-yellow-900: #713f12;
+$plus-ui-yellow-950: #422006;
+
+$plus-ui-amber-50: #fffbeb;
+$plus-ui-amber-100: #fef3c7;
+$plus-ui-amber-200: #fde68a;
+$plus-ui-amber-300: #fcd34d;
+$plus-ui-amber-400: #fbbf24;
+$plus-ui-amber-500: #f59e0b;
+$plus-ui-amber-600: #d97706;
+$plus-ui-amber-700: #b45309;
+$plus-ui-amber-800: #92400e;
+$plus-ui-amber-900: #78350f;
+$plus-ui-amber-950: #451a03;
+
+$plus-ui-orange-50: #fff7ed;
+$plus-ui-orange-100: #ffedd5;
+$plus-ui-orange-200: #fed7aa;
+$plus-ui-orange-300: #fdba74;
+$plus-ui-orange-400: #fb923c;
+$plus-ui-orange-500: #f97316;
+$plus-ui-orange-600: #ea580c;
+$plus-ui-orange-700: #c2410c;
+$plus-ui-orange-800: #9a3412;
+$plus-ui-orange-900: #7c2d12;
+$plus-ui-orange-950: #431407;
+
+// ============================================================================
+// DANGER COLOR - RED
+// ============================================================================
+
+$plus-ui-red-50: #fef2f2;
+$plus-ui-red-100: #fee2e2;
+$plus-ui-red-200: #fecaca;
+$plus-ui-red-300: #fca5a5;
+$plus-ui-red-400: #f87171;
+$plus-ui-red-500: #ef4444;
+$plus-ui-red-600: #dc2626;
+$plus-ui-red-700: #b91c1c;
+$plus-ui-red-800: #991b1b;
+$plus-ui-red-900: #7f1d1d;
+$plus-ui-red-950: #450a0a;
+
+$plus-ui-rose-50: #fff1f2;
+$plus-ui-rose-100: #ffe4e6;
+$plus-ui-rose-200: #fecdd3;
+$plus-ui-rose-300: #fda4af;
+$plus-ui-rose-400: #fb7185;
+$plus-ui-rose-500: #f43f5e;
+$plus-ui-rose-600: #e11d48;
+$plus-ui-rose-700: #be123c;
+$plus-ui-rose-800: #9f1239;
+$plus-ui-rose-900: #881337;
+$plus-ui-rose-950: #4c0519;
+
+// ============================================================================
+// ADDITIONAL COLORS
+// ============================================================================
+
+$plus-ui-cyan-50: #ecfeff;
+$plus-ui-cyan-100: #cffafe;
+$plus-ui-cyan-200: #a5f3fc;
+$plus-ui-cyan-300: #67e8f9;
+$plus-ui-cyan-400: #22d3ee;
+$plus-ui-cyan-500: #06b6d4;
+$plus-ui-cyan-600: #0891b2;
+$plus-ui-cyan-700: #0e7490;
+$plus-ui-cyan-800: #155e75;
+$plus-ui-cyan-900: #164e63;
+$plus-ui-cyan-950: #083344;
+
+$plus-ui-violet-50: #f5f3ff;
+$plus-ui-violet-100: #ede9fe;
+$plus-ui-violet-200: #ddd6fe;
+$plus-ui-violet-300: #c4b5fd;
+$plus-ui-violet-400: #a78bfa;
+$plus-ui-violet-500: #8b5cf6;
+$plus-ui-violet-600: #7c3aed;
+$plus-ui-violet-700: #6d28d9;
+$plus-ui-violet-800: #5b21b6;
+$plus-ui-violet-900: #4c1d95;
+$plus-ui-violet-950: #2e1065;
+
+$plus-ui-purple-50: #faf5ff;
+$plus-ui-purple-100: #f3e8ff;
+$plus-ui-purple-200: #e9d5ff;
+$plus-ui-purple-300: #d8b4fe;
+$plus-ui-purple-400: #c084fc;
+$plus-ui-purple-500: #a855f7;
+$plus-ui-purple-600: #9333ea;
+$plus-ui-purple-700: #7e22ce;
+$plus-ui-purple-800: #6b21a8;
+$plus-ui-purple-900: #581c87;
+$plus-ui-purple-950: #3b0764;
+
+$plus-ui-fuchsia-50: #fdf4ff;
+$plus-ui-fuchsia-100: #fae8ff;
+$plus-ui-fuchsia-200: #f5d0fe;
+$plus-ui-fuchsia-300: #f0abf6;
+$plus-ui-fuchsia-400: #e879f9;
+$plus-ui-fuchsia-500: #d946ef;
+$plus-ui-fuchsia-600: #c026d3;
+$plus-ui-fuchsia-700: #a21caf;
+$plus-ui-fuchsia-800: #86198f;
+$plus-ui-fuchsia-900: #701a75;
+$plus-ui-fuchsia-950: #4a044e;
+
+$plus-ui-pink-50: #fdf2f8;
+$plus-ui-pink-100: #fce7f3;
+$plus-ui-pink-200: #fbcfe8;
+$plus-ui-pink-300: #f9a8d4;
+$plus-ui-pink-400: #f472b6;
+$plus-ui-pink-500: #ec4899;
+$plus-ui-pink-600: #db2777;
+$plus-ui-pink-700: #be185d;
+$plus-ui-pink-800: #9f1239;
+$plus-ui-pink-900: #831843;
+$plus-ui-pink-950: #500724;
+
+// ============================================================================
+// SEMANTIC COLOR TOKENS - LIGHT MODE
+// ============================================================================
+
+// Background Colors - Light Mode
+$plus-ui-bg-default-light: $plus-ui-neutral-100;
+$plus-ui-bg-default-invert-light: $plus-ui-neutral-700;
+$plus-ui-bg-hovered-light: $plus-ui-neutral-200;
+$plus-ui-bg-pressed-light: $plus-ui-neutral-300;
+$plus-ui-bg-focused-light: $plus-ui-neutral-100;
+$plus-ui-bg-loading-light: $plus-ui-neutral-300;
+
+$plus-ui-bg-primary-default-light: $plus-ui-indigo-700;
+$plus-ui-bg-primary-invert-light: $plus-ui-indigo-100;
+$plus-ui-bg-primary-hovered-light: $plus-ui-indigo-800;
+$plus-ui-bg-primary-pressed-light: $plus-ui-indigo-900;
+$plus-ui-bg-primary-focused-light: $plus-ui-indigo-700;
+$plus-ui-bg-primary-loading-light: $plus-ui-indigo-900;
+
+$plus-ui-bg-info-default-light: $plus-ui-blue-700;
+$plus-ui-bg-info-invert-light: $plus-ui-blue-100;
+$plus-ui-bg-info-hovered-light: $plus-ui-blue-800;
+$plus-ui-bg-info-pressed-light: $plus-ui-blue-900;
+$plus-ui-bg-info-focused-light: $plus-ui-blue-700;
+$plus-ui-bg-info-loading-light: $plus-ui-blue-900;
+
+$plus-ui-bg-success-default-light: $plus-ui-green-700;
+$plus-ui-bg-success-invert-light: $plus-ui-green-100;
+$plus-ui-bg-success-hovered-light: $plus-ui-green-800;
+$plus-ui-bg-success-pressed-light: $plus-ui-green-900;
+$plus-ui-bg-success-focused-light: $plus-ui-green-700;
+$plus-ui-bg-success-loading-light: $plus-ui-green-900;
+
+$plus-ui-bg-warning-default-light: $plus-ui-yellow-700;
+$plus-ui-bg-warning-invert-light: $plus-ui-yellow-100;
+$plus-ui-bg-warning-hovered-light: $plus-ui-yellow-800;
+$plus-ui-bg-warning-pressed-light: $plus-ui-yellow-900;
+$plus-ui-bg-warning-focused-light: $plus-ui-yellow-700;
+$plus-ui-bg-warning-loading-light: $plus-ui-yellow-900;
+
+$plus-ui-bg-danger-default-light: $plus-ui-red-700;
+$plus-ui-bg-danger-invert-light: $plus-ui-red-100;
+$plus-ui-bg-danger-hovered-light: $plus-ui-red-800;
+$plus-ui-bg-danger-pressed-light: $plus-ui-red-900;
+$plus-ui-bg-danger-focused-light: $plus-ui-red-700;
+$plus-ui-bg-danger-loading-light: $plus-ui-red-900;
+
+// Text Colors - Light Mode
+$plus-ui-text-base-light: $plus-ui-white;
+$plus-ui-text-default-light: $plus-ui-neutral-950;
+$plus-ui-text-primary-light: $plus-ui-indigo-700;
+$plus-ui-text-info-light: $plus-ui-blue-700;
+$plus-ui-text-success-light: $plus-ui-green-700;
+$plus-ui-text-warning-light: $plus-ui-yellow-700;
+$plus-ui-text-danger-light: $plus-ui-red-700;
+$plus-ui-text-placeholder-light: $plus-ui-neutral-500;
+$plus-ui-text-caption-light: $plus-ui-neutral-600;
+$plus-ui-text-link-light: $plus-ui-blue-700;
+$plus-ui-text-visited-light: $plus-ui-purple-700;
+$plus-ui-text-loading-light: $plus-ui-neutral-700;
+$plus-ui-text-disabled-light: $plus-ui-neutral-400;
+
+// Border Colors - Light Mode
+$plus-ui-border-base-light: $plus-ui-white;
+$plus-ui-border-default-light: $plus-ui-neutral-400;
+$plus-ui-border-primary-light: $plus-ui-indigo-700;
+$plus-ui-border-info-light: $plus-ui-blue-700;
+$plus-ui-border-success-light: $plus-ui-green-700;
+$plus-ui-border-warning-light: $plus-ui-yellow-700;
+$plus-ui-border-danger-light: $plus-ui-red-700;
+$plus-ui-border-ring-light: $plus-ui-blue-300;
+$plus-ui-border-disabled-light: $plus-ui-neutral-300;
+
+// ============================================================================
+// SEMANTIC COLOR TOKENS - DARK MODE
+// ============================================================================
+
+// Background Colors - Dark Mode
+$plus-ui-bg-default-dark: $plus-ui-neutral-900;
+$plus-ui-bg-default-invert-dark: $plus-ui-neutral-200;
+$plus-ui-bg-hovered-dark: $plus-ui-neutral-800;
+$plus-ui-bg-pressed-dark: $plus-ui-neutral-700;
+$plus-ui-bg-focused-dark: $plus-ui-neutral-900;
+$plus-ui-bg-loading-dark: $plus-ui-neutral-700;
+
+$plus-ui-bg-primary-default-dark: $plus-ui-indigo-900;
+$plus-ui-bg-primary-invert-dark: $plus-ui-indigo-300;
+$plus-ui-bg-primary-hovered-dark: $plus-ui-indigo-800;
+$plus-ui-bg-primary-pressed-dark: $plus-ui-indigo-700;
+$plus-ui-bg-primary-focused-dark: $plus-ui-indigo-900;
+$plus-ui-bg-primary-loading-dark: $plus-ui-indigo-700;
+
+$plus-ui-bg-info-default-dark: $plus-ui-blue-900;
+$plus-ui-bg-info-invert-dark: $plus-ui-blue-300;
+$plus-ui-bg-info-hovered-dark: $plus-ui-blue-800;
+$plus-ui-bg-info-pressed-dark: $plus-ui-blue-700;
+$plus-ui-bg-info-focused-dark: $plus-ui-blue-900;
+$plus-ui-bg-info-loading-dark: $plus-ui-blue-700;
+
+$plus-ui-bg-success-default-dark: $plus-ui-green-900;
+$plus-ui-bg-success-invert-dark: $plus-ui-green-100;
+$plus-ui-bg-success-hovered-dark: $plus-ui-green-800;
+$plus-ui-bg-success-pressed-dark: $plus-ui-green-700;
+$plus-ui-bg-success-focused-dark: $plus-ui-green-900;
+$plus-ui-bg-success-loading-dark: $plus-ui-green-700;
+
+$plus-ui-bg-warning-default-dark: $plus-ui-yellow-900;
+$plus-ui-bg-warning-invert-dark: $plus-ui-yellow-300;
+$plus-ui-bg-warning-hovered-dark: $plus-ui-yellow-800;
+$plus-ui-bg-warning-pressed-dark: $plus-ui-yellow-700;
+$plus-ui-bg-warning-focused-dark: $plus-ui-yellow-900;
+$plus-ui-bg-warning-loading-dark: $plus-ui-yellow-700;
+
+$plus-ui-bg-danger-default-dark: $plus-ui-red-900;
+$plus-ui-bg-danger-invert-dark: $plus-ui-red-300;
+$plus-ui-bg-danger-hovered-dark: $plus-ui-red-800;
+$plus-ui-bg-danger-pressed-dark: $plus-ui-red-700;
+$plus-ui-bg-danger-focused-dark: $plus-ui-red-900;
+$plus-ui-bg-danger-loading-dark: $plus-ui-red-700;
+
+// Text Colors - Dark Mode
+$plus-ui-text-base-dark: $plus-ui-neutral-950;
+$plus-ui-text-default-dark: $plus-ui-white;
+$plus-ui-text-primary-dark: $plus-ui-indigo-100;
+$plus-ui-text-info-dark: $plus-ui-blue-100;
+$plus-ui-text-success-dark: $plus-ui-green-100;
+$plus-ui-text-warning-dark: $plus-ui-yellow-100;
+$plus-ui-text-danger-dark: $plus-ui-red-100;
+$plus-ui-text-placeholder-dark: $plus-ui-neutral-500;
+$plus-ui-text-caption-dark: $plus-ui-neutral-900;
+$plus-ui-text-link-dark: $plus-ui-blue-100;
+$plus-ui-text-visited-dark: $plus-ui-purple-100;
+$plus-ui-text-loading-dark: $plus-ui-neutral-100;
+$plus-ui-text-disabled-dark: $plus-ui-neutral-900;
+
+// Border Colors - Dark Mode
+$plus-ui-border-base-dark: $plus-ui-gray-950;
+$plus-ui-border-default-dark: $plus-ui-neutral-800;
+$plus-ui-border-primary-dark: $plus-ui-indigo-300;
+$plus-ui-border-info-dark: $plus-ui-blue-300;
+$plus-ui-border-success-dark: $plus-ui-green-300;
+$plus-ui-border-warning-dark: $plus-ui-yellow-300;
+$plus-ui-border-danger-dark: $plus-ui-red-300;
+$plus-ui-border-ring-dark: $plus-ui-blue-700;
+$plus-ui-border-disabled-dark: $plus-ui-neutral-700;
