@@ -23,6 +23,9 @@
 @use "pagination-footer";
 @use "pedding-justification";
 
+// Plus UI Design System Components
+@use "components/avatar";
+
 html,
 body,
 #root {

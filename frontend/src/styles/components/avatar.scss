@@ -1,0 +1,272 @@
+// ================================
+// AVATAR
+// ================================
+// Estilos para componentes Avatar e AvatarGroup do Plus UI Design System
+
+@use '../design-system' as *;
+
+// ================================
+// AVATAR BASE
+// ================================
+
+.ds-avatar {
+  font-family: 'Inter', sans-serif;
+  font-weight: $plus-ui-font-weight-medium;
+  cursor: default;
+  transition: all 200ms ease-in-out;
+
+  // Sobrescrever estilos do Ant Design
+  &.ant-avatar {
+    background-color: $plus-ui-indigo-100;
+    color: $plus-ui-indigo-700;
+    border: 2px solid $plus-ui-white;
+  }
+
+  // Modificadores de tamanho
+  &--size-xs {
+    font-size: $plus-ui-font-size-xs;
+  }
+
+  &--size-sm {
+    font-size: $plus-ui-font-size-sm;
+  }
+
+  &--size-md {
+    font-size: $plus-ui-font-size-base;
+  }
+
+  &--size-lg {
+    font-size: $plus-ui-font-size-lg;
+  }
+
+  &--size-xl {
+    font-size: $plus-ui-font-size-xl;
+  }
+
+  &--size-2xl {
+    font-size: $plus-ui-font-size-2xl;
+  }
+
+  // Shape square
+  &--square {
+    &.ant-avatar {
+      border-radius: $plus-ui-rounded-lg;
+    }
+  }
+
+  // Avatar clicável
+  &--clickable {
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: $plus-ui-shadow-md;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Com status indicator
+  &--with-status {
+    position: relative;
+  }
+
+  // Status indicator (badge do Ant Design)
+  &__status {
+    .ant-badge-dot {
+      border: 2px solid $plus-ui-white;
+      box-shadow: $plus-ui-shadow-sm;
+    }
+
+    // Status online (verde)
+    &--online .ant-badge-dot {
+      background-color: $plus-ui-green-500;
+    }
+
+    // Status offline (cinza)
+    &--offline .ant-badge-dot {
+      background-color: $plus-ui-gray-400;
+    }
+
+    // Status busy (vermelho)
+    &--busy .ant-badge-dot {
+      background-color: $plus-ui-red-500;
+    }
+
+    // Status away (amarelo)
+    &--away .ant-badge-dot {
+      background-color: $plus-ui-yellow-500;
+    }
+
+    // Posições do status
+    &--bottom-right .ant-badge-dot {
+      bottom: 0;
+      right: 0;
+    }
+
+    &--bottom-left .ant-badge-dot {
+      bottom: 0;
+      left: 0;
+      right: auto;
+    }
+
+    &--top-right .ant-badge-dot {
+      top: 0;
+      bottom: auto;
+      right: 0;
+    }
+
+    &--top-left .ant-badge-dot {
+      top: 0;
+      bottom: auto;
+      left: 0;
+      right: auto;
+    }
+
+    // Tamanhos do status indicator
+    &--size-xs .ant-badge-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    &--size-sm .ant-badge-dot {
+      width: 8px;
+      height: 8px;
+    }
+
+    &--size-md .ant-badge-dot {
+      width: 10px;
+      height: 10px;
+    }
+
+    &--size-lg .ant-badge-dot {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--size-xl .ant-badge-dot {
+      width: 14px;
+      height: 14px;
+    }
+
+    &--size-2xl .ant-badge-dot {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// ================================
+// AVATAR GROUP
+// ================================
+
+.ds-avatar-group {
+  &.ant-avatar-group {
+    display: inline-flex;
+    align-items: center;
+
+    .ant-avatar {
+      border: 2px solid $plus-ui-white;
+      margin-left: -$plus-ui-spacing-2;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  // Modificadores de tamanho
+  &--size-xs .ant-avatar {
+    margin-left: -$plus-ui-spacing-1;
+  }
+
+  &--size-sm .ant-avatar {
+    margin-left: -$plus-ui-spacing-1-5;
+  }
+
+  &--size-md .ant-avatar {
+    margin-left: -$plus-ui-spacing-2;
+  }
+
+  &--size-lg .ant-avatar {
+    margin-left: -$plus-ui-spacing-2-5;
+  }
+
+  &--size-xl .ant-avatar {
+    margin-left: -$plus-ui-spacing-3;
+  }
+
+  &--size-2xl .ant-avatar {
+    margin-left: -$plus-ui-spacing-4;
+  }
+
+  // Avatar extra (+N)
+  &__extra {
+    &.ant-avatar {
+      background-color: $plus-ui-gray-100;
+      color: $plus-ui-gray-700;
+      font-weight: $plus-ui-font-weight-semibold;
+      cursor: pointer;
+      transition: all 200ms ease-in-out;
+
+      &:hover {
+        background-color: $plus-ui-gray-200;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  // Item do grupo
+  &__item {
+    display: inline-block;
+    position: relative;
+  }
+
+  // Popover de avatares extras
+  &__popover {
+    max-width: 280px;
+    padding: $plus-ui-spacing-2;
+  }
+
+  &__popover-item {
+    padding: $plus-ui-spacing-2;
+    border-radius: $plus-ui-rounded-md;
+    cursor: pointer;
+    transition: background-color 200ms ease-in-out;
+
+    &:hover {
+      background-color: $plus-ui-gray-50;
+    }
+  }
+
+  &__popover-name {
+    font-size: $plus-ui-font-size-sm;
+    font-weight: $plus-ui-font-weight-medium;
+    color: $plus-ui-text-default-light;
+  }
+
+  &__popover-overlay {
+    .ant-popover-inner {
+      padding: $plus-ui-spacing-2;
+      border-radius: $plus-ui-rounded-lg;
+      box-shadow: $plus-ui-shadow-lg;
+    }
+  }
+}
+
+// ================================
+// RESPONSIVE
+// ================================
+
+@media (max-width: 767px) {
+  .ds-avatar-group {
+    &--size-lg .ant-avatar,
+    &--size-xl .ant-avatar,
+    &--size-2xl .ant-avatar {
+      // Reduzir overlap em telas pequenas
+      margin-left: -$plus-ui-spacing-2;
+    }
+  }
+}
