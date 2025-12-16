@@ -1,0 +1,436 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../shadows' as *;
+@use '../borders' as *;
+@use '../breakpoints' as *;
+
+/**
+ * Modal Component - Plus UI Design System
+ * Based on Ant Design v6 with Plus UI tokens
+ */
+
+.ds-modal {
+  font-family: $plus-ui-font-family !important;
+
+  &__wrapper {
+    // Wrapper do modal
+  }
+
+  &__header {
+    border-bottom: 1px solid $plus-ui-gray-200;
+    padding: $plus-ui-spacing-4 $plus-ui-spacing-6;
+
+    .ant-modal-title {
+      font-size: $plus-ui-font-size-lg;
+      font-weight: $plus-ui-font-weight-semibold;
+      line-height: $plus-ui-line-height-lg;
+      color: $plus-ui-gray-900;
+      margin: 0;
+    }
+
+    .ant-modal-close {
+      top: $plus-ui-spacing-4;
+      right: $plus-ui-spacing-4;
+      color: $plus-ui-gray-500;
+
+      &:hover {
+        color: $plus-ui-gray-700;
+        background-color: $plus-ui-gray-100;
+      }
+    }
+
+    &--confirm {
+      background-color: $plus-ui-blue-50;
+      border-bottom-color: $plus-ui-blue-200;
+    }
+
+    &--destructive {
+      background-color: $plus-ui-red-50;
+      border-bottom-color: $plus-ui-red-200;
+
+      .ant-modal-title {
+        color: $plus-ui-red-700;
+      }
+    }
+
+    &--success {
+      background-color: $plus-ui-green-50;
+      border-bottom-color: $plus-ui-green-200;
+
+      .ant-modal-title {
+        color: $plus-ui-green-700;
+      }
+    }
+
+    &--warning {
+      background-color: $plus-ui-yellow-50;
+      border-bottom-color: $plus-ui-yellow-200;
+
+      .ant-modal-title {
+        color: $plus-ui-yellow-700;
+      }
+    }
+
+    &--error {
+      background-color: $plus-ui-red-50;
+      border-bottom-color: $plus-ui-red-200;
+
+      .ant-modal-title {
+        color: $plus-ui-red-700;
+      }
+    }
+
+    &--info {
+      background-color: $plus-ui-blue-50;
+      border-bottom-color: $plus-ui-blue-200;
+
+      .ant-modal-title {
+        color: $plus-ui-blue-700;
+      }
+    }
+  }
+
+  &__body {
+    padding: $plus-ui-spacing-6;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    font-size: $plus-ui-font-size-sm;
+    line-height: $plus-ui-line-height-sm;
+    color: $plus-ui-gray-700;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $plus-ui-gray-100;
+      border-radius: $plus-ui-rounded-sm;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $plus-ui-gray-300;
+      border-radius: $plus-ui-rounded-sm;
+
+      &:hover {
+        background: $plus-ui-gray-400;
+      }
+    }
+  }
+
+  &__footer {
+    border-top: 1px solid $plus-ui-gray-200;
+    padding: $plus-ui-spacing-4 $plus-ui-spacing-6;
+    display: flex;
+    justify-content: flex-end;
+    gap: $plus-ui-spacing-3;
+
+    .ant-btn {
+      min-width: 80px;
+    }
+  }
+
+  &__mask {
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+  }
+
+  &__content {
+    border-radius: $plus-ui-rounded-lg;
+    box-shadow: $plus-ui-shadow-xl;
+    overflow: hidden;
+  }
+
+  &--confirm {
+    .ant-modal-content {
+      border-left: 4px solid $plus-ui-blue-600;
+    }
+  }
+
+  &--destructive {
+    .ant-modal-content {
+      border-left: 4px solid $plus-ui-red-600;
+    }
+  }
+
+  &--success {
+    .ant-modal-content {
+      border-left: 4px solid $plus-ui-green-600;
+    }
+  }
+
+  &--warning {
+    .ant-modal-content {
+      border-left: 4px solid $plus-ui-yellow-600;
+    }
+  }
+
+  &--error {
+    .ant-modal-content {
+      border-left: 4px solid $plus-ui-red-600;
+    }
+  }
+
+  &--info {
+    .ant-modal-content {
+      border-left: 4px solid $plus-ui-blue-600;
+    }
+  }
+
+  &--fullscreen {
+    .ant-modal {
+      max-width: 100vw;
+      width: 100vw !important;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      top: 0;
+    }
+
+    .ant-modal-content {
+      height: 100vh;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ds-modal__body {
+      flex: 1;
+      max-height: none;
+      overflow-y: auto;
+    }
+  }
+}
+
+.ant-modal {
+  font-family: $plus-ui-font-family !important;
+
+  .ant-modal-content {
+    border-radius: $plus-ui-rounded-lg;
+    box-shadow: $plus-ui-shadow-xl;
+    padding: 0;
+  }
+
+  .ant-modal-header {
+    padding: $plus-ui-spacing-4 $plus-ui-spacing-6;
+    border-bottom: 1px solid $plus-ui-gray-200;
+    border-radius: $plus-ui-rounded-lg $plus-ui-rounded-lg 0 0;
+    margin-bottom: 0;
+  }
+
+  .ant-modal-body {
+    padding: $plus-ui-spacing-6;
+    font-size: $plus-ui-font-size-sm;
+    line-height: $plus-ui-line-height-sm;
+    color: $plus-ui-gray-700;
+  }
+
+  .ant-modal-footer {
+    padding: $plus-ui-spacing-4 $plus-ui-spacing-6;
+    border-top: 1px solid $plus-ui-gray-200;
+    border-radius: 0 0 $plus-ui-rounded-lg $plus-ui-rounded-lg;
+    margin-top: 0;
+
+    .ant-btn {
+      min-width: 80px;
+
+      & + .ant-btn {
+        margin-left: $plus-ui-spacing-3;
+      }
+    }
+  }
+
+  .ant-modal-close {
+    top: $plus-ui-spacing-4;
+    right: $plus-ui-spacing-4;
+    width: 32px;
+    height: 32px;
+    color: $plus-ui-gray-500;
+    border-radius: $plus-ui-rounded-sm;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-gray-700;
+      background-color: $plus-ui-gray-100;
+    }
+
+    .ant-modal-close-x {
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      font-size: 16px;
+    }
+  }
+
+  .ant-modal-title {
+    font-size: $plus-ui-font-size-lg;
+    font-weight: $plus-ui-font-weight-semibold;
+    line-height: $plus-ui-line-height-lg;
+    color: $plus-ui-gray-900;
+  }
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.ant-modal {
+  &.ant-zoom-enter,
+  &.ant-zoom-appear {
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+  }
+
+  &.ant-zoom-leave {
+    animation-duration: 0.2s;
+    animation-timing-function: cubic-bezier(0.78, 0.14, 0.15, 0.86);
+  }
+}
+
+@media (max-width: $plus-ui-breakpoint-md) {
+  .ant-modal {
+    max-width: calc(100vw - 32px);
+    margin: $plus-ui-spacing-4;
+
+    .ant-modal-header {
+      padding: $plus-ui-spacing-3 $plus-ui-spacing-4;
+    }
+
+    .ant-modal-body {
+      padding: $plus-ui-spacing-4;
+    }
+
+    .ant-modal-footer {
+      padding: $plus-ui-spacing-3 $plus-ui-spacing-4;
+
+      .ant-btn {
+        min-width: 70px;
+        font-size: $plus-ui-font-size-sm;
+      }
+    }
+
+    .ant-modal-close {
+      top: $plus-ui-spacing-3;
+      right: $plus-ui-spacing-3;
+    }
+  }
+
+  .ds-modal {
+    &__body {
+      max-height: calc(100vh - 150px);
+    }
+
+    &--fullscreen {
+      .ant-modal {
+        max-width: 100vw;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: $plus-ui-breakpoint-sm) {
+  .ant-modal {
+    max-width: 100vw;
+    margin: 0;
+
+    &:not(.ds-modal--fullscreen) {
+      .ant-modal-content {
+        border-radius: $plus-ui-rounded-lg $plus-ui-rounded-lg 0 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 90vh;
+      }
+
+      .ant-modal-body {
+        max-height: calc(90vh - 120px);
+        overflow-y: auto;
+      }
+    }
+
+    .ant-modal-footer {
+      flex-direction: column;
+      gap: $plus-ui-spacing-2;
+
+      .ant-btn {
+        width: 100%;
+        min-width: auto;
+
+        & + .ant-btn {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ant-modal {
+    .ant-modal-content {
+      background-color: $plus-ui-gray-900;
+      color: $plus-ui-gray-100;
+    }
+
+    .ant-modal-header {
+      background-color: $plus-ui-gray-800;
+      border-bottom-color: $plus-ui-gray-700;
+    }
+
+    .ant-modal-title {
+      color: $plus-ui-gray-100;
+    }
+
+    .ant-modal-close {
+      color: $plus-ui-gray-400;
+
+      &:hover {
+        color: $plus-ui-gray-100;
+        background-color: $plus-ui-gray-800;
+      }
+    }
+
+    .ant-modal-footer {
+      background-color: $plus-ui-gray-800;
+      border-top-color: $plus-ui-gray-700;
+    }
+
+    .ant-modal-body {
+      color: $plus-ui-gray-300;
+    }
+  }
+
+  .ds-modal {
+    &__body {
+      &::-webkit-scrollbar-track {
+        background: $plus-ui-gray-800;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $plus-ui-gray-700;
+
+        &:hover {
+          background: $plus-ui-gray-600;
+        }
+      }
+    }
+  }
+}
+
+.ds-modal {
+  &__slot-area {
+    background-color: $plus-ui-gray-50;
+    border: 2px dashed $plus-ui-gray-300;
+    border-radius: $plus-ui-rounded-md;
+    padding: $plus-ui-spacing-8;
+    text-align: center;
+    color: $plus-ui-gray-500;
+    font-size: $plus-ui-font-size-sm;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

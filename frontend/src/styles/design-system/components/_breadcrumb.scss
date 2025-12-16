@@ -1,0 +1,267 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../shadows' as *;
+@use '../borders' as *;
+@use '../breakpoints' as *;
+
+/**
+ * Breadcrumb Component - Plus UI Design System
+ * Based on Ant Design v6 with Plus UI tokens
+ */
+
+.ds-breadcrumb {
+  font-family: $plus-ui-font-family !important;
+
+  &__root {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    &--with-menu {
+      .ds-breadcrumb__item {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    font-size: $plus-ui-font-size-sm;
+    line-height: $plus-ui-line-height-sm;
+    color: $plus-ui-gray-500;
+    transition: all 0.2s ease;
+
+    &:last-child {
+      color: $plus-ui-gray-900;
+      font-weight: $plus-ui-font-weight-medium;
+    }
+
+    &:hover:not(:last-child) {
+      .ds-breadcrumb__link {
+        color: $plus-ui-indigo-600;
+      }
+    }
+  }
+
+  &__link {
+    color: $plus-ui-gray-500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-indigo-600;
+    }
+
+    &:active {
+      color: $plus-ui-indigo-700;
+    }
+  }
+
+  &__separator {
+    margin: 0 $plus-ui-spacing-2;
+    color: $plus-ui-gray-400;
+    font-size: $plus-ui-font-size-sm;
+    user-select: none;
+  }
+
+  &--with-menu {
+    .ant-breadcrumb-item {
+      cursor: pointer;
+    }
+  }
+}
+
+// Override Ant Design v6 defaults
+.ant-breadcrumb {
+  font-family: $plus-ui-font-family !important;
+  font-size: $plus-ui-font-size-sm;
+  line-height: $plus-ui-line-height-sm;
+  color: $plus-ui-gray-500;
+
+  .ant-breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+
+    &:last-child {
+      color: $plus-ui-gray-900;
+      font-weight: $plus-ui-font-weight-medium;
+
+      a {
+        color: $plus-ui-gray-900;
+        cursor: default;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .ant-breadcrumb-link {
+    color: $plus-ui-gray-500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-indigo-600;
+    }
+
+    &:active {
+      color: $plus-ui-indigo-700;
+    }
+  }
+
+  .ant-breadcrumb-separator {
+    margin: 0 $plus-ui-spacing-2;
+    color: $plus-ui-gray-400;
+  }
+
+  // Dropdown menu styling
+  .ant-dropdown-menu {
+    border-radius: $plus-ui-rounded-md;
+    box-shadow: $plus-ui-shadow-lg;
+    padding: $plus-ui-spacing-1;
+  }
+
+  .ant-dropdown-menu-item {
+    padding: $plus-ui-spacing-2 $plus-ui-spacing-3;
+    font-size: $plus-ui-font-size-sm;
+    color: $plus-ui-gray-700;
+    border-radius: $plus-ui-rounded-sm;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $plus-ui-gray-50;
+      color: $plus-ui-gray-900;
+    }
+
+    &:active {
+      background-color: $plus-ui-gray-100;
+    }
+  }
+
+  // Icon in breadcrumb items
+  .anticon {
+    font-size: $plus-ui-font-size-base;
+    margin-right: $plus-ui-spacing-1;
+  }
+}
+
+// Responsive behavior
+@media (max-width: $plus-ui-breakpoint-md) {
+  .ant-breadcrumb {
+    font-size: $plus-ui-font-size-xs;
+
+    .ant-breadcrumb-separator {
+      margin: 0 $plus-ui-spacing-1;
+    }
+
+    .ant-breadcrumb-item {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .ds-breadcrumb {
+    &__item {
+      font-size: $plus-ui-font-size-xs;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__separator {
+      margin: 0 $plus-ui-spacing-1;
+    }
+  }
+}
+
+@media (max-width: $plus-ui-breakpoint-sm) {
+  .ant-breadcrumb {
+    .ant-breadcrumb-item {
+      max-width: 80px;
+    }
+  }
+
+  .ds-breadcrumb {
+    &__item {
+      max-width: 80px;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .ant-breadcrumb {
+    color: $plus-ui-gray-400;
+
+    .ant-breadcrumb-item {
+      color: $plus-ui-gray-400;
+
+      &:last-child {
+        color: $plus-ui-gray-100;
+      }
+    }
+
+    .ant-breadcrumb-link {
+      color: $plus-ui-gray-400;
+
+      &:hover {
+        color: $plus-ui-indigo-400;
+      }
+
+      &:active {
+        color: $plus-ui-indigo-300;
+      }
+    }
+
+    .ant-breadcrumb-separator {
+      color: $plus-ui-gray-600;
+    }
+
+    .ant-dropdown-menu {
+      background-color: $plus-ui-gray-800;
+    }
+
+    .ant-dropdown-menu-item {
+      color: $plus-ui-gray-300;
+
+      &:hover {
+        background-color: $plus-ui-gray-700;
+        color: $plus-ui-gray-100;
+      }
+
+      &:active {
+        background-color: $plus-ui-gray-600;
+      }
+    }
+  }
+
+  .ds-breadcrumb {
+    &__item {
+      color: $plus-ui-gray-400;
+
+      &:last-child {
+        color: $plus-ui-gray-100;
+      }
+    }
+
+    &__link {
+      color: $plus-ui-gray-400;
+
+      &:hover {
+        color: $plus-ui-indigo-400;
+      }
+
+      &:active {
+        color: $plus-ui-indigo-300;
+      }
+    }
+
+    &__separator {
+      color: $plus-ui-gray-600;
+    }
+  }
+}

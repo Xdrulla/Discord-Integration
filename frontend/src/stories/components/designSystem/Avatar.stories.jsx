@@ -1,6 +1,7 @@
 import React from 'react';
 import { Space, Flex, Typography } from 'antd';
 import Avatar from '../../../components/designSystem/Avatar/Avatar.jsx';
+import AvatarGroup from '../../../components/designSystem/Avatar/AvatarGroup.jsx';
 
 const { Text } = Typography;
 
@@ -13,6 +14,8 @@ const { Text } = Typography;
 export default {
   title: 'Design System/Avatar',
   component: Avatar,
+  subcomponents: { AvatarGroup },
+  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     docs: {
@@ -236,4 +239,229 @@ export const AllStatuses = {
       </Flex>
     </Space>
   ),
+};
+
+// ============================================================================
+// AvatarGroup Stories
+// ============================================================================
+
+/**
+ * Grupo de avatares padrão.
+ * Exibe múltiplos avatares em um layout compacto.
+ */
+export const GroupDefault = {
+  render: () => (
+    <AvatarGroup
+      items={[
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John', name: 'John Doe' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane', name: 'Jane Smith' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob', name: 'Bob Johnson' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice', name: 'Alice Williams' },
+      ]}
+      size="md"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grupo básico de avatares exibindo 4 membros da equipe.',
+      },
+    },
+  },
+};
+
+/**
+ * Grupo com limite máximo.
+ * Quando há mais avatares do que o maxCount, os extras são mostrados em um contador com popover.
+ */
+export const GroupWithMaxCount = {
+  render: () => (
+    <AvatarGroup
+      items={[
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User1', name: 'User 1' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User2', name: 'User 2' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User3', name: 'User 3' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User4', name: 'User 4' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User5', name: 'User 5' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User6', name: 'User 6' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User7', name: 'User 7' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User8', name: 'User 8' },
+      ]}
+      maxCount={5}
+      size="md"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grupo limitado a 5 avatares visíveis. Os 3 restantes aparecem em um popover ao passar o mouse no contador "+3".',
+      },
+    },
+  },
+};
+
+/**
+ * Grupo com tooltips.
+ * Exibe o nome ao passar o mouse sobre cada avatar.
+ */
+export const GroupWithTooltips = {
+  render: () => (
+    <AvatarGroup
+      items={[
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev1', name: 'Ana Silva' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev2', name: 'Carlos Santos' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev3', name: 'Maria Oliveira' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev4', name: 'João Costa' },
+      ]}
+      showTooltip
+      size="md"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Passe o mouse sobre os avatares para ver os nomes em tooltips.',
+      },
+    },
+  },
+};
+
+/**
+ * Grupo com status indicators.
+ * Mostra o status de disponibilidade de cada membro.
+ */
+export const GroupWithStatus = {
+  render: () => (
+    <AvatarGroup
+      items={[
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Online1', name: 'Online User', status: 'online' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Away1', name: 'Away User', status: 'away' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Busy1', name: 'Busy User', status: 'busy' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Offline1', name: 'Offline User', status: 'offline' },
+      ]}
+      size="lg"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grupo de avatares com indicadores de status: online, away, busy e offline.',
+      },
+    },
+  },
+};
+
+/**
+ * Grupo com diferentes tamanhos.
+ * Demonstra os tamanhos disponíveis para grupos de avatares.
+ */
+export const GroupSizes = {
+  render: () => (
+    <Flex vertical gap={24}>
+      <Flex vertical gap={8}>
+        <Text style={{ fontSize: '12px', fontWeight: 500 }}>Extra Small (xs)</Text>
+        <AvatarGroup
+          items={[
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xs1', name: 'User 1' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xs2', name: 'User 2' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xs3', name: 'User 3' },
+          ]}
+          size="xs"
+        />
+      </Flex>
+      <Flex vertical gap={8}>
+        <Text style={{ fontSize: '12px', fontWeight: 500 }}>Small (sm)</Text>
+        <AvatarGroup
+          items={[
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sm1', name: 'User 1' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sm2', name: 'User 2' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sm3', name: 'User 3' },
+          ]}
+          size="sm"
+        />
+      </Flex>
+      <Flex vertical gap={8}>
+        <Text style={{ fontSize: '12px', fontWeight: 500 }}>Medium (md)</Text>
+        <AvatarGroup
+          items={[
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=md1', name: 'User 1' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=md2', name: 'User 2' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=md3', name: 'User 3' },
+          ]}
+          size="md"
+        />
+      </Flex>
+      <Flex vertical gap={8}>
+        <Text style={{ fontSize: '12px', fontWeight: 500 }}>Large (lg)</Text>
+        <AvatarGroup
+          items={[
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lg1', name: 'User 1' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lg2', name: 'User 2' },
+            { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lg3', name: 'User 3' },
+          ]}
+          size="lg"
+        />
+      </Flex>
+    </Flex>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Comparação visual dos diferentes tamanhos de grupos de avatares.',
+      },
+    },
+  },
+};
+
+/**
+ * Grupo com formato quadrado.
+ * Avatares em formato quadrado ao invés de circular.
+ */
+export const GroupSquare = {
+  render: () => (
+    <AvatarGroup
+      items={[
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Square1', name: 'User 1' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Square2', name: 'User 2' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Square3', name: 'User 3' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Square4', name: 'User 4' },
+      ]}
+      shape="square"
+      size="md"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grupo de avatares com formato quadrado, ideal para logos ou entidades organizacionais.',
+      },
+    },
+  },
+};
+
+/**
+ * Grupo interativo com clicks.
+ * Demonstra a funcionalidade de click em cada avatar.
+ */
+export const GroupClickable = {
+  render: () => (
+    <AvatarGroup
+      items={[
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Click1', name: 'Ana Silva' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Click2', name: 'Carlos Santos' },
+        { src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Click3', name: 'Maria Oliveira' },
+      ]}
+      onItemClick={(item, index) => {
+        alert(`Clicou em ${item.name} (índice ${index})`);
+      }}
+      size="md"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Clique em qualquer avatar para ver um alerta com as informações do item.',
+      },
+    },
+  },
 };

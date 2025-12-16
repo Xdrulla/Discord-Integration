@@ -13,7 +13,6 @@
 @use "sidebar-menu";
 @use "profile-user";
 @use "protected-layout";
-@use "button";
 @use "user-profile-page";
 @use "manage-user";
 @use "justificativa-modal";
@@ -22,6 +21,9 @@
 @use "dashboard-overview";
 @use "pagination-footer";
 @use "pedding-justification";
+
+// Plus UI Design System
+@use "design-system" as *;
 
 // Plus UI Design System Components
 @use "components/avatar";

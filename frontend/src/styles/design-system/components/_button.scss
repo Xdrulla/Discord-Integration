@@ -1,0 +1,146 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../shadows' as *;
+@use '../borders' as *;
+@use '../breakpoints' as *;
+
+/**
+ * Button Component - Plus UI Design System
+ * Based on Ant Design v6 with Plus UI tokens
+ */
+
+.ds-button {
+  font-family: $plus-ui-font-family !important;
+  font-weight: $plus-ui-font-weight-medium;
+  transition: all 0.2s ease;
+
+  &__root {
+    border-radius: $plus-ui-rounded-md;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &--primary.ant-btn {
+    background-color: $plus-ui-indigo-600 !important;
+    border-color: $plus-ui-indigo-600 !important;
+    color: $plus-ui-white !important;
+    font-weight: $plus-ui-font-weight-semibold;
+
+    &:hover:not(:disabled) {
+      background-color: $plus-ui-indigo-700 !important;
+      border-color: $plus-ui-indigo-700 !important;
+      color: $plus-ui-white !important;
+      transform: translateY(-1px);
+      box-shadow: $plus-ui-shadow-md;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $plus-ui-indigo-800 !important;
+      border-color: $plus-ui-indigo-800 !important;
+      color: $plus-ui-white !important;
+      transform: translateY(0);
+    }
+  }
+
+  &--secondary.ant-btn {
+    background-color: $plus-ui-white !important;
+    border-color: $plus-ui-gray-300 !important;
+    color: $plus-ui-gray-700 !important;
+    font-weight: $plus-ui-font-weight-semibold;
+
+    &:hover:not(:disabled) {
+      background-color: $plus-ui-gray-50 !important;
+      border-color: $plus-ui-gray-400 !important;
+      color: $plus-ui-gray-800 !important;
+      transform: translateY(-1px);
+    }
+  }
+
+  &--tertiary.ant-btn {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: $plus-ui-gray-700 !important;
+
+    &:hover:not(:disabled) {
+      background-color: $plus-ui-gray-100 !important;
+      color: $plus-ui-gray-900 !important;
+    }
+  }
+
+  &--link.ant-btn {
+    color: $plus-ui-indigo-600 !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+
+    &:hover:not(:disabled) {
+      color: $plus-ui-indigo-700 !important;
+    }
+  }
+
+  &--destructive.ant-btn {
+    background-color: $plus-ui-red-600 !important;
+    border-color: $plus-ui-red-600 !important;
+    color: $plus-ui-white !important;
+    font-weight: $plus-ui-font-weight-semibold;
+
+    &:hover:not(:disabled) {
+      background-color: $plus-ui-red-700 !important;
+      border-color: $plus-ui-red-700 !important;
+      color: $plus-ui-white !important;
+      transform: translateY(-1px);
+      box-shadow: $plus-ui-shadow-md;
+    }
+  }
+
+  &--size-sm.ant-btn {
+    padding: $plus-ui-spacing-1 $plus-ui-spacing-3 !important;
+    font-size: $plus-ui-font-size-sm !important;
+    line-height: $plus-ui-line-height-sm !important;
+    height: 32px;
+  }
+
+  &--size-md.ant-btn {
+    padding: $plus-ui-spacing-2 $plus-ui-spacing-4 !important;
+    font-size: $plus-ui-font-size-sm !important;
+    line-height: $plus-ui-line-height-sm !important;
+    height: 40px;
+  }
+
+  &--size-lg.ant-btn {
+    padding: $plus-ui-spacing-3 $plus-ui-spacing-5 !important;
+    font-size: $plus-ui-font-size-base !important;
+    line-height: $plus-ui-line-height-base !important;
+    height: 48px;
+  }
+
+  &--block.ant-btn {
+    width: 100%;
+  }
+
+  &--icon-only.ant-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $plus-ui-spacing-2;
+  }
+
+  &--circle.ant-btn {
+    border-radius: 50% !important;
+  }
+
+  &--round.ant-btn {
+    border-radius: $plus-ui-rounded-full !important;
+  }
+}
+
+.ant-btn {
+  font-family: $plus-ui-font-family !important;
+  font-weight: $plus-ui-font-weight-medium;
+  border-radius: $plus-ui-rounded-md;
+  transition: all 0.2s ease;
+}
