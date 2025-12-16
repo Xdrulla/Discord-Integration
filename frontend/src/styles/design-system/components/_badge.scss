@@ -1,0 +1,476 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../shadows' as *;
+@use '../borders' as *;
+@use '../breakpoints' as *;
+
+/**
+ * Badge Component - Plus UI Design System
+ * Based on Ant Design v6 with Plus UI tokens
+ */
+
+.ds-badge {
+  font-family: $plus-ui-font-family !important;
+
+  &__root {
+    display: inline-block;
+    position: relative;
+  }
+
+  &__indicator {
+    font-family: $plus-ui-font-family !important;
+    font-size: $plus-ui-font-size-xs;
+    font-weight: $plus-ui-font-weight-medium;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  // Color variants
+  &--primary {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-indigo-600 !important;
+    }
+  }
+
+  &--success {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-green-600 !important;
+    }
+  }
+
+  &--warning {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-yellow-600 !important;
+    }
+  }
+
+  &--error {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-red-600 !important;
+    }
+  }
+
+  &--blue {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-blue-600 !important;
+    }
+  }
+
+  &--green {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-green-600 !important;
+    }
+  }
+
+  &--red {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-red-600 !important;
+    }
+  }
+
+  &--yellow {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-yellow-600 !important;
+    }
+  }
+
+  &--orange {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #ea580c !important; // orange-600
+    }
+  }
+
+  &--purple {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #9333ea !important; // purple-600
+    }
+  }
+
+  &--gray {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-gray-600 !important;
+    }
+  }
+
+  &--default {
+    .ant-badge-count {
+      background-color: $plus-ui-gray-500;
+    }
+  }
+
+  // Dot variant
+  &--dot {
+    .ant-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px $plus-ui-white;
+    }
+  }
+
+  // Size variants
+  &--small {
+    .ant-badge-count {
+      height: 16px;
+      min-width: 16px;
+      padding: 0 4px;
+      font-size: 10px;
+      line-height: 16px;
+    }
+
+    .ant-badge-dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  // Status variants
+  &--status-success {
+    .ant-badge-status-dot {
+      background-color: $plus-ui-green-600;
+    }
+  }
+
+  &--status-processing {
+    .ant-badge-status-dot {
+      background-color: $plus-ui-indigo-600;
+    }
+  }
+
+  &--status-default {
+    .ant-badge-status-dot {
+      background-color: $plus-ui-gray-400;
+    }
+  }
+
+  &--status-error {
+    .ant-badge-status-dot {
+      background-color: $plus-ui-red-600;
+    }
+  }
+
+  &--status-warning {
+    .ant-badge-status-dot {
+      background-color: $plus-ui-yellow-600;
+    }
+  }
+}
+
+// Override Ant Design v6 defaults
+.ant-badge {
+  font-family: $plus-ui-font-family !important;
+
+  // Badge count
+  .ant-badge-count {
+    background-color: $plus-ui-red-600;
+    color: $plus-ui-white;
+    font-family: $plus-ui-font-family !important;
+    font-size: $plus-ui-font-size-xs;
+    font-weight: $plus-ui-font-weight-medium;
+    line-height: 20px;
+    height: 20px;
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: $plus-ui-rounded-full;
+    box-shadow: 0 0 0 1px $plus-ui-white;
+  }
+
+  // Dot badge
+  .ant-badge-dot {
+    width: 8px;
+    height: 8px;
+    background-color: $plus-ui-red-600;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px $plus-ui-white;
+  }
+
+  // Status badge
+  .ant-badge-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    top: -1px;
+  }
+
+  .ant-badge-status-text {
+    margin-left: $plus-ui-spacing-2;
+    font-family: $plus-ui-font-family !important;
+    font-size: $plus-ui-font-size-sm;
+    color: $plus-ui-gray-700;
+  }
+
+  // Processing status animation
+  .ant-badge-status-processing {
+    &::after {
+      border: 1px solid $plus-ui-indigo-600;
+    }
+  }
+
+  // Standalone badge (no children)
+  &.ant-badge-not-a-wrapper {
+    .ant-badge-count {
+      position: static;
+      transform: none;
+      display: inline-block;
+    }
+  }
+
+  // Color variants
+  &-blue {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-blue-600;
+    }
+  }
+
+  &-green {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-green-600;
+    }
+  }
+
+  &-red {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-red-600;
+    }
+  }
+
+  &-yellow {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-yellow-600;
+    }
+  }
+
+  &-gold {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #ca8a04; // yellow-600 alternative
+    }
+  }
+
+  &-purple {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #9333ea; // purple-600
+    }
+  }
+
+  &-magenta {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #db2777; // pink-600
+    }
+  }
+
+  &-pink {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #ec4899; // pink-500
+    }
+  }
+
+  &-orange {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #ea580c; // orange-600
+    }
+  }
+
+  &-cyan {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #0891b2; // cyan-600
+    }
+  }
+
+  &-lime {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #65a30d; // lime-600
+    }
+  }
+
+  &-volcano {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: #f97316; // orange-500
+    }
+  }
+
+  &-geekblue {
+    .ant-badge-count,
+    .ant-badge-dot {
+      background-color: $plus-ui-indigo-600;
+    }
+  }
+
+  // Multiple badge (superscript)
+  .ant-scroll-number {
+    font-family: $plus-ui-font-family !important;
+  }
+}
+
+// Ribbon badge (if needed)
+.ant-badge-ribbon {
+  background-color: $plus-ui-indigo-600;
+  color: $plus-ui-white;
+  font-family: $plus-ui-font-family !important;
+  font-size: $plus-ui-font-size-xs;
+  font-weight: $plus-ui-font-weight-medium;
+  padding: 4px 8px;
+  border-radius: $plus-ui-rounded-sm;
+
+  &::after {
+    border-color: $plus-ui-indigo-600 transparent transparent;
+  }
+
+  &-blue {
+    background-color: $plus-ui-blue-600;
+
+    &::after {
+      border-color: $plus-ui-blue-600 transparent transparent;
+    }
+  }
+
+  &-green {
+    background-color: $plus-ui-green-600;
+
+    &::after {
+      border-color: $plus-ui-green-600 transparent transparent;
+    }
+  }
+
+  &-red {
+    background-color: $plus-ui-red-600;
+
+    &::after {
+      border-color: $plus-ui-red-600 transparent transparent;
+    }
+  }
+
+  &-yellow {
+    background-color: $plus-ui-yellow-600;
+
+    &::after {
+      border-color: $plus-ui-yellow-600 transparent transparent;
+    }
+  }
+}
+
+// Responsive behavior
+@media (max-width: $plus-ui-breakpoint-sm) {
+  .ant-badge {
+    .ant-badge-count {
+      font-size: 10px;
+      height: 18px;
+      min-width: 18px;
+      line-height: 18px;
+      padding: 0 5px;
+    }
+
+    .ant-badge-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .ant-badge-status-dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  .ds-badge {
+    &--small {
+      .ant-badge-count {
+        height: 14px;
+        min-width: 14px;
+        font-size: 9px;
+        line-height: 14px;
+      }
+
+      .ant-badge-dot {
+        width: 5px;
+        height: 5px;
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .ant-badge {
+    .ant-badge-count {
+      box-shadow: 0 0 0 1px $plus-ui-gray-900;
+    }
+
+    .ant-badge-dot {
+      box-shadow: 0 0 0 1px $plus-ui-gray-900;
+    }
+
+    .ant-badge-status-text {
+      color: $plus-ui-gray-300;
+    }
+
+    // Processing animation in dark mode
+    .ant-badge-status-processing {
+      &::after {
+        border: 1px solid $plus-ui-indigo-400;
+      }
+    }
+  }
+
+  .ds-badge {
+    // Color variants remain the same in dark mode
+    // Badge colors should be vibrant in both light and dark modes
+
+    &__indicator {
+      color: $plus-ui-white;
+    }
+
+    &--status-success {
+      .ant-badge-status-dot {
+        background-color: $plus-ui-green-500;
+      }
+    }
+
+    &--status-processing {
+      .ant-badge-status-dot {
+        background-color: $plus-ui-indigo-500;
+      }
+    }
+
+    &--status-error {
+      .ant-badge-status-dot {
+        background-color: $plus-ui-red-500;
+      }
+    }
+
+    &--status-warning {
+      .ant-badge-status-dot {
+        background-color: $plus-ui-yellow-500;
+      }
+    }
+  }
+
+  // Ribbon badge in dark mode
+  .ant-badge-ribbon {
+    box-shadow: 0 0 0 1px $plus-ui-gray-900;
+  }
+}

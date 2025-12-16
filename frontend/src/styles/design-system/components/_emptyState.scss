@@ -1,0 +1,42 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+
+.ds-empty {
+  font-family: $plus-ui-font-family !important;
+}
+
+.ant-empty {
+  font-family: $plus-ui-font-family !important;
+  margin: $plus-ui-spacing-8 0;
+
+  .ant-empty-image {
+    height: 100px;
+    margin-bottom: $plus-ui-spacing-4;
+
+    svg {
+      color: $plus-ui-gray-300;
+    }
+  }
+
+  .ant-empty-description {
+    color: $plus-ui-gray-500;
+    font-size: $plus-ui-font-size-sm;
+  }
+
+  .ant-empty-footer {
+    margin-top: $plus-ui-spacing-4;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ant-empty {
+    .ant-empty-image svg {
+      color: $plus-ui-gray-700;
+    }
+
+    .ant-empty-description {
+      color: $plus-ui-gray-400;
+    }
+  }
+}

@@ -1,0 +1,140 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../borders' as *;
+
+.ds-tag {
+  font-family: $plus-ui-font-family !important;
+
+  &--filled {
+    border: none;
+  }
+
+  &--outlined {
+    background-color: transparent;
+  }
+
+  &--closable {
+    padding-right: $plus-ui-spacing-1;
+  }
+}
+
+.ant-tag {
+  font-family: $plus-ui-font-family !important;
+  font-size: $plus-ui-font-size-xs;
+  font-weight: $plus-ui-font-weight-medium;
+  padding: 2px $plus-ui-spacing-2;
+  border-radius: $plus-ui-rounded-full;
+  line-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: $plus-ui-spacing-1;
+
+  // Default/Gray
+  &.ant-tag-default {
+    background-color: $plus-ui-gray-100;
+    color: $plus-ui-gray-700;
+    border-color: $plus-ui-gray-200;
+  }
+
+  // Blue
+  &.ant-tag-blue {
+    background-color: $plus-ui-blue-100;
+    color: $plus-ui-blue-700;
+    border-color: $plus-ui-blue-200;
+  }
+
+  // Green
+  &.ant-tag-green {
+    background-color: $plus-ui-green-100;
+    color: $plus-ui-green-700;
+    border-color: $plus-ui-green-200;
+  }
+
+  // Red
+  &.ant-tag-red {
+    background-color: $plus-ui-red-100;
+    color: $plus-ui-red-700;
+    border-color: $plus-ui-red-200;
+  }
+
+  // Gold/Yellow
+  &.ant-tag-gold {
+    background-color: $plus-ui-yellow-100;
+    color: $plus-ui-yellow-700;
+    border-color: $plus-ui-yellow-200;
+  }
+
+  // Orange
+  &.ant-tag-orange {
+    background-color: #ffedd5;
+    color: #c2410c;
+    border-color: #fed7aa;
+  }
+
+  // Purple
+  &.ant-tag-purple {
+    background-color: #f3e8ff;
+    color: #7e22ce;
+    border-color: #e9d5ff;
+  }
+
+  // Cyan
+  &.ant-tag-cyan {
+    background-color: #cffafe;
+    color: #0e7490;
+    border-color: #a5f3fc;
+  }
+
+  // Close icon
+  .ant-tag-close-icon {
+    color: currentColor;
+    margin-left: $plus-ui-spacing-1;
+    font-size: $plus-ui-font-size-xs;
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // Icon
+  .anticon {
+    font-size: $plus-ui-font-size-sm;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ant-tag {
+    &.ant-tag-default {
+      background-color: $plus-ui-gray-800;
+      color: $plus-ui-gray-300;
+      border-color: $plus-ui-gray-700;
+    }
+
+    &.ant-tag-blue {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: $plus-ui-blue-400;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    &.ant-tag-green {
+      background-color: rgba(34, 197, 94, 0.2);
+      color: $plus-ui-green-400;
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    &.ant-tag-red {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: $plus-ui-red-400;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    &.ant-tag-gold {
+      background-color: rgba(234, 179, 8, 0.2);
+      color: $plus-ui-yellow-400;
+      border-color: rgba(234, 179, 8, 0.3);
+    }
+  }
+}

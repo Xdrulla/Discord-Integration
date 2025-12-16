@@ -1,0 +1,132 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../borders' as *;
+
+.ds-pagination {
+  font-family: $plus-ui-font-family !important;
+
+  &--small {
+    .ant-pagination-item {
+      min-width: 28px;
+      height: 28px;
+      line-height: 26px;
+      font-size: $plus-ui-font-size-xs;
+    }
+  }
+}
+
+.ant-pagination {
+  font-family: $plus-ui-font-family !important;
+
+  .ant-pagination-item {
+    border: 1px solid $plus-ui-gray-300;
+    border-radius: $plus-ui-rounded-md;
+    background-color: $plus-ui-white;
+    font-size: $plus-ui-font-size-sm;
+    min-width: 32px;
+    height: 32px;
+    line-height: 30px;
+
+    a {
+      color: $plus-ui-gray-700;
+    }
+
+    &:hover {
+      border-color: $plus-ui-indigo-600;
+
+      a {
+        color: $plus-ui-indigo-600;
+      }
+    }
+
+    &.ant-pagination-item-active {
+      border-color: $plus-ui-indigo-600;
+      background-color: $plus-ui-indigo-600;
+
+      a {
+        color: $plus-ui-white;
+      }
+    }
+  }
+
+  .ant-pagination-prev,
+  .ant-pagination-next {
+    .ant-pagination-item-link {
+      border: 1px solid $plus-ui-gray-300;
+      border-radius: $plus-ui-rounded-md;
+      background-color: $plus-ui-white;
+      color: $plus-ui-gray-700;
+
+      &:hover {
+        border-color: $plus-ui-indigo-600;
+        color: $plus-ui-indigo-600;
+      }
+    }
+
+    &.ant-pagination-disabled .ant-pagination-item-link {
+      border-color: $plus-ui-gray-200;
+      color: $plus-ui-gray-300;
+    }
+  }
+
+  .ant-pagination-options {
+    .ant-select-selector {
+      border: 1px solid $plus-ui-gray-300;
+      border-radius: $plus-ui-rounded-md;
+    }
+  }
+
+  .ant-pagination-total-text {
+    color: $plus-ui-gray-600;
+    font-size: $plus-ui-font-size-sm;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ant-pagination {
+    .ant-pagination-item {
+      border-color: $plus-ui-gray-700;
+      background-color: $plus-ui-gray-800;
+
+      a {
+        color: $plus-ui-gray-300;
+      }
+
+      &:hover {
+        border-color: $plus-ui-indigo-500;
+
+        a {
+          color: $plus-ui-indigo-400;
+        }
+      }
+
+      &.ant-pagination-item-active {
+        border-color: $plus-ui-indigo-500;
+        background-color: $plus-ui-indigo-600;
+
+        a {
+          color: $plus-ui-white;
+        }
+      }
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      .ant-pagination-item-link {
+        border-color: $plus-ui-gray-700;
+        background-color: $plus-ui-gray-800;
+        color: $plus-ui-gray-300;
+
+        &:hover {
+          border-color: $plus-ui-indigo-500;
+          color: $plus-ui-indigo-400;
+        }
+      }
+    }
+
+    .ant-pagination-total-text {
+      color: $plus-ui-gray-400;
+    }
+  }
+}

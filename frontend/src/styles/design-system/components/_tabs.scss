@@ -1,0 +1,513 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../shadows' as *;
+@use '../borders' as *;
+@use '../breakpoints' as *;
+
+/**
+ * Tabs Component - Plus UI Design System
+ * Based on Ant Design v6 with Plus UI tokens
+ */
+
+.ds-tabs {
+  font-family: $plus-ui-font-family !important;
+
+  &__root {
+    &--line {
+      // Line type specific styles
+    }
+
+    &--card {
+      // Card type specific styles
+    }
+
+    &--editable-card {
+      // Editable card specific styles
+    }
+
+    &--top,
+    &--bottom {
+      // Horizontal tabs
+    }
+
+    &--start,
+    &--end {
+      // Vertical tabs
+    }
+  }
+
+  &__nav {
+    margin-bottom: $plus-ui-spacing-4;
+  }
+
+  &__tab {
+    font-family: $plus-ui-font-family !important;
+    font-size: $plus-ui-font-size-sm;
+    font-weight: $plus-ui-font-weight-medium;
+    color: $plus-ui-gray-600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-indigo-600;
+    }
+
+    &--active {
+      color: $plus-ui-indigo-600;
+      font-weight: $plus-ui-font-weight-semibold;
+    }
+  }
+
+  &__panel {
+    padding: $plus-ui-spacing-4 0;
+    font-size: $plus-ui-font-size-sm;
+    line-height: $plus-ui-line-height-sm;
+    color: $plus-ui-gray-700;
+  }
+
+  &__ink-bar {
+    background-color: $plus-ui-indigo-600 !important;
+  }
+
+  // Size variants
+  &--size-small {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-2 $plus-ui-spacing-3;
+      font-size: $plus-ui-font-size-xs;
+    }
+  }
+
+  &--size-middle {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-2 $plus-ui-spacing-4;
+      font-size: $plus-ui-font-size-sm;
+    }
+  }
+
+  &--size-large {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-3 $plus-ui-spacing-5;
+      font-size: $plus-ui-font-size-base;
+    }
+  }
+
+  // Type variants
+  &--line {
+    .ant-tabs-nav {
+      &::before {
+        border-bottom-color: $plus-ui-gray-200;
+      }
+    }
+  }
+
+  &--card {
+    .ant-tabs-tab {
+      background-color: $plus-ui-gray-50;
+      border: 1px solid $plus-ui-gray-200;
+      border-radius: $plus-ui-rounded-md $plus-ui-rounded-md 0 0;
+
+      &:hover {
+        background-color: $plus-ui-gray-100;
+      }
+
+      &.ant-tabs-tab-active {
+        background-color: $plus-ui-white;
+        border-bottom-color: $plus-ui-white;
+      }
+    }
+  }
+
+  &--editable-card {
+    .ant-tabs-tab {
+      background-color: $plus-ui-gray-50;
+      border: 1px solid $plus-ui-gray-200;
+
+      &.ant-tabs-tab-active {
+        background-color: $plus-ui-white;
+      }
+    }
+
+    .ant-tabs-nav-add {
+      color: $plus-ui-indigo-600;
+      border: 1px dashed $plus-ui-gray-300;
+      border-radius: $plus-ui-rounded-md;
+      background-color: $plus-ui-white;
+
+      &:hover {
+        color: $plus-ui-indigo-700;
+        border-color: $plus-ui-indigo-600;
+        background-color: $plus-ui-indigo-50;
+      }
+    }
+  }
+}
+
+// Override Ant Design v6 defaults
+.ant-tabs {
+  font-family: $plus-ui-font-family !important;
+  color: $plus-ui-gray-700;
+
+  // Tab navigation
+  .ant-tabs-nav {
+    margin-bottom: $plus-ui-spacing-4;
+
+    &::before {
+      border-bottom: 1px solid $plus-ui-gray-200;
+    }
+  }
+
+  // Individual tab
+  .ant-tabs-tab {
+    font-family: $plus-ui-font-family !important;
+    font-size: $plus-ui-font-size-sm;
+    font-weight: $plus-ui-font-weight-medium;
+    color: $plus-ui-gray-600;
+    padding: $plus-ui-spacing-2 $plus-ui-spacing-4;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-indigo-600;
+    }
+
+    &.ant-tabs-tab-active {
+      color: $plus-ui-indigo-600;
+      font-weight: $plus-ui-font-weight-semibold;
+
+      .ant-tabs-tab-btn {
+        color: $plus-ui-indigo-600;
+      }
+    }
+
+    &.ant-tabs-tab-disabled {
+      color: $plus-ui-gray-300;
+      cursor: not-allowed;
+
+      &:hover {
+        color: $plus-ui-gray-300;
+      }
+    }
+  }
+
+  .ant-tabs-tab-btn {
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  // Ink bar (active indicator)
+  .ant-tabs-ink-bar {
+    background-color: $plus-ui-indigo-600 !important;
+    height: 2px;
+  }
+
+  // Tab content
+  .ant-tabs-content {
+    padding: $plus-ui-spacing-4 0;
+  }
+
+  .ant-tabs-tabpane {
+    font-size: $plus-ui-font-size-sm;
+    line-height: $plus-ui-line-height-sm;
+    color: $plus-ui-gray-700;
+  }
+
+  // Icon in tab
+  .anticon {
+    margin-right: $plus-ui-spacing-1;
+    font-size: $plus-ui-font-size-base;
+  }
+
+  // Close button (editable-card)
+  .ant-tabs-tab-remove {
+    color: $plus-ui-gray-400;
+    margin-left: $plus-ui-spacing-2;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-red-600;
+    }
+  }
+
+  // Add button (editable-card)
+  .ant-tabs-nav-add {
+    color: $plus-ui-indigo-600;
+    border: 1px dashed $plus-ui-gray-300;
+    border-radius: $plus-ui-rounded-md;
+    background-color: $plus-ui-white;
+    min-width: 40px;
+    padding: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $plus-ui-indigo-700;
+      border-color: $plus-ui-indigo-600;
+      background-color: $plus-ui-indigo-50;
+    }
+
+    .anticon {
+      margin: 0;
+    }
+  }
+
+  // Card type
+  &.ant-tabs-card {
+    .ant-tabs-tab {
+      background-color: $plus-ui-gray-50;
+      border: 1px solid $plus-ui-gray-200;
+      border-radius: $plus-ui-rounded-md $plus-ui-rounded-md 0 0;
+      margin-right: $plus-ui-spacing-1;
+
+      &:hover {
+        background-color: $plus-ui-gray-100;
+      }
+
+      &.ant-tabs-tab-active {
+        background-color: $plus-ui-white;
+        border-bottom-color: $plus-ui-white;
+      }
+    }
+
+    .ant-tabs-nav::before {
+      border-bottom: 1px solid $plus-ui-gray-200;
+    }
+  }
+
+  // Editable card type
+  &.ant-tabs-editable-card {
+    .ant-tabs-tab {
+      background-color: $plus-ui-gray-50;
+      border: 1px solid $plus-ui-gray-200;
+      border-radius: $plus-ui-rounded-md;
+      margin-right: $plus-ui-spacing-1;
+
+      &.ant-tabs-tab-active {
+        background-color: $plus-ui-white;
+        border-color: $plus-ui-indigo-600;
+      }
+    }
+  }
+
+  // Size variants
+  &.ant-tabs-small {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-1 $plus-ui-spacing-3;
+      font-size: $plus-ui-font-size-xs;
+    }
+
+    .ant-tabs-nav-add {
+      min-width: 32px;
+      height: 32px;
+    }
+  }
+
+  &.ant-tabs-large {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-3 $plus-ui-spacing-5;
+      font-size: $plus-ui-font-size-base;
+    }
+
+    .ant-tabs-nav-add {
+      min-width: 48px;
+      height: 48px;
+    }
+  }
+
+  // Vertical tabs (start/end placement)
+  &.ant-tabs-start,
+  &.ant-tabs-end {
+    .ant-tabs-nav {
+      margin-bottom: 0;
+    }
+
+    .ant-tabs-tab {
+      justify-content: flex-start;
+    }
+
+    .ant-tabs-ink-bar {
+      width: 2px;
+      height: auto;
+    }
+  }
+
+  &.ant-tabs-start {
+    .ant-tabs-nav {
+      margin-right: $plus-ui-spacing-6;
+    }
+  }
+
+  &.ant-tabs-end {
+    .ant-tabs-nav {
+      margin-left: $plus-ui-spacing-6;
+    }
+  }
+
+  // Bottom placement
+  &.ant-tabs-bottom {
+    .ant-tabs-nav {
+      margin-top: $plus-ui-spacing-4;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Responsive behavior
+@media (max-width: $plus-ui-breakpoint-md) {
+  .ant-tabs {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-2 $plus-ui-spacing-3;
+      font-size: $plus-ui-font-size-xs;
+    }
+
+    &.ant-tabs-start,
+    &.ant-tabs-end {
+      .ant-tabs-nav {
+        margin-right: $plus-ui-spacing-4;
+        margin-left: $plus-ui-spacing-4;
+      }
+    }
+  }
+
+  .ds-tabs {
+    &--size-middle {
+      .ant-tabs-tab {
+        padding: $plus-ui-spacing-2 $plus-ui-spacing-3;
+        font-size: $plus-ui-font-size-xs;
+      }
+    }
+  }
+}
+
+@media (max-width: $plus-ui-breakpoint-sm) {
+  .ant-tabs {
+    .ant-tabs-tab {
+      padding: $plus-ui-spacing-1 $plus-ui-spacing-2;
+      font-size: $plus-ui-font-size-xs;
+    }
+
+    .ant-tabs-nav-add {
+      min-width: 32px;
+      height: 32px;
+    }
+
+    &.ant-tabs-start,
+    &.ant-tabs-end {
+      flex-direction: column;
+
+      .ant-tabs-nav {
+        margin: 0 0 $plus-ui-spacing-4 0;
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .ant-tabs {
+    color: $plus-ui-gray-300;
+
+    .ant-tabs-nav::before {
+      border-bottom-color: $plus-ui-gray-700;
+    }
+
+    .ant-tabs-tab {
+      color: $plus-ui-gray-400;
+
+      &:hover {
+        color: $plus-ui-indigo-400;
+      }
+
+      &.ant-tabs-tab-active {
+        color: $plus-ui-indigo-400;
+
+        .ant-tabs-tab-btn {
+          color: $plus-ui-indigo-400;
+        }
+      }
+
+      &.ant-tabs-tab-disabled {
+        color: $plus-ui-gray-700;
+      }
+    }
+
+    .ant-tabs-ink-bar {
+      background-color: $plus-ui-indigo-400 !important;
+    }
+
+    .ant-tabs-tabpane {
+      color: $plus-ui-gray-300;
+    }
+
+    .ant-tabs-tab-remove {
+      color: $plus-ui-gray-600;
+
+      &:hover {
+        color: $plus-ui-red-400;
+      }
+    }
+
+    .ant-tabs-nav-add {
+      color: $plus-ui-indigo-400;
+      border-color: $plus-ui-gray-700;
+      background-color: $plus-ui-gray-900;
+
+      &:hover {
+        color: $plus-ui-indigo-300;
+        border-color: $plus-ui-indigo-400;
+        background-color: $plus-ui-gray-800;
+      }
+    }
+
+    &.ant-tabs-card {
+      .ant-tabs-tab {
+        background-color: $plus-ui-gray-900;
+        border-color: $plus-ui-gray-700;
+
+        &:hover {
+          background-color: $plus-ui-gray-800;
+        }
+
+        &.ant-tabs-tab-active {
+          background-color: $plus-ui-gray-800;
+          border-bottom-color: $plus-ui-gray-800;
+        }
+      }
+
+      .ant-tabs-nav::before {
+        border-bottom-color: $plus-ui-gray-700;
+      }
+    }
+
+    &.ant-tabs-editable-card {
+      .ant-tabs-tab {
+        background-color: $plus-ui-gray-900;
+        border-color: $plus-ui-gray-700;
+
+        &.ant-tabs-tab-active {
+          background-color: $plus-ui-gray-800;
+          border-color: $plus-ui-indigo-400;
+        }
+      }
+    }
+  }
+
+  .ds-tabs {
+    &__tab {
+      color: $plus-ui-gray-400;
+
+      &:hover {
+        color: $plus-ui-indigo-400;
+      }
+
+      &--active {
+        color: $plus-ui-indigo-400;
+      }
+    }
+
+    &__panel {
+      color: $plus-ui-gray-300;
+    }
+
+    &__ink-bar {
+      background-color: $plus-ui-indigo-400 !important;
+    }
+  }
+}

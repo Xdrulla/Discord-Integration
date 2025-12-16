@@ -1,0 +1,160 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+
+.ds-loading {
+  font-family: $plus-ui-font-family !important;
+
+  &--fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+  }
+
+  // Circle indicator (animated circle)
+  &-circle {
+    display: inline-block;
+    animation: ds-loading-rotate 1s linear infinite;
+
+    svg {
+      display: block;
+
+      circle {
+        stroke: $plus-ui-indigo-600;
+        stroke-linecap: round;
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: 0;
+        animation: ds-loading-dash 1.5s ease-in-out infinite;
+      }
+    }
+  }
+
+  // Ring indicator (4 dots rotating)
+  &-ring {
+    display: inline-block;
+    position: relative;
+
+    div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      margin: 10%;
+      border: 3px solid $plus-ui-indigo-600;
+      border-radius: 50%;
+      animation: ds-loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: $plus-ui-indigo-600 transparent transparent transparent;
+
+      &:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+    }
+  }
+}
+
+// Ant Design Spin override
+.ant-spin {
+  font-family: $plus-ui-font-family !important;
+  color: $plus-ui-indigo-600 !important;
+
+  .ant-spin-dot {
+    .ant-spin-dot-item {
+      background-color: $plus-ui-indigo-600 !important;
+    }
+  }
+
+  .ant-spin-text {
+    color: $plus-ui-gray-700;
+    font-size: $plus-ui-font-size-sm;
+    margin-top: $plus-ui-spacing-2;
+  }
+
+  &.ant-spin-lg {
+    .ant-spin-dot {
+      font-size: 48px;
+    }
+  }
+
+  &.ant-spin-sm {
+    .ant-spin-dot {
+      font-size: 20px;
+    }
+  }
+}
+
+// Animations
+@keyframes ds-loading-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ds-loading-dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+@keyframes ds-loading-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .ds-loading {
+    &--fullscreen {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    &-circle {
+      svg circle {
+        stroke: $plus-ui-indigo-400;
+      }
+    }
+
+    &-ring {
+      div {
+        border-color: $plus-ui-indigo-400 transparent transparent transparent;
+      }
+    }
+  }
+
+  .ant-spin {
+    color: $plus-ui-indigo-400 !important;
+
+    .ant-spin-dot .ant-spin-dot-item {
+      background-color: $plus-ui-indigo-400 !important;
+    }
+
+    .ant-spin-text {
+      color: $plus-ui-gray-300;
+    }
+  }
+}
