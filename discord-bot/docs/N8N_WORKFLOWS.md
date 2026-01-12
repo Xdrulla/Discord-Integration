@@ -7,448 +7,401 @@ Este documento detalha os workflows necessários no n8n para substituir as funci
 ### 1. Credenciais Discord no n8n
 1. Acesse o [Discord Developer Portal](https://discord.com/developers/applications)
 2. Use o mesmo bot existente ou crie um novo
-3. No n8n, vá em **Credentials** > **Add Credential** > **Discord OAuth2 API**
-4. Configure com Client ID e Client Secret do bot
+3. No n8n, vá em **Credentials** > **Add Credential** > **Discord**
+4. Configure com o Bot Token
 
-### 2. URL do Backend
-Certifique-se que o backend está acessível. Exemplos:
-- Local: `http://localhost:5000`
-- Produção: `https://seu-backend.com`
+### 2. IDs Necessários
+Você vai precisar dos seguintes IDs do Discord:
+- **Channel ID** do canal de registros de ponto
+- **Guild ID** (ID do servidor)
+
+Para obter: Ative o "Modo Desenvolvedor" no Discord (Configurações > Avançado), clique com botão direito no canal/servidor e "Copiar ID".
+
+### 3. URL do Backend
+- Produção: `https://discord-backend.fly.dev`
 
 ---
 
 ## Workflow 1: Registro de Ponto (Entrada/Saída)
 
-Este workflow detecta mensagens e envia para o backend classificar via NLP.
+Este workflow roda a cada 10 minutos, busca mensagens recentes e envia para o backend classificar via NLP.
 
 ### Estrutura do Workflow
 
 ```
-[Discord Trigger] → [Filter Bot] → [HTTP Request] → [IF Error] → [Discord Reply]
+[Schedule: 10min] → [Get many messages] → [Filter últimos 10min] → [Loop] → [HTTP POST /register]
 ```
 
 ### Nodes:
 
-#### Node 1: Discord Trigger
-- **Type:** Discord Trigger
-- **Event:** Message Create
-- **Channel:** Selecione o canal de ponto (ou todos)
+#### Node 1: Schedule Trigger
+- **Type:** Schedule Trigger
+- **Trigger Interval:** Every 10 minutes
 
-#### Node 2: Filter - Ignorar Bots
-- **Type:** IF
-- **Condition:** `{{ $json.author.bot }}` is equal to `false`
+#### Node 2: Discord - Get many messages
+- **Type:** Discord
+- **Operation:** Get Many Messages
+- **Channel ID:** `SEU_CHANNEL_ID_DE_REGISTROS`
+- **Limit:** 50
 
-#### Node 3: HTTP Request - Registrar
+#### Node 3: Code - Filtrar mensagens recentes (não bots)
+- **Type:** Code
+- **Language:** JavaScript
+```javascript
+const agora = Date.now();
+const dezMinutos = 10 * 60 * 1000;
+
+const mensagensRecentes = [];
+
+for (const item of $input.all()) {
+  const msg = item.json;
+  const timestamp = new Date(msg.timestamp).getTime();
+  const isRecente = (agora - timestamp) < dezMinutos;
+  const isBot = msg.author?.bot === true;
+
+  if (isRecente && !isBot) {
+    mensagensRecentes.push(item);
+  }
+}
+
+return mensagensRecentes;
+```
+
+#### Node 4: HTTP Request - Registrar Ponto
 - **Type:** HTTP Request
 - **Method:** POST
-- **URL:** `{SEU_BACKEND}/register`
+- **URL:** `https://discord-backend.fly.dev/register`
+- **Authentication:** None
+- **Send Body:** ON
 - **Body Content Type:** JSON
-- **Body:**
+- **Specify Body:** Using JSON
+- **JSON:**
 ```json
 {
-  "usuario": "={{ $json.member.nick || $json.author.username }}",
-  "mensagem": "={{ $json.content }}",
-  "discordId": "={{ $json.author.id }}"
+  "usuario": "{{ $json.author.username }}",
+  "mensagem": "{{ $json.content }}",
+  "discordId": "{{ $json.author.id }}"
 }
 ```
 
-#### Node 4 (Opcional): Tratar Erro
-- **Type:** IF
-- **Condition:** Check if HTTP response has error
-- Se erro, pode logar ou ignorar silenciosamente
+### Diagrama Visual
 
-### JSON do Workflow (Importar no n8n)
-
-```json
-{
-  "name": "Discord - Registro de Ponto",
-  "nodes": [
-    {
-      "parameters": {
-        "resource": "message",
-        "event": "messageCreate"
-      },
-      "name": "Discord Trigger",
-      "type": "n8n-nodes-base.discordTrigger",
-      "position": [250, 300],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{ $json.author.bot }}",
-              "value2": false
-            }
-          ]
-        }
-      },
-      "name": "Ignorar Bots",
-      "type": "n8n-nodes-base.if",
-      "position": [450, 300],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "={YOUR_BACKEND_URL}/register",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "usuario",
-              "value": "={{ $json.member?.nick || $json.author.username }}"
-            },
-            {
-              "name": "mensagem",
-              "value": "={{ $json.content }}"
-            },
-            {
-              "name": "discordId",
-              "value": "={{ $json.author.id }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "name": "Registrar Ponto",
-      "type": "n8n-nodes-base.httpRequest",
-      "position": [650, 300],
-      "typeVersion": 4
-    }
-  ],
-  "connections": {
-    "Discord Trigger": {
-      "main": [
-        [
-          {
-            "node": "Ignorar Bots",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Ignorar Bots": {
-      "main": [
-        [
-          {
-            "node": "Registrar Ponto",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
-  }
-}
+```
+┌──────────────────┐     ┌─────────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│ Schedule Trigger │ ──► │ Discord             │ ──► │ Code             │ ──► │ HTTP Request    │
+│ Every 10 min     │     │ Get many messages   │     │ Filtrar recentes │     │ POST /register  │
+└──────────────────┘     └─────────────────────┘     └──────────────────┘     └─────────────────┘
 ```
 
 ---
 
 ## Workflow 2: Comando !registro
 
-Responde com o registro do dia quando usuário digita `!registro`.
+Roda a cada 5 minutos, busca comandos `!registro` e responde com os dados do usuário.
 
 ### Estrutura do Workflow
 
 ```
-[Discord Trigger] → [IF !registro] → [HTTP GET] → [Format Message] → [Discord Reply]
+[Schedule: 5min] → [Get messages] → [Filter !registro] → [HTTP GET registro] → [Format] → [Discord Send]
 ```
 
 ### Nodes:
 
-#### Node 1: Discord Trigger
-- **Type:** Discord Trigger
-- **Event:** Message Create
+#### Node 1: Schedule Trigger
+- **Trigger Interval:** Every 5 minutes
 
-#### Node 2: IF - Verificar Comando
-- **Type:** IF
-- **Condition:** `{{ $json.content.startsWith('!registro') }}` is equal to `true`
+#### Node 2: Discord - Get many messages
+- **Channel ID:** `SEU_CHANNEL_ID`
+- **Limit:** 30
 
-#### Node 3: HTTP Request - Buscar Registro
-- **Type:** HTTP Request
+#### Node 3: Code - Filtrar comandos !registro
+```javascript
+const agora = Date.now();
+const cincoMinutos = 5 * 60 * 1000;
+
+const comandos = [];
+
+for (const item of $input.all()) {
+  const msg = item.json;
+  const timestamp = new Date(msg.timestamp).getTime();
+  const isRecente = (agora - timestamp) < cincoMinutos;
+  const isComando = msg.content?.startsWith('!registro');
+  const isBot = msg.author?.bot === true;
+
+  if (isRecente && isComando && !isBot) {
+    comandos.push(item);
+  }
+}
+
+return comandos;
+```
+
+#### Node 4: HTTP Request - Buscar Registro
 - **Method:** GET
-- **URL:** `{SEU_BACKEND}/registro/{{ $json.member.nick || $json.author.username }}`
+- **URL:** `https://discord-backend.fly.dev/registro/{{ $json.author.username }}`
 
-#### Node 4: Code - Formatar Mensagem
-- **Type:** Code (JavaScript)
+#### Node 5: Code - Formatar Mensagem
 ```javascript
 const registro = $input.first().json;
+const originalMsg = $('Filtrar comandos !registro').first().json;
 
 if (!registro || !registro.entrada) {
-  return [{ json: { message: 'Registro não encontrado para hoje.' } }];
+  return [{
+    json: {
+      message: 'Registro não encontrado para hoje.',
+      channelId: originalMsg.channel_id
+    }
+  }];
 }
 
 let mensagem = `**Registro de Ponto - ${registro.data}**\n`;
-mensagem += `Entrada: ${registro.entrada}\n`;
+mensagem += `👤 ${registro.usuario}\n`;
+mensagem += `🟢 Entrada: ${registro.entrada}\n`;
 
 if (registro.saida) {
-  mensagem += `Saída: ${registro.saida}\n`;
-  mensagem += `Total: ${registro.total_horas}\n`;
+  mensagem += `🔴 Saída: ${registro.saida}\n`;
+  mensagem += `⏱️ Total: ${registro.total_horas}\n`;
 }
 
-if (registro.pausas && registro.pausas.length > 0) {
-  mensagem += `Pausas: ${registro.total_pausas || 'N/A'}\n`;
+if (registro.total_pausas) {
+  mensagem += `⏸️ Pausas: ${registro.total_pausas}\n`;
 }
 
-return [{ json: { message: mensagem } }];
-```
-
-#### Node 5: Discord - Responder
-- **Type:** Discord
-- **Operation:** Send Message
-- **Channel ID:** `={{ $('Discord Trigger').item.json.channel_id }}`
-- **Message:** `={{ $json.message }}`
-
-### JSON do Workflow
-
-```json
-{
-  "name": "Discord - Comando Registro",
-  "nodes": [
-    {
-      "parameters": {
-        "resource": "message",
-        "event": "messageCreate"
-      },
-      "name": "Discord Trigger",
-      "type": "n8n-nodes-base.discordTrigger",
-      "position": [250, 300]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{ $json.content }}",
-              "operation": "startsWith",
-              "value2": "!registro"
-            }
-          ]
-        }
-      },
-      "name": "IF Comando Registro",
-      "type": "n8n-nodes-base.if",
-      "position": [450, 300]
-    },
-    {
-      "parameters": {
-        "method": "GET",
-        "url": "={YOUR_BACKEND_URL}/registro/{{ $json.member?.nick || $json.author.username }}"
-      },
-      "name": "Buscar Registro",
-      "type": "n8n-nodes-base.httpRequest",
-      "position": [650, 300]
-    },
-    {
-      "parameters": {
-        "jsCode": "const registro = $input.first().json;\n\nif (!registro || !registro.entrada) {\n  return [{ json: { message: 'Registro não encontrado para hoje.' } }];\n}\n\nlet mensagem = `**Registro de Ponto - ${registro.data}**\\n`;\nmensagem += `Entrada: ${registro.entrada}\\n`;\n\nif (registro.saida) {\n  mensagem += `Saída: ${registro.saida}\\n`;\n  mensagem += `Total: ${registro.total_horas}\\n`;\n}\n\nif (registro.pausas && registro.pausas.length > 0) {\n  mensagem += `Pausas: ${registro.total_pausas || 'N/A'}\\n`;\n}\n\nreturn [{ json: { message: mensagem } }];"
-      },
-      "name": "Formatar Mensagem",
-      "type": "n8n-nodes-base.code",
-      "position": [850, 300]
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "operation": "send",
-        "channelId": "={{ $('Discord Trigger').item.json.channel_id }}",
-        "message": "={{ $json.message }}"
-      },
-      "name": "Discord Reply",
-      "type": "n8n-nodes-base.discord",
-      "position": [1050, 300]
-    }
-  ],
-  "connections": {
-    "Discord Trigger": {
-      "main": [[{ "node": "IF Comando Registro", "type": "main", "index": 0 }]]
-    },
-    "IF Comando Registro": {
-      "main": [[{ "node": "Buscar Registro", "type": "main", "index": 0 }]]
-    },
-    "Buscar Registro": {
-      "main": [[{ "node": "Formatar Mensagem", "type": "main", "index": 0 }]]
-    },
-    "Formatar Mensagem": {
-      "main": [[{ "node": "Discord Reply", "type": "main", "index": 0 }]]
-    }
+return [{
+  json: {
+    message: mensagem,
+    channelId: originalMsg.channel_id
   }
-}
+}];
 ```
+
+#### Node 6: Discord - Send Message
+- **Operation:** Send a Message
+- **Channel ID:** `{{ $json.channelId }}`
+- **Message:** `{{ $json.message }}`
 
 ---
 
 ## Workflow 3: Comando !pergunta (Chat IA)
 
-Processa perguntas e envia para o endpoint de IA.
+Processa perguntas enviadas com `!pergunta` e responde usando a IA do backend.
 
 ### Estrutura do Workflow
 
 ```
-[Discord Trigger] → [IF !pergunta] → [Extract Question] → [HTTP POST /ai/chat] → [Discord Reply]
+[Schedule: 5min] → [Get messages] → [Filter !pergunta] → [Extract question] → [HTTP POST /ai/chat] → [Discord Send]
 ```
 
 ### Nodes:
 
-#### Node 1: Discord Trigger
-- **Event:** Message Create
+#### Node 1: Schedule Trigger
+- **Trigger Interval:** Every 5 minutes
 
-#### Node 2: IF - Verificar Comando
-- **Condition:** `{{ $json.content.startsWith('!pergunta') }}`
+#### Node 2: Discord - Get many messages
+- **Channel ID:** `SEU_CHANNEL_ID`
+- **Limit:** 30
 
-#### Node 3: Code - Extrair Pergunta
+#### Node 3: Code - Filtrar e extrair perguntas
 ```javascript
-const content = $input.first().json.content;
-const pergunta = content.replace('!pergunta', '').trim();
+const agora = Date.now();
+const cincoMinutos = 5 * 60 * 1000;
 
-return [{
-  json: {
-    pergunta: pergunta,
-    usuario: $input.first().json.member?.nick || $input.first().json.author.username,
-    discordId: $input.first().json.author.id,
-    channelId: $input.first().json.channel_id
+const perguntas = [];
+
+for (const item of $input.all()) {
+  const msg = item.json;
+  const timestamp = new Date(msg.timestamp).getTime();
+  const isRecente = (agora - timestamp) < cincoMinutos;
+  const isComando = msg.content?.startsWith('!pergunta');
+  const isBot = msg.author?.bot === true;
+
+  if (isRecente && isComando && !isBot) {
+    const pergunta = msg.content.replace('!pergunta', '').trim();
+    if (pergunta) {
+      perguntas.push({
+        json: {
+          pergunta: pergunta,
+          usuario: msg.author.username,
+          discordId: msg.author.id,
+          channelId: msg.channel_id
+        }
+      });
+    }
   }
-}];
+}
+
+return perguntas;
 ```
 
 #### Node 4: HTTP Request - Chat IA
 - **Method:** POST
-- **URL:** `{SEU_BACKEND}/ai/chat`
+- **URL:** `https://discord-backend.fly.dev/ai/chat`
 - **Body:**
 ```json
 {
-  "question": "={{ $json.pergunta }}",
-  "usuario": "={{ $json.usuario }}",
-  "discordId": "={{ $json.discordId }}"
+  "question": "{{ $json.pergunta }}",
+  "usuario": "{{ $json.usuario }}",
+  "discordId": "{{ $json.discordId }}"
 }
 ```
 
-#### Node 5: Discord - Responder
-- **Channel ID:** `={{ $('Extrair Pergunta').item.json.channelId }}`
-- **Message:** `={{ $json.answer }}`
+#### Node 5: Code - Preparar resposta
+```javascript
+const resposta = $input.first().json;
+const dadosOriginal = $('Filtrar e extrair perguntas').first().json;
+
+return [{
+  json: {
+    message: resposta.answer || 'Não consegui processar sua pergunta.',
+    channelId: dadosOriginal.channelId
+  }
+}];
+```
+
+#### Node 6: Discord - Send Message
+- **Channel ID:** `{{ $json.channelId }}`
+- **Message:** `{{ $json.message }}`
 
 ---
 
-## Workflow 4: Perguntas via DM
+## Workflow Unificado (Alternativa Recomendada)
 
-Responde perguntas enviadas diretamente ao bot via mensagem privada.
+Em vez de 3 workflows separados, você pode criar um único workflow que trata tudo:
 
-### Estrutura do Workflow
-
-```
-[Discord Trigger (DM)] → [Filter Bot] → [HTTP POST /ai/chat] → [Discord DM Reply]
-```
-
-### Nodes:
-
-#### Node 1: Discord Trigger
-- **Event:** Direct Message Create
-
-#### Node 2: IF - Ignorar Bots
-- **Condition:** `{{ $json.author.bot }}` is equal to `false`
-
-#### Node 3: HTTP Request - Chat IA
-- **Method:** POST
-- **URL:** `{SEU_BACKEND}/ai/chat`
-- **Body:**
-```json
-{
-  "question": "={{ $json.content }}",
-  "usuario": "={{ $json.author.username }}",
-  "discordId": "={{ $json.author.id }}"
-}
-```
-
-#### Node 4: Discord - Responder DM
-- **Operation:** Send Direct Message
-- **User ID:** `={{ $json.author.id }}`
-- **Message:** `={{ $json.answer }}`
-
----
-
-## Workflow Unificado (Recomendado)
-
-Para simplificar, você pode criar um único workflow que trata todos os casos:
+### Estrutura
 
 ```
-                                    ┌─→ [Registrar Ponto]
-                                    │
-[Discord Trigger] → [Filter Bot] → [Switch] → [!registro] → [Buscar] → [Reply]
-                                    │
-                                    ├─→ [!pergunta] → [Chat IA] → [Reply]
-                                    │
-                                    └─→ [DM] → [Chat IA] → [DM Reply]
+[Schedule: 5min] → [Get messages] → [Filter recentes] → [Switch] → [Branches...]
 ```
 
 ### Node Switch - Roteamento
+Após filtrar mensagens recentes, use um node **Switch** para rotear:
+
 ```javascript
-// Condições do Switch:
-// 1. content.startsWith('!registro') → Output 1
-// 2. content.startsWith('!pergunta') → Output 2
-// 3. channel.type === 'DM' → Output 3
-// 4. default → Output 4 (Registrar Ponto)
+// Condição 1: É comando !registro
+{{ $json.content.startsWith('!registro') }}
+
+// Condição 2: É comando !pergunta
+{{ $json.content.startsWith('!pergunta') }}
+
+// Condição 3: Default (mensagem normal - registrar ponto)
+// Todas as outras mensagens vão para registro
+```
+
+### Diagrama do Workflow Unificado
+
+```
+                                         ┌─► [HTTP GET /registro] ─► [Format] ─► [Discord Send]
+                                         │   (Branch: !registro)
+                                         │
+[Schedule] ─► [Get Messages] ─► [Filter] ─► [Switch] ─► [HTTP POST /ai/chat] ─► [Discord Send]
+                                         │   (Branch: !pergunta)
+                                         │
+                                         └─► [HTTP POST /register]
+                                             (Branch: Default)
 ```
 
 ---
 
-## Variáveis de Ambiente n8n
+## Evitando Mensagens Duplicadas
 
-Configure estas variáveis no seu n8n:
+Como o workflow roda por polling, a mesma mensagem pode ser processada múltiplas vezes. Para evitar isso:
 
-| Variável | Valor | Descrição |
-|----------|-------|-----------|
-| `BACKEND_URL` | `https://seu-backend.com` | URL do backend de ponto |
+### Opção 1: Usar ID da última mensagem (Recomendado)
 
-Você pode usar `{{ $env.BACKEND_URL }}` nos nodes HTTP Request.
+Adicione um node **Static Data** para guardar o último ID processado:
+
+```javascript
+// No início do Code de filtro
+const staticData = $getWorkflowStaticData('global');
+const lastProcessedId = staticData.lastMessageId || '0';
+
+const mensagensNovas = [];
+
+for (const item of $input.all()) {
+  const msg = item.json;
+  // Só processa se ID for maior que o último processado
+  if (BigInt(msg.id) > BigInt(lastProcessedId)) {
+    mensagensNovas.push(item);
+  }
+}
+
+// Salva o maior ID processado
+if (mensagensNovas.length > 0) {
+  const maiorId = mensagensNovas
+    .map(m => m.json.id)
+    .sort((a, b) => BigInt(b) - BigInt(a))[0];
+  staticData.lastMessageId = maiorId;
+}
+
+return mensagensNovas;
+```
+
+### Opção 2: Confiar no backend
+
+O backend já trata parcialmente:
+- **Entrada:** Mantém a primeira, ignora duplicatas
+- **Saída:** Atualiza para a última (pode ser um problema se processar mensagem antiga)
+
+Para começar, pode usar sem controle de duplicatas e adicionar depois se necessário.
 
 ---
 
-## Dicas de Configuração
+## Variáveis para Substituir
 
-### 1. Tratamento de Erros
-Adicione um node **Error Trigger** para capturar falhas e notificar via Discord ou email.
+Antes de ativar os workflows, substitua:
 
-### 2. Rate Limiting
-O Discord tem limites de requisição. Se necessário, adicione um node **Wait** entre operações.
-
-### 3. Logs
-Use o node **Write Binary File** ou integração com serviço de logs para monitorar execuções.
-
-### 4. Webhook vs Trigger
-- **Discord Trigger:** Requer n8n sempre rodando (modo worker)
-- **Webhook:** Alternativa se seu Discord bot suportar enviar webhooks
+| Placeholder | Valor | Onde encontrar |
+|-------------|-------|----------------|
+| `SEU_CHANNEL_ID` | ID do canal de ponto | Botão direito no canal > Copiar ID |
+| `https://discord-backend.fly.dev` | URL do backend | Já está configurado |
 
 ---
 
-## Migração Passo a Passo
+## Limitações do Polling vs Bot em Tempo Real
 
-1. **Importe os workflows** no n8n
-2. **Configure as credenciais** do Discord
-3. **Substitua `{YOUR_BACKEND_URL}`** pela URL real
-4. **Teste cada workflow** individualmente
-5. **Ative os workflows**
-6. **Pare o bot antigo** e inicie o `bot-presence.js`
-7. **Monitore** por alguns dias para garantir funcionamento
+| Aspecto | Bot (tempo real) | n8n (polling) |
+|---------|------------------|---------------|
+| Latência | Instantâneo | Até 10 minutos |
+| Registro de entrada | Imediato | Até 10 min depois |
+| Comandos | Resposta imediata | Até 5 min depois |
+| Custo | Máquina 24/7 | Zero (usa n8n existente) |
+
+**Nota:** Para o sistema de ponto, um delay de até 10 minutos no registro geralmente é aceitável, já que o que importa é o horário da mensagem original, não quando foi processada.
+
+---
+
+## Checklist de Configuração
+
+- [ ] Criar credencial Discord no n8n
+- [ ] Obter Channel ID do canal de registros
+- [ ] Criar Workflow 1 (Registro de Ponto)
+- [ ] Testar Workflow 1 enviando "bom dia" no canal
+- [ ] Criar Workflow 2 (Comando !registro) - opcional
+- [ ] Criar Workflow 3 (Comando !pergunta) - opcional
+- [ ] Ativar todos os workflows
+- [ ] Configurar bot-presence.js para pausas automáticas
+- [ ] Desativar bot antigo
 
 ---
 
 ## Troubleshooting
 
-### Mensagens não estão sendo capturadas
-- Verifique se o bot tem permissão no canal
-- Confirme que os intents estão habilitados no Discord Developer Portal
+### Mensagens não estão sendo buscadas
+- Verifique se o Channel ID está correto
+- Confirme que o bot tem permissão de ler mensagens no canal
+- Teste o node Discord isoladamente
 
-### Erro 404 no backend
-- Verifique se a URL está correta
-- Confirme que o backend está rodando
+### HTTP Request retorna erro
+- Verifique se a URL do backend está correta
+- Teste o endpoint manualmente com curl/Postman
+- Verifique os logs do backend
 
-### Resposta não aparece no Discord
+### Respostas não aparecem no Discord
 - Verifique se o bot tem permissão de enviar mensagens
-- Confirme que o Channel ID está correto
+- Confirme que o Channel ID no node Send Message está correto
 
-### Timeout nas requisições
-- Aumente o timeout no node HTTP Request
-- Verifique latência do backend
+### Workflow não executa
+- Verifique se o workflow está ativo (toggle verde)
+- Confira o histórico de execuções no n8n
+- Verifique se o Schedule Trigger está configurado corretamente
