@@ -1,0 +1,68 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../shadows' as *;
+
+.ds-topbar {
+  font-family: $plus-ui-font-family !important;
+  background-color: $plus-ui-white;
+  border-bottom: 1px solid $plus-ui-gray-200;
+  padding: 0;
+  height: 64px;
+  line-height: 64px;
+
+  &--fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    font-size: $plus-ui-font-size-lg;
+    font-weight: $plus-ui-font-weight-semibold;
+    color: $plus-ui-gray-900;
+  }
+
+  &__menu {
+    flex: 1;
+    margin: 0 $plus-ui-spacing-8;
+  }
+
+  &__search {
+    width: 320px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $plus-ui-spacing-3;
+  }
+}
+
+.ant-layout-header {
+  &.ds-topbar {
+    background-color: $plus-ui-white;
+    border-bottom: 1px solid $plus-ui-gray-200;
+    padding: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ds-topbar {
+    background-color: $plus-ui-gray-900;
+    border-bottom-color: $plus-ui-gray-800;
+
+    &__logo {
+      color: $plus-ui-gray-100;
+    }
+  }
+
+  .ant-layout-header.ds-topbar {
+    background-color: $plus-ui-gray-900;
+    border-bottom-color: $plus-ui-gray-800;
+  }
+}

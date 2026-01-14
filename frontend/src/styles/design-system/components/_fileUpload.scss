@@ -1,0 +1,180 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../borders' as *;
+
+// ================================
+// FILE UPLOAD
+// ================================
+
+.ds-file-upload {
+  font-family: $plus-ui-font-family !important;
+
+  &--disabled {
+    opacity: 0.6;
+  }
+
+  // Dropzone (Upload.Dragger)
+  .ant-upload-drag {
+    background-color: $plus-ui-white;
+    border: 1px solid $plus-ui-gray-200;
+    border-radius: $plus-ui-component-border-radius;
+    padding: 0;
+
+    &:hover {
+      border-color: $plus-ui-green-500;
+    }
+  }
+
+  .ant-upload-drag-container {
+    padding: 0;
+  }
+
+  &__dropzone-content {
+    padding: $plus-ui-spacing-6 $plus-ui-spacing-4;
+    min-height: 108px;
+  }
+
+  &__dropzone-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $plus-ui-rounded-full;
+    border: 1px solid $plus-ui-gray-200;
+    background-color: $plus-ui-gray-50;
+
+    .anticon {
+      font-size: $plus-ui-font-size-lg;
+      color: $plus-ui-gray-600;
+    }
+  }
+
+  &__dropzone-hint {
+    font-size: $plus-ui-font-size-sm;
+    color: $plus-ui-gray-700;
+    text-align: center;
+  }
+
+  &__dropzone-hint-action {
+    color: $plus-ui-green-600;
+    font-weight: $plus-ui-font-weight-semibold;
+  }
+
+  &__dropzone-help {
+    font-size: $plus-ui-font-size-xs;
+    color: $plus-ui-gray-500;
+    text-align: center;
+  }
+
+  // Upload list
+  .ant-upload-list {
+    margin-top: $plus-ui-spacing-4;
+  }
+
+  .ant-upload-list-item-container {
+    margin-top: $plus-ui-spacing-3;
+  }
+
+  &__item {
+    background-color: $plus-ui-white;
+    border: 1px solid $plus-ui-gray-200;
+    border-radius: $plus-ui-component-border-radius;
+    padding: $plus-ui-spacing-3 $plus-ui-spacing-4;
+  }
+
+  &__file-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $plus-ui-rounded-lg;
+    border: 1px solid $plus-ui-gray-200;
+    background-color: $plus-ui-gray-50;
+    flex: 0 0 auto;
+
+    .anticon {
+      font-size: $plus-ui-font-size-lg;
+      color: $plus-ui-gray-700;
+    }
+
+    &--pdf {
+      background-color: $plus-ui-red-50;
+      border-color: $plus-ui-red-200;
+
+      .anticon {
+        color: $plus-ui-red-700;
+      }
+    }
+
+    &--video {
+      background-color: $plus-ui-blue-50;
+      border-color: $plus-ui-blue-200;
+
+      .anticon {
+        color: $plus-ui-blue-700;
+      }
+    }
+
+    &--figma {
+      background-color: $plus-ui-purple-50;
+      border-color: $plus-ui-purple-200;
+
+      .anticon {
+        color: $plus-ui-purple-700;
+      }
+    }
+
+    &--image {
+      background-color: $plus-ui-green-50;
+      border-color: $plus-ui-green-200;
+
+      .anticon {
+        color: $plus-ui-green-700;
+      }
+    }
+  }
+
+  &__file-name {
+    font-size: $plus-ui-font-size-sm;
+    font-weight: $plus-ui-font-weight-medium;
+    color: $plus-ui-gray-800;
+  }
+
+  &__file-subtitle {
+    font-size: $plus-ui-font-size-xs;
+    color: $plus-ui-gray-500;
+  }
+
+  &__status-icon {
+    font-size: $plus-ui-font-size-lg;
+
+    &--done {
+      color: $plus-ui-green-600;
+    }
+
+    &--error {
+      color: $plus-ui-red-600;
+    }
+  }
+
+  &__remove-button {
+    color: $plus-ui-gray-500;
+
+    &:hover {
+      color: $plus-ui-red-600;
+    }
+  }
+
+  &__line-progress {
+    .ant-progress-outer {
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    .ant-progress-inner {
+      background-color: $plus-ui-gray-100;
+      border-radius: $plus-ui-rounded-full;
+    }
+
+    .ant-progress-bg {
+      border-radius: $plus-ui-rounded-full;
+    }
+  }
+}

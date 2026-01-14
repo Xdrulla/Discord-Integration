@@ -1,0 +1,39 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+
+.ds-header {
+  font-family: $plus-ui-font-family !important;
+  padding: $plus-ui-spacing-6 $plus-ui-spacing-8;
+  background-color: $plus-ui-white;
+  border-bottom: 1px solid $plus-ui-gray-200;
+
+  &__breadcrumb {
+    margin-bottom: $plus-ui-spacing-4;
+  }
+
+  &__title-wrapper {
+    flex: 1;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $plus-ui-spacing-3;
+  }
+
+  &__tabs {
+    flex: 1;
+  }
+
+  &__search {
+    width: 320px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ds-header {
+    background-color: $plus-ui-gray-900;
+    border-bottom-color: $plus-ui-gray-800;
+  }
+}

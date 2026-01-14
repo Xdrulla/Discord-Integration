@@ -1,0 +1,244 @@
+@use '../typography' as *;
+@use '../colors' as *;
+@use '../spacing' as *;
+@use '../borders' as *;
+
+.ds-sidebar {
+  font-family: $plus-ui-font-family !important;
+  position: relative;
+  height: 100vh;
+  background: $plus-ui-white;
+  border-right: 1px solid $plus-ui-gray-200;
+  transition: width 0.2s ease;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: $plus-ui-white;
+  }
+
+  &__logo {
+    padding: $plus-ui-spacing-5 $plus-ui-spacing-6;
+    border-bottom: 1px solid $plus-ui-gray-200;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: $plus-ui-font-size-lg;
+    font-weight: $plus-ui-font-weight-semibold;
+    color: $plus-ui-gray-900;
+    min-height: 64px;
+    height: 64px;
+    background: $plus-ui-white !important;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &__menu {
+    border-right: none !important;
+    padding: $plus-ui-spacing-2 0;
+    flex: 1;
+    overflow-y: auto;
+    background-color: transparent !important;
+  }
+
+  &__footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid $plus-ui-gray-200;
+    background: $plus-ui-white !important;
+  }
+
+  &__footer-content {
+    padding: $plus-ui-spacing-3 $plus-ui-spacing-4;
+  }
+
+  &__user {
+    padding: $plus-ui-spacing-4;
+    display: flex;
+    align-items: center;
+    gap: $plus-ui-spacing-3;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $plus-ui-gray-50;
+    }
+  }
+
+  &--collapsed {
+    .ds-sidebar__logo {
+      justify-content: center;
+      padding: $plus-ui-spacing-5 $plus-ui-spacing-3;
+
+      img {
+        max-width: 32px;
+      }
+    }
+  }
+}
+
+// Menu items do Ant Design
+.ds-sidebar {
+  .ant-menu {
+    &.ds-sidebar__menu {
+      background-color: transparent;
+      border-right: none;
+
+      .ant-menu-item {
+        font-family: $plus-ui-font-family !important;
+        font-size: $plus-ui-font-size-sm;
+        color: $plus-ui-gray-700;
+        margin: 2px $plus-ui-spacing-2;
+        border-radius: $plus-ui-rounded-md;
+        height: 40px;
+        line-height: 40px;
+
+        &:hover {
+          background-color: $plus-ui-gray-50;
+          color: $plus-ui-gray-900;
+        }
+
+        &.ant-menu-item-selected {
+          background-color: $plus-ui-indigo-50;
+          color: $plus-ui-indigo-600;
+          font-weight: $plus-ui-font-weight-medium;
+
+          .anticon {
+            color: $plus-ui-indigo-600;
+          }
+        }
+
+        .anticon {
+          font-size: $plus-ui-font-size-lg;
+          color: $plus-ui-gray-500;
+        }
+      }
+
+      .ant-menu-submenu {
+        .ant-menu-submenu-title {
+          font-family: $plus-ui-font-family !important;
+          font-size: $plus-ui-font-size-sm;
+          color: $plus-ui-gray-700;
+          margin: 2px $plus-ui-spacing-2;
+          border-radius: $plus-ui-rounded-md;
+          height: 40px;
+          line-height: 40px;
+
+          &:hover {
+            background-color: $plus-ui-gray-50;
+            color: $plus-ui-gray-900;
+          }
+
+          .anticon {
+            font-size: $plus-ui-font-size-lg;
+            color: $plus-ui-gray-500;
+          }
+        }
+
+        &.ant-menu-submenu-selected {
+          .ant-menu-submenu-title {
+            color: $plus-ui-indigo-600;
+            font-weight: $plus-ui-font-weight-medium;
+
+            .anticon {
+              color: $plus-ui-indigo-600;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Collapsed state
+  &--collapsed {
+    .ds-sidebar__menu {
+      .ant-menu-item,
+      .ant-menu-submenu-title {
+        padding: 0 $plus-ui-spacing-4;
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ds-sidebar {
+    background: $plus-ui-gray-900;
+    border-right-color: $plus-ui-gray-800;
+
+    &__container {
+      background: $plus-ui-gray-900;
+    }
+
+    &__logo {
+      border-bottom-color: $plus-ui-gray-800;
+      color: $plus-ui-gray-100;
+      background: $plus-ui-gray-900;
+    }
+
+    &__footer {
+      border-top-color: $plus-ui-gray-800;
+      background: $plus-ui-gray-900;
+    }
+
+    &__user:hover {
+      background-color: $plus-ui-gray-800;
+    }
+
+    .ant-menu.ds-sidebar__menu {
+      .ant-menu-item {
+        color: $plus-ui-gray-300;
+
+        &:hover {
+          background-color: $plus-ui-gray-800;
+          color: $plus-ui-gray-100;
+        }
+
+        &.ant-menu-item-selected {
+          background-color: rgba(79, 70, 229, 0.2);
+          color: $plus-ui-indigo-400;
+
+          .anticon {
+            color: $plus-ui-indigo-400;
+          }
+        }
+
+        .anticon {
+          color: $plus-ui-gray-500;
+        }
+      }
+
+      .ant-menu-submenu {
+        .ant-menu-submenu-title {
+          color: $plus-ui-gray-300;
+
+          &:hover {
+            background-color: $plus-ui-gray-800;
+            color: $plus-ui-gray-100;
+          }
+
+          .anticon {
+            color: $plus-ui-gray-500;
+          }
+        }
+
+        &.ant-menu-submenu-selected .ant-menu-submenu-title {
+          color: $plus-ui-indigo-400;
+
+          .anticon {
+            color: $plus-ui-indigo-400;
+          }
+        }
+      }
+    }
+  }
+}
