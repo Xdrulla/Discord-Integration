@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/useAuth";
+import { Avatar } from "../designSystem";
 import { db } from "../../config/firebaseConfig";
 import { doc, getDoc, collection, query, where, orderBy, getDocs } from "firebase/firestore";
 
@@ -50,7 +50,12 @@ const UserProfile = () => {
   return (
     <div className="user-profile compact">
       <span className="user-name">{displayName}</span>
-      <Avatar icon={<UserOutlined />} className="user-avatar" />
+      <Avatar
+        name={displayName}
+        icon={<UserOutlined />}
+        size="sm"
+        className="user-avatar"
+      />
     </div>
   );
 };

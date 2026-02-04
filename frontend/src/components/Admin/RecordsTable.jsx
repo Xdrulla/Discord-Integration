@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Table, Spin, Dropdown, Menu, Button } from "antd";
+import { Dropdown, Menu } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   EditOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import { Table, Loading, Button } from "../designSystem";
 import { useAuth } from "../../context/useAuth";
 import dayjs from "dayjs";
 import {
@@ -286,14 +287,14 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
           trigger={["click"]}
           className="column-dropdown"
         >
-          <Button icon={<SettingOutlined />} className="column-btn">
+          <Button variant="secondary" icon={<SettingOutlined />} className="column-btn">
             Configurar Colunas
           </Button>
         </Dropdown>
       </div>
 
       {loading ? (
-        <Spin size="large" className="loading-spinner" />
+        <Loading size="lg" className="loading-spinner" />
       ) : isMobile ? (
         <>
           <div className="records-mobile-list">
@@ -342,9 +343,10 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
 
                       <div className="record-justification-buttons">
                         <Button
+                          variant="secondary"
                           icon={<EditOutlined />}
                           onClick={() => showJustificationModal(record)}
-                          size="small"
+                          size="sm"
                         >
                           {(() => {
                             const justification = justifications[record.id];
@@ -359,9 +361,9 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
                           justifications[record.id]?.status === "pendente" && (
                             <>
                               <Button
-                                type="primary"
+                                variant="primary"
                                 icon={<CheckCircleOutlined />}
-                                size="small"
+                                size="sm"
                                 onClick={() =>
                                   handleApprovalHelper({
                                     recordId: record.id,
@@ -379,9 +381,9 @@ const RecordsTable = ({ loading, filteredData, initialRecordId }) => {
                                 Aprovar
                               </Button>
                               <Button
-                                type="danger"
+                                variant="destructive"
                                 icon={<CloseCircleOutlined />}
-                                size="small"
+                                size="sm"
                                 onClick={() =>
                                   handleApprovalHelper({
                                     recordId: record.id,

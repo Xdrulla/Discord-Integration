@@ -1,32 +1,38 @@
 import goepikLogo from '../../images/goepik-logo-big.png';
 import UserProfile from '../Auth/UserProfile';
-import { Layout } from 'antd';
 import { BulbOutlined, BulbFilled } from "@ant-design/icons";
 import useDarkMode from '../../hooks/useDarkMode';
-
-const { Header } = Layout;
+import { TopBar } from '../designSystem';
 
 const Topbar = () => {
   const [darkMode, setDarkMode] = useDarkMode();
 
-  return (
-    <Header className="topbar">
-      <div className="topbar__left">
-        <img src={goepikLogo} alt="GoEpik Logo" className="topbar__logo" />
-      </div>
+  // Logo
+  const logo = (
+    <img src={goepikLogo} alt="GoEpik Logo" className="topbar__logo" />
+  );
 
-      <div className="topbar__right">
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="theme-toggle"
-          title="Alternar Tema"
-          aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
-        >
-          {darkMode ? <BulbFilled /> : <BulbOutlined />}
-        </button>
-        <UserProfile />
-      </div>
-    </Header>
+  // Actions (theme toggle + user profile)
+  const actions = (
+    <>
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="theme-toggle"
+        title="Alternar Tema"
+        aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
+      >
+        {darkMode ? <BulbFilled /> : <BulbOutlined />}
+      </button>
+      <UserProfile />
+    </>
+  );
+
+  return (
+    <TopBar
+      logo={logo}
+      actions={actions}
+      className="topbar"
+    />
   );
 };
 

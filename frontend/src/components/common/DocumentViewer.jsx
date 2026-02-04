@@ -1,5 +1,5 @@
 import PropTypes from "prop-types"
-import { Modal } from "antd"
+import { Modal } from "../designSystem"
 
 const DocumentViewer = ({ fileUrl, fileName, open, onClose }) => {
   const isPdf = fileUrl?.startsWith("data:application/pdf")

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { Tabs } from "antd";
 import { useLocation } from "react-router-dom";
+import { Tabs } from "../designSystem";
 import FilterBar from "./FilterBar";
 import RecordsTable from "./RecordsTable";
 import DashboardStats from "./DashboardStats";
@@ -199,37 +199,53 @@ const Dashboard = () => {
       <div className="dashboard-wrapper">
         <DashboardOverview resumo={resumo} />
 
-        <Tabs defaultActiveKey="1" className="dashboard-tabs">
-          <Tabs.TabPane tab="Registros de Ponto" key="1">
-            <FilterBar
-              role={role}
-              searchUser={searchUser}
-              setSearchUser={setSearchUser}
-              setDateRange={setDateRange}
-              currentTab="1"
-            />
-
-            <RecordsTable
-              loading={loading}
-              filteredData={filteredData}
-              initialRecordId={initialRecordId}
-            />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="Estatísticas" key="2">
-            <DashboardStats resumo={resumo} loading={resumoLoading} todosRegistros={data} />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="Banco de Horas" key="3">
-            <BancoHorasHistorico discordId={discordId} />
-          </Tabs.TabPane>
-
-          {role === "admin" && (
-            <Tabs.TabPane tab="Resumo Geral" key="4">
-              <DashboardGeneral />
-            </Tabs.TabPane>
-          )}
-        </Tabs>
+        <Tabs
+          defaultActiveKey="1"
+          className="dashboard-tabs"
+          items={[
+            {
+              key: "1",
+              label: "Registros de Ponto",
+              children: (
+                <>
+                  <FilterBar
+                    role={role}
+                    searchUser={searchUser}
+                    setSearchUser={setSearchUser}
+                    setDateRange={setDateRange}
+                    currentTab="1"
+                  />
+                  <RecordsTable
+                    loading={loading}
+                    filteredData={filteredData}
+                    initialRecordId={initialRecordId}
+                  />
+                </>
+              ),
+            },
+            {
+              key: "2",
+              label: "Estatísticas",
+              children: (
+                <DashboardStats resumo={resumo} loading={resumoLoading} todosRegistros={data} />
+              ),
+            },
+            {
+              key: "3",
+              label: "Banco de Horas",
+              children: <BancoHorasHistorico discordId={discordId} />,
+            },
+            ...(role === "admin"
+              ? [
+                  {
+                    key: "4",
+                    label: "Resumo Geral",
+                    children: <DashboardGeneral />,
+                  },
+                ]
+              : []),
+          ]}
+        />
       </div>
     </>
   );

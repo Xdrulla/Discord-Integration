@@ -5,6 +5,8 @@
  * Box shadows, blur effects, and background blur utilities
  */
 
+@use 'sass:map';
+
 // ============================================================================
 // BOX SHADOWS
 // ============================================================================
@@ -118,7 +120,7 @@ $plus-ui-backdrop-blur-scale: (
  * }
  */
 @function shadow($key: 'default') {
-  @return map-get($plus-ui-shadow-scale, $key);
+  @return map.get($plus-ui-shadow-scale, $key);
 }
 
 /**
@@ -132,7 +134,7 @@ $plus-ui-backdrop-blur-scale: (
  * }
  */
 @function blur($key: 'default') {
-  @return map-get($plus-ui-blur-scale, $key);
+  @return map.get($plus-ui-blur-scale, $key);
 }
 
 /**
@@ -146,7 +148,7 @@ $plus-ui-backdrop-blur-scale: (
  * }
  */
 @function backdrop-blur($key: 'default') {
-  @return map-get($plus-ui-backdrop-blur-scale, $key);
+  @return map.get($plus-ui-backdrop-blur-scale, $key);
 }
 
 // ============================================================================

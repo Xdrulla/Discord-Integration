@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState, useMemo } from "react";
-import { Card, Row, Col, Statistic, Empty, Spin } from "antd";
+import { Card, Row, Col, Statistic } from "antd";
+import { Loading, EmptyState } from "../designSystem";
 import FilterBar from "./FilterBar";
 import dayjs from "dayjs";
 import { useAuth } from "../../context/useAuth";
@@ -50,9 +51,9 @@ const DashboardStats = ({ resumo: initialResumo, loading: initialLoading, todosR
     return () => debouncedFetch.cancel();
   }, [searchUser, discordIdFromSearch, dateRange, role, discordId]);
 
-  if (loading) return <Spin size="large" />;
+  if (loading) return <Loading size="lg" />;
 
-  if (!resumo) return <Empty description="Resumo não disponível" />;
+  if (!resumo) return <EmptyState description="Resumo não disponível" />;
 
   return (
     <div className="stats-container">

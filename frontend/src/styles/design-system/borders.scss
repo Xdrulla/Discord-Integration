@@ -5,6 +5,8 @@
  * Border radius and border width tokens
  */
 
+@use 'sass:map';
+
 // ============================================================================
 // BORDER RADIUS
 // ============================================================================
@@ -68,7 +70,7 @@ $plus-ui-border-width-scale: (
  * }
  */
 @function rounded($key: 'default') {
-  @return map-get($plus-ui-border-radius-scale, $key);
+  @return map.get($plus-ui-border-radius-scale, $key);
 }
 
 /**
@@ -82,7 +84,7 @@ $plus-ui-border-width-scale: (
  * }
  */
 @function border-width($key: 'default') {
-  @return map-get($plus-ui-border-width-scale, $key);
+  @return map.get($plus-ui-border-width-scale, $key);
 }
 
 // ============================================================================

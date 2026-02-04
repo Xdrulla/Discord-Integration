@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   BarChartOutlined,
   UserOutlined,
@@ -11,12 +11,14 @@ import {
 } from "@ant-design/icons";
 
 import { useAuth } from "../../context/useAuth";
+import { Sidebar, Button } from "../designSystem";
 
 const SidebarMenu = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [collapsed, setCollapsed] = useState(!isMobile);
   const { logout, role } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,43 +37,69 @@ const SidebarMenu = () => {
     }
   };
 
+  // Menu items no formato do Ant Design Menu
   const menuItems = [
-    { key: "/dashboard", label: "Dashboard", icon: <BarChartOutlined /> },
+    {
+      key: "/dashboard",
+      label: "Dashboard",
+      icon: <BarChartOutlined />,
+      onClick: () => navigate("/dashboard"),
+    },
     ...(role === "admin"
       ? [
-        { key: "/admin/manage-users", label: "Usuários", icon: <UserOutlined /> },
-        { key: "/admin/goals", label: "Metas", icon: <CalendarOutlined /> },
-      ]
+          {
+            key: "/admin/manage-users",
+            label: "Usuários",
+            icon: <UserOutlined />,
+            onClick: () => navigate("/admin/manage-users"),
+          },
+          {
+            key: "/admin/goals",
+            label: "Metas",
+            icon: <CalendarOutlined />,
+            onClick: () => navigate("/admin/goals"),
+          },
+        ]
       : []),
-    { key: "/profile", label: "Perfil", icon: <SettingOutlined /> },
+    {
+      key: "/profile",
+      label: "Perfil",
+      icon: <SettingOutlined />,
+      onClick: () => navigate("/profile"),
+    },
   ];
 
-  return (
-    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
-      <div className="sidebar-toggle" onClick={toggleCollapse}>
+  // Logo com toggle
+  const logoContent = (
+    <div className="ds-sidebar__logo-wrapper">
+      <span className="ds-sidebar__brand">GoEPIK</span>
+      <button className="ds-sidebar__toggle" onClick={toggleCollapse}>
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </div>
+      </button>
+    </div>
+  );
 
-      <div className="sidebar-brand">GoEPIK</div>
+  // Footer com botão de logout
+  const footerContent = (
+    <Button
+      variant="ghost"
+      icon={<LogoutOutlined />}
+      onClick={logout}
+      className="ds-sidebar__logout"
+    >
+      {!collapsed && "Sair"}
+    </Button>
+  );
 
-      <ul className="sidebar-menu">
-        {menuItems.map((item) => (
-          <li key={item.key} className={location.pathname === item.key ? "active" : ""}>
-            <Link to={item.key}>
-              <span className="icon">{item.icon}</span>
-              {(!collapsed || isMobile) && <span className="label">{item.label}</span>}
-            </Link>
-          </li>
-        ))}
-
-        <li>
-          <button className="logout-btn" onClick={logout}>
-            <span className="icon"><LogoutOutlined /></span>
-            {(!collapsed || isMobile) && <span className="label">Sair</span>}
-          </button>
-        </li>
-      </ul>
-    </aside>
+  return (
+    <Sidebar
+      logo={logoContent}
+      menuItems={menuItems}
+      footer={footerContent}
+      collapsed={collapsed}
+      className={`sidebar ${location.pathname}`}
+      selectedKeys={[location.pathname]}
+    />
   );
 };
 

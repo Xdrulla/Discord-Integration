@@ -6,6 +6,8 @@
  * Base unit: 1rem = 16px, with granular control using px and rem values
  */
 
+@use 'sass:map';
+
 // ============================================================================
 // SPACING SCALE
 // ============================================================================
@@ -105,7 +107,7 @@ $plus-ui-spacing-scale: (
  * }
  */
 @function spacing($key) {
-  @return map-get($plus-ui-spacing-scale, $key);
+  @return map.get($plus-ui-spacing-scale, $key);
 }
 
 // ============================================================================

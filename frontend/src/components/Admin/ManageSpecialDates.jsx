@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Input, Table, Typography, message, Popconfirm, Select } from "antd";
+import { Card, Input, Typography, message, Popconfirm, Select } from "antd";
 import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Table } from "../designSystem";
 import {
   fetchSpecialDates,
   addSpecialDate,
@@ -90,7 +91,7 @@ const ManageSpecialDates = () => {
       key: "action",
       render: (data) => (
         <Popconfirm title="Tem certeza que deseja excluir?" onConfirm={() => handleDelete(data)}>
-          <Button type="link" danger icon={<DeleteOutlined />} />
+          <Button variant="ghost" icon={<DeleteOutlined />} className="text-destructive" />
         </Popconfirm>
       ),
     },
@@ -100,7 +101,7 @@ const ManageSpecialDates = () => {
     <div className="manage-holidays-container">
       <Card className="manage-holidays-card">
         <Button
-          type="link"
+          variant="ghost"
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate("/dashboard")}
           className="back-button"
@@ -134,7 +135,7 @@ const ManageSpecialDates = () => {
             className="holiday-select-users"
           />
 
-          <Button type="primary" onClick={handleAddHoliday}>Adicionar</Button>
+          <Button variant="primary" onClick={handleAddHoliday}>Adicionar</Button>
         </div>
 
         <Table

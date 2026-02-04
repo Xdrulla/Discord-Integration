@@ -20,6 +20,9 @@ const Sidebar = ({
   footer,
   collapsed = false,
   width = DEFAULT_SIDEBAR_WIDTH,
+  selectedKeys = [],
+  defaultSelectedKeys = [],
+  onSelect,
   className = '',
   style = {},
   ...restProps
@@ -50,6 +53,9 @@ const Sidebar = ({
         <Menu
           mode="inline"
           items={menuItems}
+          selectedKeys={selectedKeys}
+          defaultSelectedKeys={defaultSelectedKeys}
+          onSelect={onSelect}
           className="ds-sidebar__menu"
           inlineCollapsed={collapsed}
         />
@@ -73,6 +79,9 @@ Sidebar.propTypes = {
   footer: PropTypes.node,
   collapsed: PropTypes.bool,
   width: PropTypes.number,
+  selectedKeys: PropTypes.arrayOf(PropTypes.string),
+  defaultSelectedKeys: PropTypes.arrayOf(PropTypes.string),
+  onSelect: PropTypes.func,
   className: PropTypes.string,
   style: PropTypes.object,
 };

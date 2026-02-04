@@ -2,8 +2,9 @@ import { useState } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { Input, Button, Card, Typography, message, Tabs, Form } from "antd";
+import { Input, Card, Typography, message, Form } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Tabs } from "../designSystem";
 import { setDoc, doc } from "firebase/firestore";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
@@ -53,34 +54,46 @@ const AuthPage = () => {
         <Title level={2} className="auth-title">Bem-vindo</Title>
         <Text type="secondary">Acesse sua conta ou cadastre-se para continuar</Text>
 
-        <Tabs activeKey={activeTab} onChange={setActiveTab} className="auth-tabs">
-          <Tabs.TabPane tab="Login" key="login">
-            <Form layout="vertical" onFinish={(values) => handleAuth(values, false)}>
-              <Form.Item name="email" rules={[{ required: true, message: "Digite seu e-mail" }]}>
-                <Input prefix={<MailOutlined />} placeholder="E-mail" />
-              </Form.Item>
-              <Form.Item name="password" rules={[{ required: true, message: "Digite sua senha" }]}>
-                <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
-              </Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} block>Entrar</Button>
-            </Form>
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="Cadastro" key="register">
-            <Form layout="vertical" onFinish={(values) => handleAuth(values, true)}>
-              <Form.Item name="email" rules={[{ required: true, message: "Digite seu e-mail" }]}>
-                <Input prefix={<MailOutlined />} placeholder="E-mail" />
-              </Form.Item>
-              <Form.Item name="password" rules={[{ required: true, message: "Crie uma senha" }]}>
-                <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
-              </Form.Item>
-              <Form.Item name="discordId" rules={[{ required: true, message: "Digite seu ID do Discord" }]}>
-                <Input placeholder="ID do Discord" />
-              </Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} block>Cadastrar</Button>
-            </Form>
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          className="auth-tabs"
+          items={[
+            {
+              key: "login",
+              label: "Login",
+              children: (
+                <Form layout="vertical" onFinish={(values) => handleAuth(values, false)}>
+                  <Form.Item name="email" rules={[{ required: true, message: "Digite seu e-mail" }]}>
+                    <Input prefix={<MailOutlined />} placeholder="E-mail" />
+                  </Form.Item>
+                  <Form.Item name="password" rules={[{ required: true, message: "Digite sua senha" }]}>
+                    <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
+                  </Form.Item>
+                  <Button variant="primary" htmlType="submit" loading={loading} block>Entrar</Button>
+                </Form>
+              ),
+            },
+            {
+              key: "register",
+              label: "Cadastro",
+              children: (
+                <Form layout="vertical" onFinish={(values) => handleAuth(values, true)}>
+                  <Form.Item name="email" rules={[{ required: true, message: "Digite seu e-mail" }]}>
+                    <Input prefix={<MailOutlined />} placeholder="E-mail" />
+                  </Form.Item>
+                  <Form.Item name="password" rules={[{ required: true, message: "Crie uma senha" }]}>
+                    <Input.Password prefix={<LockOutlined />} placeholder="Senha" />
+                  </Form.Item>
+                  <Form.Item name="discordId" rules={[{ required: true, message: "Digite seu ID do Discord" }]}>
+                    <Input placeholder="ID do Discord" />
+                  </Form.Item>
+                  <Button variant="primary" htmlType="submit" loading={loading} block>Cadastrar</Button>
+                </Form>
+              ),
+            },
+          ]}
+        />
       </Card>
     </div>
   );

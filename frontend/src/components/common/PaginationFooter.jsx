@@ -1,4 +1,4 @@
-import { Pagination } from "antd";
+import { Pagination } from "../designSystem";
 import usePagination from "../../context/usePagination";
 
 const PaginationFooter = () => {
@@ -14,7 +14,7 @@ const PaginationFooter = () => {
         pageSize={pagination.pageSize}
         total={pagination.total}
         showSizeChanger
-        pageSizeOptions={["10", "20", "50"]}
+        pageSizeOptions={[10, 20, 50]}
         showTotal={(total) => `Total de ${total} registros`}
         onChange={(page, pageSize) =>
           setPagination((prev) => ({ ...prev, current: page, pageSize }))

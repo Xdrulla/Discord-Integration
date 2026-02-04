@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import { Modal, Card, Button } from "antd";
+import { Card } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
+import { Modal, Button } from "../../designSystem";
 
 const PendingJustificationsModal = ({
   visible,
@@ -19,6 +20,7 @@ const PendingJustificationsModal = ({
       onCancel={onClose}
       footer={null}
       className="pending-justifications-modal"
+      size="md"
     >
       {justifications.map((j) => (
         <Card key={j.id} className="pending-card">
@@ -33,16 +35,16 @@ const PendingJustificationsModal = ({
           </p>
           <div className="pending-card-actions">
             <Button
-              size="small"
-              type="primary"
+              size="sm"
+              variant="primary"
               icon={<CheckCircleOutlined />}
               onClick={() => onApprove(j.id)}
             >
               Aprovar
             </Button>
             <Button
-              size="small"
-              danger
+              size="sm"
+              variant="destructive"
               icon={<CloseCircleOutlined />}
               onClick={() => onReject(j.id)}
             >

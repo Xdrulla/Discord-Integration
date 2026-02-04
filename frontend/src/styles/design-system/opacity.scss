@@ -6,6 +6,8 @@
  * Values range from 0 (fully transparent) to 100 (fully opaque)
  */
 
+@use 'sass:map';
+
 // ============================================================================
 // OPACITY SCALE
 // ============================================================================
@@ -63,7 +65,7 @@ $plus-ui-opacity-scale: (
  * }
  */
 @function opacity($key) {
-  @return map-get($plus-ui-opacity-scale, $key);
+  @return map.get($plus-ui-opacity-scale, $key);
 }
 
 // ============================================================================

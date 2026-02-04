@@ -1,14 +1,13 @@
 import PropTypes from "prop-types"
 import {
-  Modal,
   Input,
-  Button,
   Upload,
   Select,
   DatePicker,
   message
 } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
+import { Modal, Button } from "../../designSystem"
 import DocumentViewer from "../../common/DocumentViewer"
 import dayjs from "dayjs"
 import { IMaskInput } from 'react-imask'
@@ -55,9 +54,10 @@ const JustificationModal = ({
         onOk={onSubmit}
         onCancel={onCancel}
         okText={saving ? "Salvando..." : "Salvar"}
-        okButtonProps={{ disabled: saving }}
+        confirmLoading={saving}
         cancelText="Cancelar"
         footer={isReadOnly ? null : undefined}
+        size="md"
       >
         <div className="justificativa-modal">
           <p>
@@ -96,7 +96,7 @@ const JustificationModal = ({
               onRemove={() => setJustificationFile(null)}
               fileList={justificationFile ? [justificationFile] : []}
             >
-              <Button icon={<UploadOutlined />} className="upload-button">
+              <Button variant="secondary" icon={<UploadOutlined />} className="upload-button">
                 Anexar Arquivo (Atestado, etc)
               </Button>
             </Upload>
@@ -106,7 +106,7 @@ const JustificationModal = ({
             <div style={{ marginTop: 16 }}>
               <p>Arquivo enviado:</p>
               <Button
-                type="link"
+                variant="ghost"
                 onClick={() => {
                   setViewerFile({
                     url: currentRecord.justificativa.file,
@@ -187,7 +187,7 @@ const JustificationModal = ({
           )}
 
           {!isReadOnly && isOwnJustification && currentRecord?.justificativa && (
-            <Button danger style={{ marginTop: 12 }} onClick={onDelete}>
+            <Button variant="destructive" style={{ marginTop: 12 }} onClick={onDelete}>
               Excluir Justificativa
             </Button>
           )}

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button, Select, Row, Col, Typography, message } from "antd";
+import { Select, Row, Col, Typography, message } from "antd";
 import { FileExcelOutlined, FilePdfOutlined } from "@ant-design/icons";
+import { Table, Button } from "../designSystem";
 import { auth } from "../../config/firebaseConfig";
 import axios from "axios";
 const { Title } = Typography;
@@ -130,12 +131,12 @@ const DashboardGeneral = () => {
           />
         </Col>
         <Col>
-          <Button icon={<FileExcelOutlined />} onClick={() => exportar("excel")}>
+          <Button variant="secondary" icon={<FileExcelOutlined />} onClick={() => exportar("excel")}>
             Exportar Excel
           </Button>
         </Col>
         <Col>
-          <Button icon={<FilePdfOutlined />} onClick={() => exportar("pdf")}>
+          <Button variant="secondary" icon={<FilePdfOutlined />} onClick={() => exportar("pdf")}>
             Exportar PDF
           </Button>
         </Col>

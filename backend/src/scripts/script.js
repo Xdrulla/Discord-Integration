@@ -67,6 +67,22 @@ const timesheetData = {
     'Luan Drulla': { entrada: '08:47', saida: '17:31', intervalo: 60 },
     'Erick': { entrada: '13:02', saida: '19:00', intervalo: 0 },
   },
+  '2026-01-08': {
+    'Felipe Rodrigues': { entrada: '07:09', saida: '17:39', intervalo: 60 },
+    'Feliphe': { entrada: '08:18', saida: '17:23', intervalo: 60 },
+    'Carlos Henrique': { entrada: '08:29', saida: '17:35', intervalo: 60 },
+    'Vinicius Grzyb': { entrada: '08:32', saida: '17:35', intervalo: 60 },
+    'Luan Drulla': { entrada: '08:50', saida: '17:50', intervalo: 60 },
+    'Erick': { entrada: '12:55', saida: '19:00', intervalo: 0 },
+  },
+  '2026-01-09': {
+    'Felipe Rodrigues': { entrada: '08:05', saida: '18:04', intervalo: 60 },
+    'Feliphe': { entrada: '08:19', saida: '17:28', intervalo: 60 },
+    'Vinicius Grzyb': { entrada: '08:44', saida: '17:46', intervalo: 60 },
+    'Luan Drulla': { entrada: '08:50', saida: '17:51', intervalo: 60 },
+    'Carlos Henrique': { entrada: '08:52', saida: '15:03', intervalo: 60 },
+    'Erick': { entrada: '12:56', saida: '19:00', intervalo: 0 },
+  },
 };
 
 // Função para calcular horas trabalhadas usando a mesma lógica do seu sistema

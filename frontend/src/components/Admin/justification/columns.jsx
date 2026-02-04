@@ -1,5 +1,6 @@
-import { Tag, Button, Tooltip, Space } from "antd"
+import { Tooltip, Space } from "antd"
 import { EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons"
+import { Tag, Button } from "../../designSystem"
 import dayjs from "dayjs"
 import { extrairMinutosDeString } from "../../../utils/timeUtils"
 import PauseInProgress from "../../common/inProgressPause"
@@ -134,6 +135,7 @@ export const getColumns = ({
           <Space>
             <Tooltip title={justification?.text || "Nenhuma justificativa"}>
               <Button
+                variant="secondary"
                 icon={<EditOutlined />}
                 onClick={() => showJustificationModal(record)}
               >
@@ -147,14 +149,14 @@ export const getColumns = ({
             {role === "admin" && justification && justification.status === "pendente" && (
               <>
                 <Button
-                  type="primary"
+                  variant="primary"
                   icon={<CheckCircleOutlined />}
                   onClick={() => handleApproval(record.id, "aprovado")}
                 >
                   Aprovar
                 </Button>
                 <Button
-                  type="danger"
+                  variant="destructive"
                   icon={<CloseCircleOutlined />}
                   onClick={() => handleApproval(record.id, "reprovado")}
                 >

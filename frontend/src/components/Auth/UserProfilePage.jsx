@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Card, Typography, Button, Avatar, Modal, Input, message, Form } from "antd";
+import { Card, Typography, Input, message, Form } from "antd";
 import { ArrowLeftOutlined, UserOutlined, LockOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { Avatar, Button, Modal } from "../designSystem";
 import { useAuth } from "../../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getAuth, updatePassword } from "firebase/auth";
@@ -101,7 +102,7 @@ const UserProfilePage = () => {
     <div className="profile-container">
       <Card className="profile-card">
         <Button
-          type="text"
+          variant="ghost"
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate("/dashboard")}
           className="back-button"
@@ -109,7 +110,7 @@ const UserProfilePage = () => {
           Voltar
         </Button>
 
-        <Avatar size={96} icon={<UserOutlined />} className="profile-avatar" />
+        <Avatar size="xl" icon={<UserOutlined />} className="profile-avatar" />
 
         <Title level={3} className="profile-title">
           {user?.displayName || "Usuário"}
@@ -144,7 +145,7 @@ const UserProfilePage = () => {
 
           <Form.Item>
             <Button
-              type="primary"
+              variant="primary"
               icon={<CheckCircleOutlined />}
               htmlType="submit"
               loading={saving}
@@ -156,7 +157,7 @@ const UserProfilePage = () => {
         </Form>
 
         <Button
-          type="primary"
+          variant="primary"
           icon={<LockOutlined />}
           onClick={() => setIsModalOpen(true)}
           className="profile-button"

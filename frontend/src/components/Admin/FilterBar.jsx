@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { Input, DatePicker, Space, Button } from 'antd';
+import { Input, DatePicker, Space } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import { Button } from '../designSystem';
 import AddManualRecordModal from './AddManualRecordModal';
 
 const { RangePicker } = DatePicker;
@@ -44,10 +45,10 @@ const FilterBar = ({ role, searchUser, setSearchUser, setDateRange, currentTab }
 
         {showAddManual && currentTab === '1' && (
           <Button
-            type="primary"
+            variant="primary"
             shape="circle"
             icon={<PlusOutlined />}
-            size="large"
+            size="lg"
             onClick={() => setManualModalOpen(true)}
             title="Adicionar registro manual"
             aria-label="Adicionar registro manual"

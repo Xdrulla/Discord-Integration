@@ -5,6 +5,8 @@
  * Responsive breakpoints for mobile-first design
  */
 
+@use 'sass:map';
+
 // ============================================================================
 // BREAKPOINTS (min-width)
 // ============================================================================
@@ -44,7 +46,7 @@ $plus-ui-breakpoints: (
  * }
  */
 @function breakpoint($key) {
-  @return map-get($plus-ui-breakpoints, $key);
+  @return map.get($plus-ui-breakpoints, $key);
 }
 
 // ============================================================================

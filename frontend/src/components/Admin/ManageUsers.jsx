@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebaseConfig";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
-import { Table, Select, message, Card, Button, Typography, Switch } from "antd";
+import { Select, message, Card, Switch } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-
-const { Title } = Typography;
+import { Header, Breadcrumb, Button, Table } from "../designSystem";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -142,22 +141,29 @@ const ManageUsers = () => {
     },
   ];
 
+  const breadcrumbItems = [
+    { title: "Dashboard", href: "/dashboard" },
+    { title: "Gerenciar Usuários" },
+  ];
+
   return (
     <div className="manage-users-container">
-      <Card className="manage-users-card">
-        <div className="manage-users-header">
+      <Header
+        title="Gerenciar Usuários"
+        description="Gerencie permissões e notificações dos usuários"
+        breadcrumb={<Breadcrumb items={breadcrumbItems} />}
+        actions={
           <Button
-            type="text"
+            variant="ghost"
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate("/dashboard")}
-            className="back-button"
           >
-            Voltar ao Dashboard
+            Voltar
           </Button>
-          
-          <Title level={3} className="manage-users-title">Gerenciar Usuários</Title>
-        </div>
+        }
+      />
 
+      <Card className="manage-users-card">
         <div className="manage-users-content">
           {isMobile ? (
             <div className="users-mobile-list">

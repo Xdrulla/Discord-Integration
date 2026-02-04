@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Card, Table, Spin, Alert } from "antd";
+import { Card, Alert } from "antd";
 import { BankOutlined, HistoryOutlined } from "@ant-design/icons";
+import { Table, Loading, EmptyState } from "../designSystem";
 import PropTypes from "prop-types";
 import axios from "axios";
 
@@ -100,7 +101,7 @@ const BancoHorasHistorico = ({ discordId }) => {
     return (
       <Card title={<><HistoryOutlined /> Histórico de Banco de Horas</>}>
         <div style={{ textAlign: "center", padding: "2rem" }}>
-          <Spin size="large" />
+          <Loading size="lg" />
         </div>
       </Card>
     );
@@ -117,11 +118,9 @@ const BancoHorasHistorico = ({ discordId }) => {
   if (historico.length === 0) {
     return (
       <Card title={<><HistoryOutlined /> Histórico de Banco de Horas</>}>
-        <Alert
-          message="Nenhum histórico encontrado"
+        <EmptyState
+          title="Nenhum histórico encontrado"
           description="O histórico de banco de horas aparecerá aqui após o fechamento dos meses."
-          type="info"
-          showIcon
         />
       </Card>
     );

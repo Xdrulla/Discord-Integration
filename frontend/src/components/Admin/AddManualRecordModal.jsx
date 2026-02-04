@@ -1,10 +1,10 @@
 import PropTypes from "prop-types"
 import { useState } from "react"
 import {
-  Modal,
   DatePicker,
   message,
 } from "antd"
+import { Modal } from "../designSystem"
 import { useAuth } from "../../context/useAuth"
 import { addManualRecord } from "../../services/manualRecordService"
 import { showError, showSuccess } from "../common/alert"
@@ -63,6 +63,7 @@ const AddManualRecordModal = ({ open, onClose }) => {
       confirmLoading={loading}
       okText="Salvar"
       cancelText="Cancelar"
+      size="md"
     >
       <p>Informe os dados para inserir um novo registro manual.</p>
       <DatePicker
