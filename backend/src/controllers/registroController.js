@@ -10,6 +10,24 @@ const { enviarEmailNotificacao } = require("../utils/emailHelper");
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
+const mensagensProcessadas = new Map();
+const CACHE_TTL = 15 * 60 * 1000;
+
+function gerarChaveMensagem(discordId, mensagem) {
+  const minuto = dayjs().tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm");
+  return `${discordId}_${mensagem.trim().toLowerCase()}_${minuto}`;
+}
+
+function mensagemJaProcessada(chave) {
+  const agora = Date.now();
+  for (const [key, timestamp] of mensagensProcessadas) {
+    if ((agora - timestamp) > CACHE_TTL) {
+      mensagensProcessadas.delete(key);
+    }
+  }
+  return mensagensProcessadas.has(chave);
+}
+
 async function getUsuarioByDiscordId(discordId) {
   const snapshot = await db.collection("users").where("discordId", "==", discordId).limit(1).get();
   if (snapshot.empty) return null;
@@ -26,6 +44,12 @@ exports.register = async (req, res) => {
       if (!nomeUsuario) return res.status(404).json({ error: "Usuário não encontrado pelo Discord ID." });
       usuario = nomeUsuario;
     }
+
+    const chaveDedupe = gerarChaveMensagem(discordId || usuario, mensagem);
+    if (mensagemJaProcessada(chaveDedupe)) {
+      return res.json({ success: true, message: "Mensagem duplicada ignorada." });
+    }
+    mensagensProcessadas.set(chaveDedupe, Date.now());
 
     const agora = dayjs().tz("America/Sao_Paulo")
     const dataFormatada = agora.format("YYYY-MM-DD")
@@ -47,7 +71,7 @@ exports.register = async (req, res) => {
       if (registroAtual.pausas) {
         registroAtual.pausas.forEach((pausa) => {
           if (!pausa.fim) {
-            pausa.fim = `${dataFormatada}T${horaAtual}`;
+            pausa.fim = agora.format();
           }
         });
       }
@@ -56,8 +80,8 @@ exports.register = async (req, res) => {
         dadosRegistro.saida = horaAtual;
 
         if (registroAtual.entrada) {
-          const dataCompletaEntrada = `${dataFormatada}T${registroAtual.entrada}:00`
-          const dataCompletaSaida = `${dataFormatada}T${dadosRegistro.saida}:00`
+          const dataCompletaEntrada = dayjs.tz(`${dataFormatada} ${registroAtual.entrada}`, "America/Sao_Paulo").format()
+          const dataCompletaSaida = dayjs.tz(`${dataFormatada} ${dadosRegistro.saida}`, "America/Sao_Paulo").format()
 
           const { totalHoras, totalPausas } = calcularHorasTrabalhadas(
             dataCompletaEntrada,
@@ -176,7 +200,7 @@ exports.resume = async (req, res) => {
     ultimaPausa.fim = agora;
 
     const { totalPausas } = calcularHorasTrabalhadas(
-      `${dataFormatada}T${dadosRegistro.entrada || "00:00"}`,
+      dayjs.tz(`${dataFormatada} ${dadosRegistro.entrada || "00:00"}`, "America/Sao_Paulo").format(),
       agora,
       dadosRegistro.pausas
     );
