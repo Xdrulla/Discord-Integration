@@ -43,10 +43,16 @@ function buildParams(cursor = null) {
   const params = {}
   if (!auth.isAdmin && auth.discordId) params.discordId = auth.discordId
   if (dateStart.value) params.dataInicioParam = dateStart.value
+  // Quando apenas dateEnd é definida sem dateStart, busca desde um período bem amplo
+  if (!dateStart.value && dateEnd.value) params.dataInicioParam = '2020-01-01'
   if (dateEnd.value) params.dataFimParam = dateEnd.value
   if (cursor) params.cursorDoc = cursor
   return params
 }
+
+// Quando filtro de data está ativo, busca TODAS as páginas do intervalo de uma vez
+// para evitar problemas de cursor com filtro local por dataFim
+const dateFilterActive = computed(() => !!(dateStart.value || dateEnd.value))
 
 async function loadRecords() {
   try {
@@ -55,10 +61,25 @@ async function loadRecords() {
     lastDoc.value = null
     hasMore.value = false
 
-    const result = await fetchRegistrosPaginated(buildParams())
-    records.value = result.records
-    lastDoc.value = result.lastDoc
-    hasMore.value = result.hasMore
+    if (dateFilterActive.value) {
+      // Busca todas as páginas do intervalo selecionado
+      let cursor = null
+      let more = true
+      const all = []
+      while (more) {
+        const res = await fetchRegistrosPaginated(buildParams(cursor))
+        all.push(...res.records)
+        cursor = res.lastDoc
+        more = res.hasMore && res.records.length > 0
+      }
+      records.value = all
+      hasMore.value = false
+    } else {
+      const result = await fetchRegistrosPaginated(buildParams())
+      records.value = result.records
+      lastDoc.value = result.lastDoc
+      hasMore.value = result.hasMore
+    }
   } catch (err) {
     console.error('[Dashboard] erro ao carregar registros:', err?.code, err?.message)
     toast({ type: 'error', title: 'Erro ao carregar', message: err?.message ?? 'Falha ao carregar registros.' })
@@ -155,7 +176,7 @@ onUnmounted(() => {
       </TabsContent>
 
       <TabsContent value="stats">
-        <StatsTab :records="records" :loading="loading" />
+        <StatsTab :loading="loading" />
       </TabsContent>
 
       <TabsContent value="banco-horas">

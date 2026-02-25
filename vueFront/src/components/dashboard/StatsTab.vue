@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { fetchResumoMensal } from '@/services/registroService'
+import { fetchRegistrosPaginated, fetchResumoMensal } from '@/services/registroService'
 import { extrairMinutosDeString, formatarMinutosParaHoras } from '@/utils/timeUtils'
 import Card from '@/components/ui/Card.vue'
 import Select from '@/components/ui/Select.vue'
@@ -16,7 +16,6 @@ import {
 dayjs.locale('pt-br')
 
 const props = defineProps({
-  records: { type: Array, default: () => [] },
   loading: Boolean,
 })
 
@@ -41,6 +40,45 @@ const years = computed(() => {
   return y
 })
 
+// ── Registros do mês selecionado (Firestore direto, com paginação acumulada) ──
+const monthRecords = ref([])
+const loadingRecords = ref(false)
+
+async function loadMonthRecords() {
+  loadingRecords.value = true
+  monthRecords.value = []
+  try {
+    const m = String(selectedMonth.value).padStart(2, '0')
+    const y = selectedYear.value
+    const dataInicio = `${y}-${m}-01`
+    const lastDay = dayjs(`${y}-${m}-01`).daysInMonth()
+    const dataFim = `${y}-${m}-${String(lastDay).padStart(2, '0')}`
+
+    // Parâmetros: sem discordId para admin (todos), com discordId para leitor
+    const params = {
+      dataInicioParam: dataInicio,
+      dataFimParam: dataFim,
+    }
+    if (!auth.isAdmin && auth.discordId) params.discordId = auth.discordId
+
+    // Busca todas as páginas do mês
+    let cursor = null
+    let more = true
+    const all = []
+    while (more) {
+      const res = await fetchRegistrosPaginated({ ...params, cursorDoc: cursor })
+      all.push(...res.records)
+      cursor = res.lastDoc
+      more = res.hasMore && res.records.length > 0
+    }
+    monthRecords.value = all
+  } catch {
+    monthRecords.value = []
+  } finally {
+    loadingRecords.value = false
+  }
+}
+
 // ── Resumo da API ─────────────────────────────────────────────────────────────
 const resumo       = ref(null)
 const loadingResumo = ref(false)
@@ -57,15 +95,10 @@ async function loadResumo() {
   }
 }
 
-watch([selectedMonth, selectedYear], loadResumo, { immediate: true })
-
-// ── Registros locais do mês (para a tabela de detalhe) ────────────────────────
-const monthRecords = computed(() =>
-  props.records.filter(r => {
-    const d = dayjs(r.data)
-    return d.month() + 1 === Number(selectedMonth.value) && d.year() === Number(selectedYear.value)
-  })
-)
+watch([selectedMonth, selectedYear], () => {
+  loadMonthRecords()
+  loadResumo()
+}, { immediate: true })
 
 const daysWorked = computed(() =>
   monthRecords.value.filter(r => r.hora_saida && r.hora_saida !== '-').length
@@ -164,10 +197,10 @@ const statCards = computed(() => [
     </div>
 
     <!-- Cards principais -->
-    <div v-if="loading || loadingResumo" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div v-if="loadingResumo || loadingRecords" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <Skeleton v-for="i in 4" :key="i" class="h-28" />
     </div>
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div v-else-if="!loadingResumo && !loadingRecords" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <Card
         v-for="card in statCards"
         :key="card.title"
@@ -189,7 +222,7 @@ const statCards = computed(() => [
       <div class="px-4 py-3 border-b border-border">
         <h3 class="font-medium text-sm text-foreground">Horas por tipo de dia</h3>
       </div>
-      <div v-if="loading || loadingResumo" class="p-4 space-y-2">
+      <div v-if="loadingResumo || loadingRecords" class="p-4 space-y-2">
         <Skeleton v-for="i in 3" :key="i" class="h-12 w-full" />
       </div>
       <div v-else class="divide-y divide-border">
@@ -245,7 +278,7 @@ const statCards = computed(() => [
           Registros de {{ months.find(m => m.value === Number(selectedMonth))?.label }} {{ selectedYear }}
         </h3>
       </div>
-      <div v-if="loading" class="p-4 space-y-2">
+      <div v-if="loadingRecords" class="p-4 space-y-2">
         <Skeleton v-for="i in 5" :key="i" class="h-10 w-full" />
       </div>
       <div v-else-if="monthRecords.length" class="overflow-x-auto">

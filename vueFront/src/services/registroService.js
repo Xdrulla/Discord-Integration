@@ -100,8 +100,9 @@ export async function fetchRegistrosPaginated({ discordId = null, dataInicioPara
   }
 
   const records = docs.map(mapDoc)
-  const lastDoc = snapshot.docs.at(-1) ?? null
-  const hasMore = snapshot.size === PAGE_SIZE
+  // Usa o último doc filtrado como cursor para que a próxima página continue do ponto certo
+  const lastDoc = docs.at(-1) ?? null
+  const hasMore = snapshot.size === PAGE_SIZE && docs.length > 0
 
   return { records, lastDoc, hasMore }
 }

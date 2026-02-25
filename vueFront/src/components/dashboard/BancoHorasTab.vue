@@ -33,13 +33,18 @@ onMounted(async () => {
   }
 })
 
-// Saldo total: soma histórico fechado + saldo dos registros do mês atual ainda não fechados
+// Saldo total: soma histórico + registros do mês atual se ainda não fechados
 const saldoHistoricoMin = computed(() =>
   historico.value.reduce((acc, h) => acc + (h.saldoMinutos ?? 0), 0)
 )
 
-// Registros do mês atual (ainda não fechados no histórico)
+// O fechamento ocorre no dia 1 do mês seguinte.
+// mesAno="2026-02" fechado em 2026-02-01 = saldo acumulado até jan/2026.
+// Se o histórico mais recente tem mesAno == mês atual, o mês atual já foi
+// fechado e os registros locais do mês atual (ainda em aberto) devem ser somados.
 const mesAtual = dayjs().format('YYYY-MM')
+const mesAnoMaisRecente = computed(() => historico.value[0]?.mesAno ?? null)
+
 const registrosMesAtual = computed(() =>
   props.records.filter(r => dayjs(r.data).format('YYYY-MM') === mesAtual)
 )
@@ -47,19 +52,21 @@ const saldoMesAtualMin = computed(() =>
   registrosMesAtual.value.reduce((acc, r) => acc + (r.banco_horas_min ?? 0), 0)
 )
 
-// Se o mês atual já aparece no histórico fechado, não somamos duas vezes
-const mesAtualNoHistorico = computed(() =>
-  historico.value.some(h => h.mesAno === mesAtual)
+// Soma os registros locais do mês atual apenas se o histórico já tem o doc do mês atual
+// (i.e., o fechamento do mês anterior já ocorreu e o mês atual ainda está em aberto)
+const deveIncluirMesAtualLocal = computed(() =>
+  mesAnoMaisRecente.value === mesAtual
 )
 
-const saldoTotalMin = computed(() => {
-  if (mesAtualNoHistorico.value) return saldoHistoricoMin.value
-  return saldoHistoricoMin.value + saldoMesAtualMin.value
-})
+const saldoTotalMin = computed(() =>
+  deveIncluirMesAtualLocal.value
+    ? saldoHistoricoMin.value + saldoMesAtualMin.value
+    : saldoHistoricoMin.value
+)
 
 const maxAbs = computed(() => {
   const vals = historico.value.map(h => Math.abs(h.saldoMinutos ?? 0))
-  if (!mesAtualNoHistorico.value) vals.push(Math.abs(saldoMesAtualMin.value))
+  if (deveIncluirMesAtualLocal.value) vals.push(Math.abs(saldoMesAtualMin.value))
   return Math.max(...vals, 1)
 })
 
@@ -73,9 +80,11 @@ const listaExibicao = computed(() => {
     fechadoEm: h.fechadoEm ? dayjs(h.fechadoEm).format('DD/MM/YYYY') : null,
   }))
 
-  if (!mesAtualNoHistorico.value) {
+  // Adiciona linha do mês atual em aberto se o histórico já tem o doc do mês atual
+  // (fechamento já ocorreu, mas o mês corrente ainda está em andamento)
+  if (deveIncluirMesAtualLocal.value) {
     rows.unshift({
-      key: mesAtual,
+      key: mesAtual + '-aberto',
       label: dayjs().format('MMMM [de] YYYY') + ' (em aberto)',
       totalMin: saldoMesAtualMin.value,
       fechado: false,

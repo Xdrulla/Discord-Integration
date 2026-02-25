@@ -44,6 +44,12 @@ const openJustification = (record) => {
 
 const hasExit = (record) => record.hora_saida && record.hora_saida !== '-'
 
+const formatPausa = (ts) => {
+  if (!ts) return 'em curso'
+  const d = dayjs(ts)
+  return d.isValid() ? d.format('HH:mm') : ts
+}
+
 const statusVariant = (record) => {
   if (!hasExit(record)) return 'warning'
   if (record.justificativa?.status === 'aprovado') return 'success'
@@ -190,12 +196,13 @@ const statusLabel = (record) => {
               <tr v-if="expandedRows.has(record.id)" class="bg-muted/20">
                 <td :colspan="auth.isAdmin ? 9 : 8" class="px-8 py-3">
                   <div class="space-y-1 text-xs text-muted-foreground">
-                    <p v-if="record.pausas?.length">
+                    <div v-if="record.pausas?.length">
                       <span class="font-medium">Pausas:</span>
-                      <span v-for="(p, i) in record.pausas" :key="i" class="ml-2">
-                        {{ p.inicio }} – {{ p.fim ?? 'em curso' }}
+                      <span v-for="(p, i) in record.pausas" :key="i" class="ml-2 font-mono">
+                        {{ formatPausa(p.inicio) }} – {{ formatPausa(p.fim) }}
+                        <span v-if="i < record.pausas.length - 1" class="text-muted-foreground/50 mx-1">·</span>
                       </span>
-                    </p>
+                    </div>
                     <p v-if="record.justificativa">
                       <span class="font-medium">Justificativa:</span>
                       {{ record.justificativa.texto }}

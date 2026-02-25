@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { fetchRegistros } from '@/services/registroService'
+import { fetchBancoHorasPorIds } from '@/services/bancoHorasService'
 import { formatarMinutosParaHoras, extrairMinutosDeString } from '@/utils/timeUtils'
 import { useToast } from '@/composables/useToast'
 import Card from '@/components/ui/Card.vue'
@@ -15,11 +16,19 @@ dayjs.locale('pt-br')
 const { toast } = useToast()
 const loading = ref(true)
 const allRecords = ref([])
+// Map<discordId, { saldoMinutos }> — saldo acumulado histórico fechado por usuário
+const bancoAcumulado = ref({})
 
 onMounted(async () => {
   try {
-    allRecords.value = await fetchRegistros({ diasRetroativos: 30, maxResults: 200 })
-  } catch {
+    const records = await fetchRegistros({ diasRetroativos: 30, maxResults: 500 })
+    allRecords.value = records
+
+    // Extrai discordIds únicos dos registros para buscar banco individualmente
+    const ids = [...new Set(records.map(r => r.discordId).filter(Boolean))]
+    bancoAcumulado.value = await fetchBancoHorasPorIds(ids)
+  } catch (err) {
+    console.error('[GeneralTab] erro ao carregar:', err)
     toast({ type: 'error', title: 'Erro', message: 'Falha ao carregar dados gerais.' })
   } finally {
     loading.value = false
@@ -31,6 +40,7 @@ const byUser = computed(() => {
   const now = dayjs()
   const m = now.month()
   const y = now.year()
+  const mesAtual = now.format('YYYY-MM')
 
   for (const r of allRecords.value) {
     const d = dayjs(r.data)
@@ -39,19 +49,26 @@ const byUser = computed(() => {
     const key = r.discordId ?? r.usuario
     if (!map[key]) {
       map[key] = {
+        discordId: r.discordId,
         name: r.displayName ?? r.usuario,
-        bancoMin: 0,
+        bancoMesMin: 0,   // banco calculado dos registros do mês atual
         totalMin: 0,
         dias: 0,
       }
     }
-    // banco_horas_min é numérico; total_horas é string "Xh Ym"
-    map[key].bancoMin += r.banco_horas_min ?? 0
+    map[key].bancoMesMin += r.banco_horas_min ?? 0
     map[key].totalMin += extrairMinutosDeString(r.total_horas ?? '0h 0m')
     if (r.hora_saida && r.hora_saida !== '-') map[key].dias++
   }
 
-  return Object.values(map).sort((a, b) => b.totalMin - a.totalMin)
+  return Object.values(map).map(u => {
+    const historico = bancoAcumulado.value[u.discordId] ?? null
+    // O histórico já é o saldo acumulado autoritativo (calculado pelo backend).
+    // Não somamos bancoMesMin dos registros locais para evitar dupla contagem —
+    // o banco local é uma estimativa; o histórico fechado é a fonte de verdade.
+    const bancoTotalMin = historico?.saldoMinutos ?? 0
+    return { ...u, bancoTotalMin }
+  }).sort((a, b) => b.totalMin - a.totalMin)
 })
 </script>
 
@@ -84,18 +101,18 @@ const byUser = computed(() => {
 
         <div class="grid grid-cols-2 gap-2 pt-1 border-t border-border">
           <div>
-            <p class="text-xs text-muted-foreground">Total Horas</p>
+            <p class="text-xs text-muted-foreground">Total Horas (mês)</p>
             <p class="text-sm font-mono font-semibold text-foreground">
               {{ formatarMinutosParaHoras(user.totalMin) }}
             </p>
           </div>
           <div>
-            <p class="text-xs text-muted-foreground">Banco</p>
+            <p class="text-xs text-muted-foreground">Banco Acumulado</p>
             <p
               class="text-sm font-mono font-semibold"
-              :class="user.bancoMin >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'"
+              :class="user.bancoTotalMin >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'"
             >
-              {{ formatarMinutosParaHoras(user.bancoMin) }}
+              {{ formatarMinutosParaHoras(user.bancoTotalMin) }}
             </p>
           </div>
         </div>
