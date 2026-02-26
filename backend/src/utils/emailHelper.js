@@ -36,7 +36,7 @@ async function enviarEmailNotificacao(justificativa, usuario, data) {
         <p><em>Para visualizar o anexo, acesse o sistema.</em></p>
       ` : ''}
         <p style="margin-top: 20px;">
-          <a href="https://frontend-virid-alpha-62.vercel.app/" target="_blank"
+          <a href="https://goepik-ponto.vercel.app/" target="_blank"
             style="
               display: inline-block;
               padding: 10px 20px;
@@ -109,7 +109,7 @@ async function enviarEmailConfirmacaoLeitor(justificativa, usuario, data, status
         <blockquote style="background: #f1f1f1; padding: 10px; border-left: 4px solid #5a40b6;">${justificativa.observacaoAdmin}</blockquote>
       ` : ''}      
       <p style="margin-top: 20px;">
-        <a href="https://frontend-virid-alpha-62.vercel.app/" target="_blank"
+        <a href="https://goepik-ponto.vercel.app/" target="_blank"
           style="
             display: inline-block;
             padding: 10px 20px;

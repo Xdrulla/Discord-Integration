@@ -45,8 +45,15 @@ async function calcularResumoMensal(discordId, ano, mes) {
       const metasRef = userDoc.ref.collection("metas").doc(prefixoData);
       const metasDoc = await metasRef.get();
 
-      if (metasDoc.exists && metasDoc.data().metaMinutos) {
-        metaMinutos = metasDoc.data().metaMinutos;
+      if (metasDoc.exists) {
+        const metasData = metasDoc.data();
+        if (metasData.metaHorasDia) {
+          // Meta configurada por hora/dia: multiplica pelos dias úteis reais do mês
+          metaMinutos = diasUteis * metasData.metaHorasDia * 60;
+        } else if (metasData.metaMinutos) {
+          // Compatibilidade com formato antigo (total mensal em minutos)
+          metaMinutos = metasData.metaMinutos;
+        }
       }
     }
   } catch (err) {
