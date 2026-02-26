@@ -13,8 +13,8 @@ const auth = useAuthStore()
 const { toast } = useToast()
 
 const form = ref({
-  discordId: auth.isAdmin ? '' : (auth.discordId ?? ''),
-  usuario: auth.isAdmin ? '' : (auth.displayName ?? ''),
+  discordId: auth.isAdminOrRH ? '' : (auth.discordId ?? ''),
+  usuario: auth.isAdminOrRH ? '' : (auth.displayName ?? ''),
   data: '',
   hora_entrada: '',
   hora_saida: '',
@@ -27,7 +27,7 @@ const handleSave = async () => {
     toast({ type: 'warning', title: 'Atenção', message: 'Preencha a data e horário de entrada.' })
     return
   }
-  if (auth.isAdmin && !form.value.discordId) {
+  if (auth.isAdminOrRH && !form.value.discordId) {
     toast({ type: 'warning', title: 'Atenção', message: 'Informe o Discord ID do usuário.' })
     return
   }
@@ -71,18 +71,18 @@ const handleSave = async () => {
         </div>
 
         <div class="p-4 space-y-4">
-          <!-- Discord ID — só admin preenche -->
-          <div v-if="auth.isAdmin" class="space-y-1.5">
+          <!-- Discord ID — admin e rh preenchem -->
+          <div v-if="auth.isAdminOrRH" class="space-y-1.5">
             <Label>Discord ID *</Label>
             <Input v-model="form.discordId" placeholder="123456789..." />
           </div>
-          <div v-if="auth.isAdmin" class="space-y-1.5">
+          <div v-if="auth.isAdminOrRH" class="space-y-1.5">
             <Label>Usuário</Label>
             <Input v-model="form.usuario" placeholder="Nome do usuário" />
           </div>
 
           <!-- Para leitores, mostra o próprio nome apenas como info -->
-          <div v-if="!auth.isAdmin" class="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
+          <div v-if="!auth.isAdminOrRH" class="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
             Registrando para: <span class="font-medium text-foreground">{{ auth.displayName || auth.discordId }}</span>
           </div>
 

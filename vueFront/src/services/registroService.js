@@ -14,7 +14,7 @@ dayjs.locale('pt-br')
 
 export const PAGE_SIZE = 20
 
-function mapDoc(doc) {
+function mapDoc(doc, metaHorasDia = 8) {
   const d = doc.data()
   const entrada = d.entrada
   const saida = d.saida
@@ -30,7 +30,7 @@ function mapDoc(doc) {
 
   if (entrada && saida && entrada !== '-' && saida !== '-') {
     const diaSemana = dayjs(d.data).day() // 0 = domingo, 6 = sábado
-    const jornadaBase = (diaSemana === 0 || diaSemana === 6) ? 0 : 8 * 60
+    const jornadaBase = (diaSemana === 0 || diaSemana === 6) ? 0 : metaHorasDia * 60
     const abono =
       d.justificativa?.status === 'aprovado'
         ? extrairMinutosDeString(d.justificativa.abonoHoras || '0h 0m')
@@ -74,7 +74,7 @@ function mapDoc(doc) {
  * @param {import('firebase/firestore').QueryDocumentSnapshot|null} options.cursorDoc - cursor da página anterior
  * @returns {{ records: object[], lastDoc: object|null, hasMore: boolean }}
  */
-export async function fetchRegistrosPaginated({ discordId = null, dataInicioParam = null, dataFimParam = null, diasRetroativos = 60, cursorDoc = null } = {}) {
+export async function fetchRegistrosPaginated({ discordId = null, dataInicioParam = null, dataFimParam = null, diasRetroativos = 60, cursorDoc = null, metaHorasDia = 8 } = {}) {
   const dataInicio = dataInicioParam ?? dayjs().subtract(diasRetroativos, 'day').format('YYYY-MM-DD')
   const registrosRef = collection(db, 'registros')
 
@@ -99,7 +99,7 @@ export async function fetchRegistrosPaginated({ discordId = null, dataInicioPara
     docs = docs.filter(d => d.data().data <= dataFimParam)
   }
 
-  const records = docs.map(mapDoc)
+  const records = docs.map(d => mapDoc(d, metaHorasDia))
   // Usa o último doc filtrado como cursor para que a próxima página continue do ponto certo
   const lastDoc = docs.at(-1) ?? null
   const hasMore = snapshot.size === PAGE_SIZE && docs.length > 0

@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { io } from 'socket.io-client'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import { db } from '@/config/firebase'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
 import { fetchRegistrosPaginated } from '@/services/registroService'
@@ -12,7 +14,8 @@ import RecordsTab from '@/components/dashboard/RecordsTab.vue'
 import StatsTab from '@/components/dashboard/StatsTab.vue'
 import BancoHorasTab from '@/components/dashboard/BancoHorasTab.vue'
 import GeneralTab from '@/components/dashboard/GeneralTab.vue'
-import { LayoutDashboard, BarChart3, Clock, Users } from 'lucide-vue-next'
+import PendingJustificationsModal from '@/components/justification/PendingJustificationsModal.vue'
+import { LayoutDashboard, BarChart3, Clock, Users, AlertTriangle } from 'lucide-vue-next'
 
 const auth = useAuthStore()
 const { toast } = useToast()
@@ -23,6 +26,23 @@ const loading = ref(true)
 const loadingMore = ref(false)
 const hasMore = ref(false)
 const lastDoc = ref(null)
+
+// Justificativas pendentes (apenas admin/rh)
+const pendentesCount = ref(0)
+const pendentesRecords = ref([])
+const showPendentesModal = ref(false)
+
+async function carregarPendentes() {
+  if (!auth.isAdmin && !auth.isRH) return
+  try {
+    const q = query(collection(db, 'registros'), where('justificativa.status', '==', 'pendente'))
+    const snap = await getDocs(q)
+    pendentesRecords.value = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    pendentesCount.value = pendentesRecords.value.length
+  } catch {
+    // silencioso
+  }
+}
 
 // Filtros
 const searchQuery = ref('')
@@ -41,7 +61,7 @@ const filteredRecords = computed(() => {
 
 function buildParams(cursor = null) {
   const params = {}
-  if (!auth.isAdmin && auth.discordId) params.discordId = auth.discordId
+  if (!auth.isAdminOrRH && auth.discordId) params.discordId = auth.discordId
   if (dateStart.value) params.dataInicioParam = dateStart.value
   // Quando apenas dateEnd é definida sem dateStart, busca desde um período bem amplo
   if (!dateStart.value && dateEnd.value) params.dataInicioParam = '2020-01-01'
@@ -104,18 +124,22 @@ async function loadMore() {
   }
 }
 
-// Quando o filtro de data mudar, refaz a query no Firestore
-watch([dateStart, dateEnd], () => {
-  loadRecords()
+// Quando o filtro de data mudar, só refaz a query quando ambas as datas estiverem
+// preenchidas (ou ambas vazias). Evita busca com apenas uma data informada.
+watch([dateStart, dateEnd], ([start, end]) => {
+  if ((start && end) || (!start && !end)) {
+    loadRecords()
+  }
 })
 
 let socket = null
 
 onMounted(async () => {
-  await loadRecords()
+  await Promise.all([loadRecords(), carregarPendentes()])
   socket = io(import.meta.env.VITE_API_URL)
   socket.on('registro-atualizado', () => {
     loadRecords()
+    carregarPendentes()
   })
 })
 
@@ -137,6 +161,26 @@ onUnmounted(() => {
       </p>
     </div>
 
+    <!-- Banner de justificativas pendentes (admin/rh) -->
+    <div
+      v-if="(auth.isAdmin || auth.isRH) && pendentesCount > 0"
+      class="flex items-center gap-3 rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-950/30 px-4 py-3 cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/50 transition-colors"
+      @click="showPendentesModal = true"
+    >
+      <AlertTriangle class="h-5 w-5 text-yellow-600 dark:text-yellow-400 shrink-0" />
+      <p class="text-sm text-yellow-800 dark:text-yellow-300 font-medium">
+        {{ pendentesCount }} justificativa{{ pendentesCount > 1 ? 's' : '' }} pendente{{ pendentesCount > 1 ? 's' : '' }} de aprovação — clique para revisar
+      </p>
+    </div>
+
+    <!-- Modal de justificativas pendentes -->
+    <PendingJustificationsModal
+      v-if="showPendentesModal"
+      :pendentes="pendentesRecords"
+      @close="showPendentesModal = false"
+      @saved="showPendentesModal = false; carregarPendentes()"
+    />
+
     <!-- Tabs -->
     <Tabs v-model="activeTab">
       <TabsList class="flex-wrap h-auto gap-1">
@@ -152,7 +196,7 @@ onUnmounted(() => {
           <Clock class="h-3.5 w-3.5" />
           Banco de Horas
         </TabsTrigger>
-        <TabsTrigger v-if="auth.isAdmin" value="general">
+        <TabsTrigger v-if="auth.isAdmin || auth.isRH" value="general">
           <Users class="h-3.5 w-3.5" />
           Resumo Geral
         </TabsTrigger>
@@ -183,7 +227,7 @@ onUnmounted(() => {
         <BancoHorasTab :records="records" :loading="loading" />
       </TabsContent>
 
-      <TabsContent v-if="auth.isAdmin" value="general">
+      <TabsContent v-if="auth.isAdmin || auth.isRH" value="general">
         <GeneralTab :loading="loading" />
       </TabsContent>
     </Tabs>

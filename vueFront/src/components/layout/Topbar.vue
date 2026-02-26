@@ -4,7 +4,9 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useDarkMode } from '@/composables/useDarkMode'
 import Avatar from '@/components/ui/Avatar.vue'
-import { Sun, Moon, User, ChevronDown } from 'lucide-vue-next'
+import { Sun, Moon, User, ChevronDown, Menu } from 'lucide-vue-next'
+
+const emit = defineEmits(['open-sidebar'])
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -44,6 +46,15 @@ onUnmounted(() => {
 
 <template>
   <header class="h-14 border-b border-border bg-background flex items-center justify-between px-4 md:px-6 gap-4">
+    <!-- Botão hamburger — visível apenas em mobile -->
+    <button
+      class="md:hidden h-9 w-9 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors shrink-0"
+      @click="emit('open-sidebar')"
+      title="Abrir menu"
+    >
+      <Menu class="h-5 w-5" />
+    </button>
+
     <!-- Left: slot para breadcrumb ou título -->
     <div class="flex-1 min-w-0">
       <slot />

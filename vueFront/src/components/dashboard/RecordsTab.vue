@@ -69,8 +69,8 @@ const statusLabel = (record) => {
   <div class="space-y-4">
     <!-- Toolbar -->
     <div class="flex flex-wrap items-center gap-3">
-      <!-- Busca por usuário — somente admin -->
-      <div v-if="auth.isAdmin" class="relative flex-1 min-w-48">
+      <!-- Busca por usuário — admin e rh -->
+      <div v-if="auth.isAdminOrRH" class="relative flex-1 min-w-48">
         <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           :model-value="search"
@@ -125,7 +125,7 @@ const statusLabel = (record) => {
             <tr>
               <th class="text-left px-4 py-3 font-medium text-muted-foreground w-8"></th>
               <th class="text-left px-4 py-3 font-medium text-muted-foreground">Data</th>
-              <th v-if="auth.isAdmin" class="text-left px-4 py-3 font-medium text-muted-foreground">Usuário</th>
+              <th v-if="auth.isAdminOrRH" class="text-left px-4 py-3 font-medium text-muted-foreground">Usuário</th>
               <th class="text-left px-4 py-3 font-medium text-muted-foreground">Entrada</th>
               <th class="text-left px-4 py-3 font-medium text-muted-foreground">Saída</th>
               <th class="text-left px-4 py-3 font-medium text-muted-foreground">Horas</th>
@@ -152,7 +152,7 @@ const statusLabel = (record) => {
                   {{ dayjs(record.data).format('DD/MM/YYYY') }}
                 </td>
                 <!-- Usuário -->
-                <td v-if="auth.isAdmin" class="px-4 py-3 text-foreground max-w-36 truncate">
+                <td v-if="auth.isAdminOrRH" class="px-4 py-3 text-foreground max-w-36 truncate">
                   {{ record.displayName ?? record.usuario }}
                 </td>
                 <!-- Hora entrada -->
@@ -194,7 +194,7 @@ const statusLabel = (record) => {
 
               <!-- Expanded row: detalhes de pausas -->
               <tr v-if="expandedRows.has(record.id)" class="bg-muted/20">
-                <td :colspan="auth.isAdmin ? 9 : 8" class="px-8 py-3">
+                <td :colspan="auth.isAdminOrRH ? 9 : 8" class="px-8 py-3">
                   <div class="space-y-1 text-xs text-muted-foreground">
                     <div v-if="record.pausas?.length">
                       <span class="font-medium">Pausas:</span>
@@ -205,7 +205,7 @@ const statusLabel = (record) => {
                     </div>
                     <p v-if="record.justificativa">
                       <span class="font-medium">Justificativa:</span>
-                      {{ record.justificativa.texto }}
+                      {{ record.justificativa.text }}
                     </p>
                     <p v-if="!record.pausas?.length && !record.justificativa" class="italic">
                       Sem detalhes adicionais.

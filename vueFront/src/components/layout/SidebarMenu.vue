@@ -10,7 +10,7 @@ import {
 const props = defineProps({
   collapsed: Boolean,
 })
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'close-mobile'])
 
 const auth = useAuthStore()
 const route = useRoute()
@@ -24,7 +24,7 @@ const navItems = computed(() => {
       icon: LayoutDashboard,
     },
   ]
-  if (auth.isAdmin) {
+  if (auth.isAdminOrRH) {
     items.push(
       { to: '/admin/manage-users', label: 'Usuários', icon: Users },
       { to: '/admin/goals', label: 'Metas', icon: Target },
@@ -46,7 +46,7 @@ const handleLogout = async () => {
   <aside
     :class="cn(
       'flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-in-out',
-      collapsed ? 'w-16' : 'w-60'
+      collapsed ? 'w-16 md:w-16' : 'w-60'
     )"
   >
     <!-- Logo -->
@@ -63,6 +63,7 @@ const handleLogout = async () => {
         v-for="item in navItems"
         :key="item.to"
         :to="item.to"
+        @click="emit('close-mobile')"
         :class="cn(
           'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
           isActive(item.to)
@@ -80,7 +81,7 @@ const handleLogout = async () => {
     <!-- Footer -->
     <div class="p-2 border-t border-sidebar-border space-y-1">
       <button
-        @click="handleLogout"
+        @click="handleLogout(); emit('close-mobile')"
         :class="cn(
           'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-destructive/20 hover:text-destructive transition-colors',
           collapsed && 'justify-center px-2'

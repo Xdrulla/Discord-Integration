@@ -1,5 +1,7 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore'
+import { db } from '@/config/firebase'
 import { useAuthStore } from '@/stores/auth'
 import { fetchRegistrosPaginated, fetchResumoMensal } from '@/services/registroService'
 import { extrairMinutosDeString, formatarMinutosParaHoras } from '@/utils/timeUtils'
@@ -15,7 +17,7 @@ import {
 
 dayjs.locale('pt-br')
 
-const props = defineProps({
+defineProps({
   loading: Boolean,
 })
 
@@ -24,6 +26,38 @@ const auth = useAuthStore()
 const now = dayjs()
 const selectedMonth = ref(now.month() + 1) // 1-12
 const selectedYear  = ref(now.year())
+
+// Para admin/rh: seletor de usuário
+const usuarios = ref([])
+const selectedDiscordId = ref(null)
+const loadingUsuarios = ref(false)
+
+onMounted(async () => {
+  if (auth.isAdminOrRH) {
+    loadingUsuarios.value = true
+    try {
+      const snap = await getDocs(collection(db, 'users'))
+      usuarios.value = snap.docs
+        .map(d => ({ uid: d.id, ...d.data() }))
+        .filter(u => u.discordId)
+        .sort((a, b) => (a.displayName ?? '').localeCompare(b.displayName ?? ''))
+      // Pré-seleciona o próprio usuário se tiver discordId, senão o primeiro
+      const self = usuarios.value.find(u => u.discordId === auth.discordId)
+      selectedDiscordId.value = self?.discordId ?? usuarios.value[0]?.discordId ?? null
+    } catch {
+      // silencioso
+    } finally {
+      loadingUsuarios.value = false
+    }
+  } else {
+    selectedDiscordId.value = auth.discordId
+  }
+})
+
+// discordId efetivo para as queries
+const effectiveDiscordId = computed(() =>
+  auth.isAdminOrRH ? selectedDiscordId.value : auth.discordId
+)
 
 const months = [
   { value: 1,  label: 'Janeiro'   }, { value: 2,  label: 'Fevereiro' },
@@ -40,11 +74,49 @@ const years = computed(() => {
   return y
 })
 
-// ── Registros do mês selecionado (Firestore direto, com paginação acumulada) ──
+// ── Resumo da API ─────────────────────────────────────────────────────────────
+const resumo       = ref(null)
+const loadingResumo = ref(false)
+
+async function loadResumo() {
+  if (!effectiveDiscordId.value) return
+  try {
+    loadingResumo.value = true
+    resumo.value = await fetchResumoMensal(effectiveDiscordId.value, selectedYear.value, selectedMonth.value)
+  } catch {
+    resumo.value = null
+  } finally {
+    loadingResumo.value = false
+  }
+}
+
+// ── Registros do mês selecionado ──────────────────────────────────────────────
 const monthRecords = ref([])
 const loadingRecords = ref(false)
 
+// Busca metaHorasDia do Firestore para o usuário/mês selecionado
+async function fetchMetaHorasDia() {
+  try {
+    const m = String(selectedMonth.value).padStart(2, '0')
+    const mesAno = `${selectedYear.value}-${m}`
+    // Para leitor: usa o próprio uid. Para admin/rh: procura o uid do usuário selecionado no array
+    let uid = null
+    if (auth.isAdminOrRH) {
+      uid = usuarios.value.find(u => u.discordId === selectedDiscordId.value)?.uid ?? null
+    } else {
+      uid = auth.user?.uid ?? null
+    }
+    if (!uid) return 8
+    const snap = await getDoc(doc(db, 'users', uid, 'metas', mesAno))
+    if (snap.exists()) {
+      return snap.data().metaHorasDia ?? 8
+    }
+  } catch { /* silencioso */ }
+  return 8
+}
+
 async function loadMonthRecords() {
+  if (!effectiveDiscordId.value) return
   loadingRecords.value = true
   monthRecords.value = []
   try {
@@ -54,14 +126,15 @@ async function loadMonthRecords() {
     const lastDay = dayjs(`${y}-${m}-01`).daysInMonth()
     const dataFim = `${y}-${m}-${String(lastDay).padStart(2, '0')}`
 
-    // Parâmetros: sem discordId para admin (todos), com discordId para leitor
+    const metaHorasDia = await fetchMetaHorasDia()
+
     const params = {
+      discordId: effectiveDiscordId.value,
       dataInicioParam: dataInicio,
       dataFimParam: dataFim,
+      metaHorasDia,
     }
-    if (!auth.isAdmin && auth.discordId) params.discordId = auth.discordId
 
-    // Busca todas as páginas do mês
     let cursor = null
     let more = true
     const all = []
@@ -79,25 +152,10 @@ async function loadMonthRecords() {
   }
 }
 
-// ── Resumo da API ─────────────────────────────────────────────────────────────
-const resumo       = ref(null)
-const loadingResumo = ref(false)
-
-async function loadResumo() {
-  if (!auth.discordId) return
-  try {
-    loadingResumo.value = true
-    resumo.value = await fetchResumoMensal(auth.discordId, selectedYear.value, selectedMonth.value)
-  } catch {
-    resumo.value = null
-  } finally {
-    loadingResumo.value = false
-  }
-}
-
-watch([selectedMonth, selectedYear], () => {
+watch([selectedMonth, selectedYear, effectiveDiscordId], async () => {
+  // Carrega resumo primeiro para ter a meta correta, depois os registros
+  await loadResumo()
   loadMonthRecords()
-  loadResumo()
 }, { immediate: true })
 
 const daysWorked = computed(() =>
@@ -115,7 +173,6 @@ const metaMin = computed(() =>
   resumo.value?.meta ? extrairMinutosDeString(resumo.value.meta) : 0
 )
 
-// saldo do mês atual (sem banco acumulado anterior)
 const saldoMesMin = computed(() =>
   resumo.value?.saldoMesAtual
     ? extrairMinutosDeString(resumo.value.saldoMesAtual)
@@ -134,14 +191,12 @@ const avgMin = computed(() =>
   daysWorked.value ? Math.round(totalTrabalhadoMin.value / daysWorked.value) : 0
 )
 
-// horas extras por tipo de dia
 const extrasUtilMin       = computed(() => extrairMinutosDeString(resumo.value?.extras?.dia_util       ?? '0h 0m'))
 const extrasSabadoMin     = computed(() => extrairMinutosDeString(resumo.value?.extras?.sabado         ?? '0h 0m'))
 const extrasDomingoMin    = computed(() => extrairMinutosDeString(resumo.value?.extras?.domingo_feriado ?? '0h 0m'))
 
 const hasExtras = computed(() => extrasSabadoMin.value > 0 || extrasDomingoMin.value > 0)
 
-// ── Cards principais ──────────────────────────────────────────────────────────
 const statCards = computed(() => [
   {
     title: 'Horas Trabalhadas',
@@ -180,8 +235,18 @@ const statCards = computed(() => [
 
 <template>
   <div class="space-y-4">
-    <!-- Filtros de mês/ano -->
+    <!-- Filtros -->
     <div class="flex flex-wrap gap-3 items-center">
+      <!-- Seletor de colaborador (admin/rh) -->
+      <div v-if="auth.isAdminOrRH" class="flex items-center gap-2">
+        <label class="text-sm text-muted-foreground shrink-0">Colaborador:</label>
+        <Select v-model="selectedDiscordId" class="w-48" :disabled="loadingUsuarios">
+          <option v-for="u in usuarios" :key="u.discordId" :value="u.discordId">
+            {{ u.displayName ?? u.email }}
+          </option>
+        </Select>
+      </div>
+
       <div class="flex items-center gap-2">
         <label class="text-sm text-muted-foreground">Mês:</label>
         <Select v-model="selectedMonth" class="w-36">
@@ -200,7 +265,7 @@ const statCards = computed(() => [
     <div v-if="loadingResumo || loadingRecords" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <Skeleton v-for="i in 4" :key="i" class="h-28" />
     </div>
-    <div v-else-if="!loadingResumo && !loadingRecords" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <Card
         v-for="card in statCards"
         :key="card.title"
@@ -226,7 +291,6 @@ const statCards = computed(() => [
         <Skeleton v-for="i in 3" :key="i" class="h-12 w-full" />
       </div>
       <div v-else class="divide-y divide-border">
-        <!-- Dias úteis -->
         <div class="flex items-center justify-between px-4 py-3">
           <div class="flex items-center gap-3">
             <div class="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
@@ -238,7 +302,6 @@ const statCards = computed(() => [
             {{ resumo?.extras?.dia_util ?? '—' }}
           </span>
         </div>
-        <!-- Sábados -->
         <div class="flex items-center justify-between px-4 py-3">
           <div class="flex items-center gap-3">
             <div class="h-8 w-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
@@ -253,7 +316,6 @@ const statCards = computed(() => [
             {{ resumo?.extras?.sabado ?? '—' }}
           </span>
         </div>
-        <!-- Domingos/Feriados -->
         <div class="flex items-center justify-between px-4 py-3">
           <div class="flex items-center gap-3">
             <div class="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center">
@@ -297,7 +359,6 @@ const statCards = computed(() => [
             <tr v-for="r in monthRecords" :key="r.id" class="hover:bg-muted/30">
               <td class="px-4 py-2.5">{{ dayjs(r.data).format('DD/MM') }}</td>
               <td class="px-4 py-2.5">
-                <!-- Tipo de dia baseado no dia da semana local -->
                 <span
                   class="text-xs font-medium px-1.5 py-0.5 rounded"
                   :class="{

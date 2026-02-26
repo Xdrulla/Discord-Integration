@@ -73,7 +73,7 @@ router.beforeEach(async (to) => {
     return { name: 'dashboard' }
   }
 
-  if (to.meta.requiresAdmin && !auth.isAdmin) {
+  if (to.meta.requiresAdmin && !auth.isAdminOrRH) {
     return { name: 'dashboard' }
   }
 })

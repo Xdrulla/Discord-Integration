@@ -98,6 +98,7 @@ const toggleRow = (id) => {
                   @update:model-value="handleRoleChange(user.id, $event)"
                 >
                   <option value="admin">Admin</option>
+                  <option value="rh">RH</option>
                   <option value="leitor">Leitor</option>
                 </Select>
               </td>
@@ -139,7 +140,7 @@ const toggleRow = (id) => {
           >
             <div>
               <p class="text-sm font-medium text-foreground">{{ user.email }}</p>
-              <Badge :variant="user.role === 'admin' ? 'default' : 'secondary'" class="mt-1">
+              <Badge :variant="user.role === 'admin' ? 'default' : user.role === 'rh' ? 'warning' : 'secondary'" class="mt-1">
                 {{ user.role ?? 'leitor' }}
               </Badge>
             </div>
@@ -156,6 +157,7 @@ const toggleRow = (id) => {
                 @update:model-value="handleRoleChange(user.id, $event)"
               >
                 <option value="admin">Admin</option>
+                <option value="rh">RH</option>
                 <option value="leitor">Leitor</option>
               </Select>
             </div>

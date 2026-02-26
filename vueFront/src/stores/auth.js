@@ -21,6 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
   const initialized = ref(false)
 
   const isAdmin = computed(() => role.value === 'admin')
+  const isRH = computed(() => role.value === 'rh')
+  const isAdminOrRH = computed(() => role.value === 'admin' || role.value === 'rh')
   const isAuthenticated = computed(() => !!user.value)
 
   async function fetchUserData(firebaseUser) {
@@ -118,6 +120,8 @@ export const useAuthStore = defineStore('auth', () => {
     loading,
     initialized,
     isAdmin,
+    isRH,
+    isAdminOrRH,
     isAuthenticated,
     init,
     login,
