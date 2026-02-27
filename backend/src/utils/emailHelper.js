@@ -3,14 +3,17 @@ const db = require("../config/firebase");
 const nodemailer = require("nodemailer");
 
 async function enviarEmailNotificacao(justificativa, usuario, data) {
-  const adminsSnapshot = await db.collection("users")
-    .where("role", "==", "admin")
-    .where("receberNotificacoes", "==", true)
-    .get();
+  const [adminsSnapshot, rhSnapshot] = await Promise.all([
+    db.collection("users").where("role", "==", "admin").where("receberNotificacoes", "==", true).get(),
+    db.collection("users").where("role", "==", "rh").where("receberNotificacoes", "==", true).get(),
+  ]);
 
-  if (adminsSnapshot.empty) return;
+  const emails = [
+    ...adminsSnapshot.docs.map(doc => doc.data().email),
+    ...rhSnapshot.docs.map(doc => doc.data().email),
+  ].filter(Boolean);
 
-  const emails = adminsSnapshot.docs.map(doc => doc.data().email);
+  if (emails.length === 0) return;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",

@@ -40,9 +40,11 @@ exports.deleteJustificativa = async (req, res) => {
     if (snapshot.empty) return res.status(403).json({ error: "Usuário não encontrado." });
 
     const userData = snapshot.docs[0].data();
+    const userRole = userData.role || "leitor";
     const userDiscordId = userData.discordId;
 
-    if (!userDiscordId || doc.data().discordId !== userDiscordId) {
+    const isAdminOrRH = userRole === "admin" || userRole === "rh";
+    if (!isAdminOrRH && (!userDiscordId || doc.data().discordId !== userDiscordId)) {
       return res.status(403).json({ error: "Você não tem permissão para deletar esta justificativa." });
     }
 
@@ -64,7 +66,8 @@ exports.upsertJustificativa = async (req, res) => {
 
     const email = req.user.email;
     const userRole = await getUserRole(email);
-    const justificativaStatus = userRole === "admin" && status ? status : "pendente";
+    const isAdminOrRH = userRole === "admin" || userRole === "rh";
+    const justificativaStatus = isAdminOrRH && status ? status : "pendente";
 
     const registroId = `${usuario}_${data}`;
     const registroRef = db.collection("registros").doc(registroId);
