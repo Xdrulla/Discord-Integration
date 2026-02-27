@@ -1,11 +1,12 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { io } from 'socket.io-client'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore'
 import { db } from '@/config/firebase'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
 import { fetchRegistrosPaginated } from '@/services/registroService'
+import dayjs from 'dayjs'
 import Tabs from '@/components/ui/Tabs.vue'
 import TabsList from '@/components/ui/TabsList.vue'
 import TabsTrigger from '@/components/ui/TabsTrigger.vue'
@@ -20,7 +21,7 @@ import { LayoutDashboard, BarChart3, Clock, Users, AlertTriangle } from 'lucide-
 const auth = useAuthStore()
 const { toast } = useToast()
 
-const activeTab = ref('records')
+const activeTab = ref(auth.isRH ? 'stats' : 'records')
 const records = ref([])
 const loading = ref(true)
 const loadingMore = ref(false)
@@ -41,6 +42,27 @@ async function carregarPendentes() {
     pendentesCount.value = pendentesRecords.value.length
   } catch {
     // silencioso
+  }
+}
+
+// Meta de horas/dia do leitor (para cálculo correto do banco na aba Registros)
+const metaHorasDia = ref(8)
+
+async function fetchMetaHorasDia() {
+  if (auth.isAdminOrRH || !auth.discordId) return
+  try {
+    const mesAno = dayjs().format('YYYY-MM')
+    const usersSnap = await getDocs(
+      query(collection(db, 'users'), where('discordId', '==', auth.discordId))
+    )
+    if (usersSnap.empty) return
+    const uid = usersSnap.docs[0].id
+    const metaDoc = await getDoc(doc(db, 'users', uid, 'metas', mesAno))
+    if (metaDoc.exists() && metaDoc.data().metaHorasDia) {
+      metaHorasDia.value = metaDoc.data().metaHorasDia
+    }
+  } catch {
+    // usa padrão 8h
   }
 }
 
@@ -67,6 +89,7 @@ function buildParams(cursor = null) {
   if (!dateStart.value && dateEnd.value) params.dataInicioParam = '2020-01-01'
   if (dateEnd.value) params.dataFimParam = dateEnd.value
   if (cursor) params.cursorDoc = cursor
+  if (!auth.isAdminOrRH) params.metaHorasDia = metaHorasDia.value
   return params
 }
 
@@ -135,6 +158,7 @@ watch([dateStart, dateEnd], ([start, end]) => {
 let socket = null
 
 onMounted(async () => {
+  await fetchMetaHorasDia()
   await Promise.all([loadRecords(), carregarPendentes()])
   socket = io(import.meta.env.VITE_API_URL)
   socket.on('registro-atualizado', () => {
@@ -184,7 +208,7 @@ onUnmounted(() => {
     <!-- Tabs -->
     <Tabs v-model="activeTab">
       <TabsList class="flex-wrap h-auto gap-1">
-        <TabsTrigger value="records">
+        <TabsTrigger v-if="!auth.isRH" value="records">
           <LayoutDashboard class="h-3.5 w-3.5" />
           Registros
         </TabsTrigger>
@@ -202,7 +226,7 @@ onUnmounted(() => {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="records">
+      <TabsContent v-if="!auth.isRH" value="records">
         <RecordsTab
           :records="filteredRecords"
           :loading="loading"
